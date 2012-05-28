@@ -1,8 +1,22 @@
-*** ifvisible.js
+ifvisible.js
+------------
 
 Crosbrowser way to check if user is looking at the page or interacting with it.
 
 Here are few examples:
+
+
+```javascript
+
+// If page is visible right now
+if( ifvisible.now() ){
+	// Display pop-up
+	openPopUp();
+}
+
+```
+
+Handle tba switch or browser minimize states
 
 ```javascript
 
@@ -12,6 +26,7 @@ ifvisible.on("blur", function(){
 });
 
 ifvisible.on("focus", function(){
+	// resume all animations
 	animations.resume();
 });
 
@@ -27,12 +42,11 @@ ifvisible.on("idle", function(){
 });
 
 ifvisible.on("wakeup", function(){
-
+	// go back updating data
 	stream.resume();
 });
 
 ```
-
 
 You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the action it interval will automatically stop itself
 
@@ -40,7 +54,7 @@ You can set your smart intervals with ifvisible.js, if user is IDLE or not seein
 
 // If page is visible run this function on every half seconds
 ifvisible.onEvery(0.5, function(){
-    
+    // Do an animation on the logo only when page is visible
 	animateLogo();
 
 });
