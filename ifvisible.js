@@ -1,27 +1,104 @@
-/*global define */
+/*global define, console */
 (function(doc, undefined){
     "use strict";
-
+    var ifvisible;
     var initialized = false;
+
+    var addEvent = (function () {
+        var setListener;
+
+        return function (el, ev, fn) {
+            if (!setListener) {
+                if (el.addEventListener) {
+                    setListener = function (el, ev, fn) {
+                        el.addEventListener(ev, fn, false);
+                    };
+                } else if (el.attachEvent) {
+                    setListener = function (el, ev, fn) {
+                        el.attachEvent('on' + ev, fn);
+                    };
+                } else {
+                    setListener = function (el, ev, fn) {
+                        el['on' + ev] =  fn;
+                    };
+                }
+            }
+            setListener(el, ev, fn);
+        };
+    }());
+    
+    var ie = (function(){
+
+        var undef,
+            v = 3,
+            div = document.createElement('div'),
+            all = div.getElementsByTagName('i');
+        
+        while (
+            div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+            all[0]
+        );
+        
+        return v > 4 ? v : undef;
+        
+    }());
+
+    // Set the name of the hidden property and the change event for visibility
+
+    var hidden = false, visibilityChange;
+    if (typeof document.hidden !== "undefined") {
+        hidden = "hidden";
+        visibilityChange = "visibilitychange";
+    } else if (typeof document.mozHidden !== "undefined") {
+        hidden = "mozHidden";
+        visibilityChange = "mozvisibilitychange";
+    } else if (typeof document.msHidden !== "undefined") {
+        hidden = "msHidden";
+        visibilityChange = "msvisibilitychange";
+    } else if (typeof document.webkitHidden !== "undefined") {
+        hidden = "webkitHidden";
+        visibilityChange = "webkitvisibilitychange";
+    }
 
     function init(){
         if(initialized){ return true; }
 
-
         // Set events here
-        
+        if(hidden === false){
+            var blur = "blur";
+            if(ie < 9){
+                blur = "focusout";
+            }
+
+            addEvent(window, blur, function(){
+                ifvisible.blur();
+            });
+
+            addEvent(window, "focus", function(){
+                ifvisible.focus();
+            });
+        }else{
+            addEvent(document, visibilityChange, function(){
+                if(document[hidden]){
+                    ifvisible.blur();
+                }else{
+                    ifvisible.focus();
+                }
+            }, false);
+        }
+
         initialized = true;
     }
 
 
-    var ifvisible = {
+    ifvisible = {
 
         /**
          * When User Opens the page,
          * @note: User may not be looking at it directly
          */
         focus: function(){
-
+            console.log("focused");
         },
 
         /**
@@ -29,7 +106,7 @@
          * @note: this may trigger when iframes are selected
          */
         blur: function(){
-
+            console.log("blurred");
         },
 
         /**
