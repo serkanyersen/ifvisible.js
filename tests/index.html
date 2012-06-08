@@ -7,10 +7,14 @@
 		<title>ifvisible.js test page</title>
 		<script src="../ifvisible.js"></script>
 		<script type="text/javascript">
-			ifvisible.now();
+			ifvisible.on('statusChanged', function(e){
+				document.getElementById("result").innerHTML += "<br>"+e.status;
+			});
 		</script>
 	</head>
 	<body>
-    	
+    	<div style="border:1px solid #ccc;background:#f5f5f5;padding:20px;float:left;font-size:18px;" id="result">
+    		init
+    	</div>
 	</body>
 </html>
