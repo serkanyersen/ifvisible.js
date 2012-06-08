@@ -21,6 +21,12 @@
     var status = "active";
 
     /**
+     * Time to wait when setting page to idle
+     * @type {Number} in miliseconds
+     */
+    var idleTime = 60000;
+
+    /**
      * Handle Custom Object events
      * @return {Object} add and fire methods to handle custom events
      */
@@ -36,6 +42,14 @@
          * @type {Object}
          */
         var listeners = {};
+
+        /**
+         * Name of the custom GUID property
+         * @type {String}
+         */
+        var customGUID = '__ceGUID';
+
+
         /**
          * Add a custom event to a given object
          * @param {Object}   obj      Object to add custom events
@@ -43,20 +57,26 @@
          * @param {Function} callback callback function to run when event is fired
          */
         var addCustomEvent = function(obj, event, callback){
-            if(!obj.__customEventGUID){
-                obj.__customEventGUID = guid();
+            /**
+             * Extent Objects with custom event GUID so that it will be hidden
+             */
+            obj.constructor.prototype[customGUID] = undefined;
+
+            if(!obj[customGUID]){
+                obj[customGUID] = guid();
             }
 
-            if(!listeners[obj.__customEventGUID]){
-                listeners[obj.__customEventGUID] = {};
+            if(!listeners[obj[customGUID]]){
+                listeners[obj[customGUID]] = {};
             }
 
-            if(!listeners[obj.__customEventGUID][event]){
-                listeners[obj.__customEventGUID][event] = [];
+            if(!listeners[obj[customGUID]][event]){
+                listeners[obj[customGUID]][event] = [];
             }
             
-            listeners[obj.__customEventGUID][event].push(callback);
+            listeners[obj[customGUID]][event].push(callback);
         };
+
         /**
          * Trigger the custom event on given object
          * @param  {Object} obj   Object to trigger the event
@@ -64,10 +84,10 @@
          * @param  {object} memo  a custom argument to send triggered event
          */
         var fireCustomEvent = function (obj, event, memo) {
-            if(obj.__customEventGUID){
-                if(listeners[obj.__customEventGUID]){
-                    if(listeners[obj.__customEventGUID][event]){
-                        var evts = listeners[obj.__customEventGUID][event];
+            if(obj[customGUID]){
+                if(listeners[obj[customGUID]]){
+                    if(listeners[obj[customGUID]][event]){
+                        var evts = listeners[obj[customGUID]][event];
                         for(var i=0; i < evts.length; i++){
                             var e = evts[i](memo || {});
                         }
@@ -158,19 +178,19 @@
 
     // Set the name of the hidden property and the change event for visibility checks
     var hidden = false, visibilityChange;
-    if (typeof document.hidden !== "undefined") {
+    if (typeof doc.hidden !== "undefined") {
         // Standarts
         hidden = "hidden";
         visibilityChange = "visibilitychange";
-    } else if (typeof document.mozHidden !== "undefined") {
+    } else if (typeof doc.mozHidden !== "undefined") {
         // For Gecko browsers
         hidden = "mozHidden";
         visibilityChange = "mozvisibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
+    } else if (typeof doc.msHidden !== "undefined") {
         // For MSIE
         hidden = "msHidden";
         visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
+    } else if (typeof doc.webkitHidden !== "undefined") {
         // Webkit browsers
         hidden = "webkitHidden";
         visibilityChange = "webkitvisibilitychange";
@@ -187,11 +207,14 @@
                 ifvisible.wakeup();
             }
             timer = setTimeout(function(){
-                ifvisible.idle();
-            }, 10000);
+                if(status === 'active'){
+                    ifvisible.idle();
+                }
+            }, idleTime);
         };
-
-        addEvent(document, "mousemove", wakeUp);
+        wakeUp(); // Call once so that it can set page to idle without doing anything
+        addEvent(doc, "mousemove", wakeUp);
+        addEvent(doc, "keyup", wakeUp);
         addEvent(window, "scroll", wakeUp);
     }
 
@@ -219,8 +242,8 @@
             });
         }else{
             // add HTML5 visibility events
-            addEvent(document, visibilityChange, function(){
-                if(document[hidden]){
+            addEvent(doc, visibilityChange, function(){
+                if(doc[hidden]){
                     ifvisible.blur();
                 }else{
                     ifvisible.focus();
@@ -238,11 +261,26 @@
      * @type {Object}
      */
     ifvisible = {
+
+        /**
+         * Change idle timeout value.
+         * @param {Number} seconds a number in seconds such as: 10 or 0.5
+         */
+        setIdleDuration: function(seconds){
+            idleTime = seconds * 1000;
+        },
+
         /**
          * When User Opens the page,
          * @note: User may not be looking at it directly
          */
-        focus: function(){
+        focus: function(callback){
+
+            // if first argument is a callback then set an event
+            if(typeof callback === 'function'){
+                return this.on("focus", callback);
+            }
+
             status = 'active';
             customEvent.fire(this, "focus");
             customEvent.fire(this, "statusChanged", {status:status});
@@ -252,7 +290,13 @@
          * When User swicthes tabs or minimizes the window
          * @note: this may trigger when iframes are selected
          */
-        blur: function(){
+        blur: function(callback){
+            
+            // if first argument is a callback then set an event
+            if(typeof callback === 'function'){
+                return this.on("blur", callback);
+            }
+
             status = 'hidden';
             customEvent.fire(this, "blur");
             customEvent.fire(this, "statusChanged", {status:status});
@@ -261,7 +305,13 @@
         /**
          * When page is focused but user is doing nothing on the page
          */
-        idle: function(){
+        idle: function(callback){
+            
+            // if first argument is a callback then set an event
+            if(typeof callback === 'function'){
+                return this.on("idle", callback);
+            }
+
             status = 'idle';
             customEvent.fire(this, "idle");
             customEvent.fire(this, "statusChanged", {status:status});
@@ -272,7 +322,13 @@
          * mousemove, click, keypress, scroll
          * This will be called when page has focus too
          */
-        wakeup: function(){
+        wakeup: function(callback){
+            
+            // if first argument is a callback then set an event
+            if(typeof callback === 'function'){
+                return this.on("wakeup", callback);
+            }
+
             status = 'active';
             customEvent.fire(this, "wakeup");
             customEvent.fire(this, "statusChanged", {status:status});
@@ -300,7 +356,7 @@
 
             var t = setInterval(function(){
                 if(status == 'active'){
-                    var ret = callback || callback();
+                    callback();
                 }
             }, seconds * 1000);
 
@@ -319,7 +375,7 @@
          */
         now: function(){
             init(); // Auto init on first call
-            return status;
+            return status === 'active';
         }
     };
 

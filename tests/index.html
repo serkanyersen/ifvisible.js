@@ -6,15 +6,41 @@
         <meta name="HandheldFriendly" content="true" />
 		<title>ifvisible.js test page</title>
 		<script src="../ifvisible.js"></script>
+		<style>
+			body{
+				font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+				font-size:12px;
+			}
+		</style>
 		<script type="text/javascript">
+			function d(el){
+				return document.getElementById(el);
+			}
+			ifvisible.setIdleDuration(5);
+
 			ifvisible.on('statusChanged', function(e){
-				document.getElementById("result").innerHTML += "<br>"+e.status;
+				d("result").innerHTML += "<br>"+e.status;
+			});
+
+			ifvisible.idle(function(){
+				d("result2").innerHTML = "Good bye. (-_-) ZzzZZzz...";
+			});
+
+			ifvisible.wakeup(function(){
+				d("result2").innerHTML = "Hey!, you woke me up. (o_o)";
+			});
+			ifvisible.onEvery(0.5, function(){
+				var i = d("result3").innerHTML;
+				d("result3").innerHTML = i.replace(/\(\d+\)/gim, "("+(new Date()).getSeconds()+")");
 			});
 		</script>
 	</head>
 	<body>
-    	<div style="border:1px solid #ccc;background:#f5f5f5;padding:20px;float:left;font-size:18px;" id="result">
-    		init
+		<p>Idle Duration is set to 5 seconds so that you can see the effect easily. <br>Try switching between tabs or minimizing the window.</p>
+    	<div style="border:1px solid #ccc;background:#f5f5f5;padding:5px;float:right;font-size:11px;width:90px;margin:5px;" id="result">
+    		<b style="border-bottom:1px solid #ccc;">Event log.</b>
     	</div>
+    	<div id="result2" style="font-size:18px;">If you wait 5 seconds I'll sleep</div>
+    	<div id="result3" style="font-size:18px;">Smart interval will stop when page is not active. (0)</div>
 	</body>
 </html>

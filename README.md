@@ -1,7 +1,7 @@
 ifvisible.js
 ------------
 
-Crosbrowser way to check if user is looking at the page or interacting with it.
+Crosbrowser & lightweight way to check if user is looking at the page or interacting with it.
 
 Here are few examples:
 
@@ -16,7 +16,7 @@ if( ifvisible.now() ){
 
 ```
 
-Handle tba switch or browser minimize states
+Handle tab switch or browser minimize states
 
 ```javascript
 
@@ -32,7 +32,7 @@ ifvisible.on("focus", function(){
 
 ```
 
-ifvisible.js can handle visible states too such as being IDLE or ACTIVE on the page
+ifvisible.js can handle activity states too, such as being IDLE or ACTIVE on the page
 
 ```javascript
 
@@ -48,7 +48,33 @@ ifvisible.on("wakeup", function(){
 
 ```
 
-You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the action it interval will automatically stop itself
+Default idle duration is 60 seconds but you can change it with `setIdleDuration` method
+
+```javascript
+
+ifvisible.setIdleDuration(120); // Page will become idle after 120 seconds
+
+```
+
+You can manually trigger status events by calling them directly or you can set events with their names by giving first argument as a callback
+
+```javascript
+
+ifvisible.idle(); // will put page in a idle status
+
+ifvisible.idle(function(){
+	// This code will work when page goes into idle status
+});
+
+// other methods are
+ifvisible.blur();
+ifvisible.focus();
+ifvisible.idle();
+ifvisible.wakeup();
+
+```
+
+You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the page the interval will automatically stop itself
 
 ```javascript
 
@@ -60,4 +86,3 @@ ifvisible.onEvery(0.5, function(){
 });
 
 ```
-
