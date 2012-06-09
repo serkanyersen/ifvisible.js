@@ -283,6 +283,7 @@
 
             status = 'active';
             customEvent.fire(this, "focus");
+            customEvent.fire(this, "wakeup"); // When focused page will woke up too.
             customEvent.fire(this, "statusChanged", {status:status});
         },
 
@@ -299,6 +300,7 @@
 
             status = 'hidden';
             customEvent.fire(this, "blur");
+            customEvent.fire(this, "idle"); // When blurred page is idle too
             customEvent.fire(this, "statusChanged", {status:status});
         },
 
