@@ -1,0 +1,10 @@
+# SublimeText project files
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
