@@ -3,7 +3,7 @@ ifvisible.js
 
 Crosbrowser & lightweight way to check if user is looking at the page or interacting with it.
 
-Here are few examples:
+### Check out the [Demo](http://serkanyersen.github.com/ifvisible.js/demo.html) or read below for code example
 
 
 ```javascript
