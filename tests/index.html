@@ -1,46 +1,88 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <meta name="HandheldFriendly" content="true" />
-		<title>ifvisible.js test page</title>
-		<script src="../ifvisible.js"></script>
-		<style>
-			body{
-				font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-				font-size:12px;
-			}
-		</style>
-		<script type="text/javascript">
-			function d(el){
-				return document.getElementById(el);
-			}
-			ifvisible.setIdleDuration(5);
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <title>ifvisible.js test page</title>
+        <script src="../ifvisible.js"></script>
+        <script type="text/javascript">
+            function d(el){
+                return document.getElementById(el);
+            }
+            ifvisible.setIdleDuration(30);
 
-			ifvisible.on('statusChanged', function(e){
-				d("result").innerHTML += "<br>"+e.status;
-			});
+            ifvisible.on('statusChanged', function(e){
+                d("result").innerHTML += (e.status+"<br>");
+            });
 
-			ifvisible.idle(function(){
-				d("result2").innerHTML = "Good bye. (-_-) ZzzZZzz...";
-			});
+            ifvisible.idle(function(){
+                d("result2").innerHTML = "(-_-) Good bye. ZzzZZzz...";
+                document.body.style.opacity = 0.5;
+            });
 
-			ifvisible.wakeup(function(){
-				d("result2").innerHTML = "Hey!, you woke me up. (o_o)";
-			});
-			ifvisible.onEvery(0.5, function(){
-				var i = d("result3").innerHTML;
-				d("result3").innerHTML = i.replace(/\(\d+\)/gim, "("+(new Date()).getSeconds()+")");
-			});
-		</script>
-	</head>
-	<body>
-		<p>Idle Duration is set to 5 seconds so that you can see the effect easily. <br>Try switching between tabs or minimizing the window.</p>
-    	<div style="border:1px solid #ccc;background:#f5f5f5;padding:5px;float:right;font-size:11px;width:90px;margin:5px;" id="result">
-    		<b style="border-bottom:1px solid #ccc;">Event log.</b>
-    	</div>
-    	<div id="result2" style="font-size:18px;">If you wait 5 seconds I'll sleep</div>
-    	<div id="result3" style="font-size:18px;">Smart interval will stop when page is not active. (0)</div>
-	</body>
+            ifvisible.wakeup(function(){
+                d("result2").innerHTML = "(O_o) Hey!, you woke me up.";
+                document.body.style.opacity = 1;
+            });
+
+            ifvisible.onEvery(0.5, function(){
+                // Clock, as simple as it gets
+                var h = (new Date()).getHours();
+                var m = (new Date()).getMinutes();
+                var s = (new Date()).getSeconds();
+                h = h < 10? "0"+h : h;
+                m = m < 10? "0"+m : m;
+                s = s < 10? "0"+s : s;
+                // Update clock
+                d("result3").innerHTML = (h+':'+m+':'+s);
+            });
+
+            setInterval(function(){
+                var info = ifvisible.getIdleInfo();
+                d("seconds").innerHTML = parseInt(info.timeLeft / 1000), 10;
+                d("idlebar").style.width = info.timeLeftPer+'%';
+            }, 100);
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <h1>ifvisible.js test page</h1>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <p class="lead">Idle duration is set to <span id="idleTime" class="label label-warning">00 seconds</span>, so that you can see the effect easily.
+                    <ul>
+                        <li>Try switching between tabs or minimizing the window. and look for the event log</li>
+                        <li>Do nothing and wait for idle time to fill. Counter should stop.</li>
+                        <li>While Idle, try moving the mouse or pressing any key. Page should wake up</li>
+                    </ul>
+
+                    <div class="well">
+                        If you wait <span class="label label-warning" id="seconds">00</span> seconds I'll sleep.
+                        <div class="progress">
+                          <div class="bar" id="idlebar" style="width: 0%;"></div>
+                        </div>
+                        <div id="result2">(^_^) Hey, there.</div>
+                    </div>
+                    <div class="well">
+                        sThis simple clock <span id="result3" class="badge badge-info">0</span> is updated via <code>onEvery</code> method. It should stop when page is not active (idle,hidden) and should continue with current time when page is active.
+                    </div>
+                </div>
+                <div class="span6">
+                    <div id="result">
+                        <p>Event log.</p>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var dur = (ifvisible.getIdleDuration() / 1000);
+                d('seconds').innerHTML =  dur;
+                d('idleTime').innerHTML = dur + " seconds";
+            </script>
+        </div>
+    </body>
 </html>

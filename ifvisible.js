@@ -2,7 +2,7 @@
 (function(doc, undefined){
     // Use strict rules for proper coding
     "use strict";
-    
+
     /**
      * Export Object
      * @type {Object}
@@ -14,6 +14,7 @@
      * @type {Boolean}
      */
     var initialized = false;
+
     /**
      * Current status, may contain "active", "idle", "hidden"
      * @type {String}
@@ -25,6 +26,13 @@
      * @type {Number} in miliseconds
      */
     var idleTime = 60000;
+
+    /**
+     * To track how many time left to become IDLE I need to know
+     * when we started keeping the time
+     * @type {Number} in miliseconds
+     */
+    var idleStartedTime = false;
 
     /**
      * Handle Custom Object events
@@ -60,10 +68,10 @@
             /**
              * Extent Objects with custom event GUID so that it will be hidden
              */
-            obj.constructor.prototype[customGUID] = undefined;
+            obj/*.constructor.prototype*/[customGUID] = undefined;
 
             if(!obj[customGUID]){
-                obj[customGUID] = guid();
+                obj[customGUID] = 'ifvisible.object.event.identifier'; // guid();
             }
 
             if(!listeners[obj[customGUID]]){
@@ -73,7 +81,7 @@
             if(!listeners[obj[customGUID]][event]){
                 listeners[obj[customGUID]][event] = [];
             }
-            
+
             listeners[obj[customGUID]][event].push(callback);
         };
 
@@ -94,7 +102,6 @@
                     }
                 }
             }
-        
         };
 
         /**
@@ -114,7 +121,7 @@
      */
     var addEvent = (function () {
         var setListener;
-        
+
         return function (el, ev, fn) {
             if (!setListener) {
                 if (el.addEventListener) {
@@ -165,14 +172,14 @@
             v = 3,
             div = document.createElement('div'),
             all = div.getElementsByTagName('i');
-        
+
         while (
             div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
             all[0]
         );
-        
+
         return v > 4 ? v : undef;
-        
+
     }());
 
 
@@ -206,6 +213,7 @@
             if(status !== "active"){
                 ifvisible.wakeup();
             }
+            idleStartedTime = +(new Date());
             timer = setTimeout(function(){
                 if(status === 'active'){
                     ifvisible.idle();
@@ -216,6 +224,7 @@
         addEvent(doc, "mousemove", wakeUp);
         addEvent(doc, "keyup", wakeUp);
         addEvent(window, "scroll", wakeUp);
+        ifvisible.focus(wakeUp); // If page got focus but noinput activity was recorded
     }
 
     /**
@@ -223,7 +232,7 @@
      * @constructor
      */
     function init(){
-        
+
         if(initialized){ return true; }
 
         // If hidden is false the use the legacy methods
@@ -250,9 +259,9 @@
                 }
             }, false);
         }
-        trackIdleStatus();
-        //Set method to be initialized
         initialized = true;
+        //Set method to be initialized
+        trackIdleStatus();
     }
 
 
@@ -268,6 +277,39 @@
          */
         setIdleDuration: function(seconds){
             idleTime = seconds * 1000;
+        },
+
+        /**
+         * Get idle timeout value.
+         */
+        getIdleDuration: function(){
+            return idleTime;
+        },
+
+        /**
+         * GEt information about user being idle.
+         * @return {Object} An object contining information about idle status, informations is as followa <pre>
+         *  isIdle = [current idle status true/false]
+         *  idleFor = [how long the user was idle in milliseconds]
+         *  timeLeft = [How long does it take to become idle in milliseconds]
+         *  timeLeftPer = [How long does it take to become idle in percentage]
+         * </pre>
+         */
+        getIdleInfo: function(){
+            var now = +(new Date());
+            var response = {};
+            if(status == 'idle'){
+                response.isIdle = true;
+                response.idleFor = now - idleStartedTime;
+                response.timeLeft = 0;
+                response.timeLeftPer = 100;
+            }else{
+                response.isIdle = false;
+                response.idleFor = now - idleStartedTime;
+                response.timeLeft = (idleStartedTime + idleTime) - now;
+                response.timeLeftPer = (100 - (response.timeLeft * 100 / idleTime)).toFixed(2);
+            }
+            return response;
         },
 
         /**
@@ -292,7 +334,7 @@
          * @note: this may trigger when iframes are selected
          */
         blur: function(callback){
-            
+
             // if first argument is a callback then set an event
             if(typeof callback === 'function'){
                 return this.on("blur", callback);
@@ -308,7 +350,7 @@
          * When page is focused but user is doing nothing on the page
          */
         idle: function(callback){
-            
+
             // if first argument is a callback then set an event
             if(typeof callback === 'function'){
                 return this.on("idle", callback);
@@ -325,7 +367,7 @@
          * This will be called when page has focus too
          */
         wakeup: function(callback){
-            
+
             // if first argument is a callback then set an event
             if(typeof callback === 'function'){
                 return this.on("wakeup", callback);
@@ -344,7 +386,7 @@
          */
         on: function(name, callback){
             init(); // Auto init on first call
-            
+
             customEvent.add(this, name, callback);
         },
 
@@ -380,7 +422,6 @@
             return status === 'active';
         }
     };
-
 
     // If there is a Require JS kind of library use it othervise
     // place it on the window
