@@ -42,6 +42,11 @@
 
             setInterval(function(){
                 var info = ifvisible.getIdleInfo();
+                // Give 3% margin to stabilaze user output
+                if(info.timeLeftPer < 3){
+                    info.timeLeftPer = 0;
+                    info.timeLeft = ifvisible.getIdleDuration();
+                }
                 d("seconds").innerHTML = parseInt(info.timeLeft / 1000), 10;
                 d("idlebar").style.width = info.timeLeftPer+'%';
             }, 100);
