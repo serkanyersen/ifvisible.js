@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ifvisible.js by serkanyersen</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Ifvisible.js</h1>
+        <p class="header">Checks if the current page is visible or not</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/serkanyersen/ifvisible.js/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/serkanyersen/ifvisible.js/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/serkanyersen/ifvisible.js">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/serkanyersen">serkanyersen</a></p>
+
+
+      </header>
+      <section>
+        <h2>ifvisible.js</h2>
+
+<p>Crosbrowser &amp; lightweight way to check if user is looking at the page or interacting with it.</p>
+
+<p>Here are few examples:</p>
+
+<div class="highlight"><pre>
+<span class="c1">// If page is visible right now</span>
+<span class="k">if</span><span class="p">(</span> <span class="nx">ifvisible</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="p">){</span>
+    <span class="c1">// Display pop-up</span>
+    <span class="nx">openPopUp</span><span class="p">();</span>
+<span class="p">}</span>
+
+</pre></div>
+
+<p>Handle tab switch or browser minimize states</p>
+
+<div class="highlight"><pre>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"blur"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// example code here..</span>
+    <span class="nx">animations</span><span class="p">.</span><span class="nx">pause</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"focus"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// resume all animations</span>
+    <span class="nx">animations</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
+<span class="p">});</span>
+
+</pre></div>
+
+<p>ifvisible.js can handle activity states too, such as being IDLE or ACTIVE on the page</p>
+
+<div class="highlight"><pre>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"idle"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// Stop auto updating the live data</span>
+    <span class="nx">stream</span><span class="p">.</span><span class="nx">pause</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"wakeup"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// go back updating data</span>
+    <span class="nx">stream</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
+<span class="p">});</span>
+
+</pre></div>
+
+<p>Default idle duration is 60 seconds but you can change it with <code>setIdleDuration</code> method</p>
+
+<div class="highlight"><pre>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">setIdleDuration</span><span class="p">(</span><span class="mi">120</span><span class="p">);</span> <span class="c1">// Page will become idle after 120 seconds</span>
+
+</pre></div>
+
+<p>You can manually trigger status events by calling them directly or you can set events with their names by giving first argument as a callback</p>
+
+<div class="highlight"><pre>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">idle</span><span class="p">();</span> <span class="c1">// will put page in a idle status</span>
+
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">idle</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// This code will work when page goes into idle status</span>
+<span class="p">});</span>
+
+<span class="c1">// other methods are</span>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">blur</span><span class="p">();</span>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">idle</span><span class="p">();</span>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">wakeup</span><span class="p">();</span>
+
+</pre></div>
+
+<p>You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the page the interval will automatically stop itself</p>
+
+<div class="highlight"><pre>
+<span class="c1">// If page is visible run this function on every half seconds</span>
+<span class="nx">ifvisible</span><span class="p">.</span><span class="nx">onEvery</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// Do an animation on the logo only when page is visible</span>
+    <span class="nx">animateLogo</span><span class="p">();</span>
+
+<span class="p">});</span>
+
+</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
