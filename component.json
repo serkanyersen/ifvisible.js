@@ -1,5 +1,5 @@
 {
   "name": "ifvisible.js",
   "version": "1.0.0",
-  "main": "./ifvisible.js"
+  "main": "./src/ifvisible.js"
 }
