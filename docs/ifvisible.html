@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Ifvisible.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>Ifvisible.js</h1>
+<p>By Serkan Yersen - <a href="http://serkanyersen.github.com/ifvisible.js/">http://serkanyersen.github.com/ifvisible.js/</a></p>
+<h2>Copyright (c) 2013 Serkan Yersen</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Permission <span class="keyword">is</span> hereby granted, free <span class="keyword">of</span> charge, to any person obtaining a copy <span class="keyword">of</span>
+<span class="keyword">this</span> software <span class="keyword">and</span> associated documentation files (the <span class="string">"Software"</span>), to deal <span class="keyword">in</span>
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, <span class="keyword">and</span>/<span class="keyword">or</span> sell copies <span class="keyword">of</span>
+the Software, <span class="keyword">and</span> to permit persons to whom the Software <span class="keyword">is</span> furnished to <span class="keyword">do</span> so,
+subject to the following conditions:
+
+The above copyright notice <span class="keyword">and</span> <span class="keyword">this</span> permission notice shall be included <span class="keyword">in</span> all
+copies <span class="keyword">or</span> substantial portions <span class="keyword">of</span> the Software.
+
+THE SOFTWARE IS PROVIDED <span class="string">"AS IS"</span>, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.<span class="comment">###</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Use strict rules for proper coding</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Export Object</p>
+<pre><code>@type {Object}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ifvisible = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>document element</p>
+<pre><code>@type {Document Object}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>doc = document</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>flag to prevent multiple initializations</p>
+<pre><code>@type {Boolean}`</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>initialized = <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Current status, may contain <code>active</code>, <code>idle</code>, <code>hidden</code></p>
+<pre><code>@type {String}`</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>status = <span class="string">"active"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Time to wait when setting page to idle</p>
+<pre><code>@type {Number} in miliseconds</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>idleTime = <span class="number">60000</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>To track how many time left to become IDLE I need to know
+when we started keeping the time</p>
+<pre><code>@type {Number} in miliseconds</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>idleStartedTime = <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2>Custome Event Handler</h2>
+<p>Handle Custom Object events</p>
+<pre><code>@return {Object} add and fire methods to handle custom events</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>customEvent = (-&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Create a synthetic GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="title">S4</span></span> = -&gt;
+     (((<span class="number">1</span>+Math.random())*<span class="number">0x10000</span>)|<span class="number">0</span>).toString(<span class="number">16</span>).substring(<span class="number">1</span>)
+  <span class="function"><span class="title">guid</span></span> = -&gt;
+     (S4()+S4()+<span class="string">"-"</span>+S4()+<span class="string">"-"</span>+S4()+<span class="string">"-"</span>+S4()+<span class="string">"-"</span>+S4()+S4()+S4())</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Event listeners</p>
+<pre><code>@type {Object}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  listeners = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Name of the custom GUID property</p>
+<pre><code>@type {String}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  cgid = <span class="string">'__ceGUID'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Add a custom event to a given object</p>
+<pre><code>@param {Object}   obj      Object to add custom events
+@param {string}   event    name of the custom event
+@param {Function} callback callback function to run when
+                           event is fired</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="title">addCustomEvent</span></span> = (obj, event, callback)-&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Extent Objects with custom event GUID so that it will be hidden</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    obj[cgid] = `<span class="javascript"><span class="literal">undefined</span></span>` <span class="comment"># it was using prototype before but diabled</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>We were using GUID here but it&#39;s disabled to keep events object in scope</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    obj[cgid] = <span class="string">"ifvisible.object.event.identifier"</span> <span class="keyword">unless</span> obj[cgid]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>create a place for event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    listeners[obj[cgid]] = {}  <span class="keyword">unless</span> listeners[obj[cgid]]
+    listeners[obj[cgid]][event] = []\
+      <span class="keyword">unless</span> listeners[obj[cgid]][event]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>add event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    listeners[obj[cgid]][event].push(callback)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Trigger the custom event on given object</p>
+<pre><code>@param  {Object} obj   Object to trigger the event
+@param  {string} event name of the event to trigger
+@param  {object} memo  a custom argument to send
+                       triggered event</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="title">fireCustomEvent</span></span> = (obj, event, memo)-&gt;
+    <span class="keyword">if</span> obj[cgid] <span class="keyword">and</span> listeners[obj[cgid]] <span class="keyword">and</span> listeners[obj[cgid]][event]
+      ev memo <span class="keyword">or</span> {} <span class="keyword">for</span> ev <span class="keyword">in</span> listeners[obj[cgid]][event]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>export methods to use</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  add: addCustomEvent
+  fire: fireCustomEvent
+)()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h2>Regular Event Handlers</h2>
+<p>CrossBrowser event attachement</p>
+<pre><code>@param  {DomElement}   el Dom Element to attach the event
+@param  {string}   ev name of the event with on prefix
+@param  {Function} fn callback function to run when event
+                      is fired</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>addEvent = (-&gt;
+  setListener = <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>return an anonmous function with the correct version of set listener</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  (el, ev, fn)-&gt;
+    <span class="keyword">if</span> <span class="keyword">not</span> setListener
+      <span class="keyword">if</span> el.addEventListener
+        <span class="function"><span class="title">setListener</span></span> = (el, ev, fn) -&gt;
+          el.addEventListener(ev, fn, <span class="literal">false</span>)
+      <span class="keyword">else</span> <span class="keyword">if</span> el.attachEvent
+        <span class="function"><span class="title">setListener</span></span> = (el, ev, fn) -&gt;
+          el.attachEvent(ev, fn, <span class="literal">false</span>)
+      <span class="keyword">else</span>
+        <span class="function"><span class="title">setListener</span></span> = (el, ev, fn) -&gt;
+          el[<span class="string">'on'</span> + ev] =  fn
+    setListener(el, ev, fn)
+)()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Trigger any HTML events</p>
+<pre><code>@param  {DomElement} element Dom Element to trigger
+                             events on
+@param  {string} event   event name to trigger
+@return {boolean}   if dispached or not</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">fireEvent</span></span> = (element, event) -&gt;
+  <span class="keyword">if</span> doc.createEventObject
+    element.fireEvent(<span class="string">'on'</span>+event,evt)
+  <span class="keyword">else</span>
+    evt = doc.createEvent(<span class="string">'HTMLEvents'</span>)
+    evt.initEvent(event, <span class="literal">true</span>, <span class="literal">true</span>)
+    <span class="keyword">not</span> element.dispatchEvent(evt)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h2>IE Detection</h2>
+<p>Get the IE version</p>
+<pre><code>@return {Number|Undefined} version number of IE or undefined</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ie = (-&gt;
+  undef = <span class="literal">undefined</span>
+  v = <span class="number">3</span>
+  div = doc.createElement(<span class="string">"div"</span>)
+  all = div.getElementsByTagName(<span class="string">"i"</span>)
+
+  <span class="function"><span class="title">check</span></span> = -&gt;
+    <span class="keyword">return</span> ((div.innerHTML = <span class="string">"&lt;!--[if gt IE "</span> + (++v) +
+      <span class="string">"]&gt;&lt;i&gt;&lt;/i&gt;&lt;![endif]--&gt;"</span>); all[<span class="number">0</span>])
+
+  <span class="keyword">while</span> check()
+    <span class="keyword">continue</span>
+
+  (<span class="keyword">if</span> v &gt; <span class="number">4</span> <span class="keyword">then</span> v <span class="keyword">else</span> undef)
+)()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h2>Get HTML5 visibility api for current browser</h2>
+<p>Set the name of the hidden property and the change event for visibility checks</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>hidden = <span class="literal">false</span>
+visibilityChange = <span class="literal">undefined</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Standarts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">if</span> <span class="keyword">typeof</span> doc.hidden <span class="keyword">isnt</span> <span class="string">"undefined"</span>
+  hidden = <span class="string">"hidden"</span>
+  visibilityChange = <span class="string">"visibilitychange"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>For Gecko browsers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">typeof</span> doc.mozHidden <span class="keyword">isnt</span> <span class="string">"undefined"</span>
+  hidden = <span class="string">"mozHidden"</span>
+  visibilityChange = <span class="string">"mozvisibilitychange"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>For MSIE</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">typeof</span> doc.msHidden <span class="keyword">isnt</span> <span class="string">"undefined"</span>
+  hidden = <span class="string">"msHidden"</span>
+  visibilityChange = <span class="string">"msvisibilitychange"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Webkit browsers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">typeof</span> doc.webkitHidden <span class="keyword">isnt</span> <span class="string">"undefined"</span>
+  hidden = <span class="string">"webkitHidden"</span>
+  visibilityChange = <span class="string">"webkitvisibilitychange"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Track if the page is idle or not</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">trackIdleStatus</span></span> = -&gt;
+  timer = <span class="literal">false</span>
+  <span class="function"><span class="title">wakeUp</span></span> = -&gt;
+    clearTimeout timer
+    ifvisible.wakeup()  <span class="keyword">if</span> status <span class="keyword">isnt</span> <span class="string">"active"</span>
+    idleStartedTime = +(<span class="keyword">new</span> Date())
+    timer = setTimeout(-&gt;
+      ifvisible.idle()  <span class="keyword">if</span> status <span class="keyword">is</span> <span class="string">"active"</span>
+    , idleTime)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Call once so that it can set page to idle without doing anything</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  wakeUp()
+  addEvent doc, <span class="string">"mousemove"</span>, wakeUp
+  addEvent doc, <span class="string">"keyup"</span>, wakeUp
+  addEvent window, <span class="string">"scroll"</span>, wakeUp</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>If page got focus but noinput activity was recorded</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  ifvisible.focus wakeUp</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h2>Initialize the module</h2>
+<p>constructor</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">init</span></span> = -&gt;
+  <span class="keyword">return</span> <span class="literal">true</span>  <span class="keyword">if</span> initialized</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>If hidden is false the use the legacy methods</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> hidden <span class="keyword">is</span> <span class="literal">false</span>
+    blur = <span class="string">"blur"</span>
+    blur = <span class="string">"focusout"</span>  <span class="keyword">if</span> ie &lt; <span class="number">9</span>
+    addEvent window, blur, -&gt;
+      ifvisible.blur()
+
+    addEvent window, <span class="string">"focus"</span>, -&gt;
+      ifvisible.focus()
+
+  <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>add HTML5 visibility events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    addEvent doc, visibilityChange, -&gt;
+      <span class="keyword">if</span> doc[hidden]
+        ifvisible.blur()
+      <span class="keyword">else</span>
+        ifvisible.focus()
+    , <span class="literal">false</span>
+  initialized = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Set method to be initialized</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  trackIdleStatus()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h2>Exports</h2>
+<p>Methods to be exported</p>
+<pre><code>@type {Object}</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ifvisible =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Change idle timeout value.</p>
+<pre><code>@param {Number} seconds a number in seconds such as: 10 or 0.5</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  setIdleDuration: (seconds) -&gt;
+    idleTime = seconds * <span class="number">1000</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Get idle timeout value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getIdleDuration: -&gt;
+    idleTime</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Get information about user being idle.</p>
+<pre><code>@return {Object} An object contining information about idle status</code></pre>
+<p>Informations is as following</p>
+<pre><code>isIdle: [current idle status true/false]
+idleFor: [how long the user was idle
+          in milliseconds]
+timeLeft: [How long does it take to become
+           idle in milliseconds]
+timeLeftPer: [How long does it take to become
+              idle in percentage]</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getIdleInfo: -&gt;
+    now = +(<span class="keyword">new</span> Date())
+    response = {}
+    <span class="keyword">if</span> status <span class="keyword">is</span> <span class="string">"idle"</span>
+      response.isIdle = <span class="literal">true</span>
+      response.idleFor = now - idleStartedTime
+      response.timeLeft = <span class="number">0</span>
+      response.timeLeftPer = <span class="number">100</span>
+    <span class="keyword">else</span>
+      response.isIdle = <span class="literal">false</span>
+      response.idleFor = now - idleStartedTime
+      response.timeLeft = (idleStartedTime + idleTime) - now
+      response.timeLeftPer = (<span class="number">100</span> - (response.timeLeft * <span class="number">100</span> /
+        idleTime)).toFixed(<span class="number">2</span>)
+    response</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>When User Opens the page,</p>
+<pre><code>@note: User may not be looking at it directly</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  focus: (callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>if first argument is a callback then set an event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@on</span>(<span class="string">"focus"</span>, callback)  <span class="keyword">if</span> <span class="keyword">typeof</span> callback <span class="keyword">is</span> <span class="string">"function"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>else trigger event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    status = <span class="string">"active"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"focus"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"wakeup"</span> <span class="comment"># When focused page will woke up too.</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"statusChanged"</span>, { status: status }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>When User swicthes tabs or minimizes the window</p>
+<pre><code>@note: this may trigger when iframes are selected</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  blur: (callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>if first argument is a callback then set an event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@on</span>(<span class="string">"blur"</span>, callback)  <span class="keyword">if</span> <span class="keyword">typeof</span> callback <span class="keyword">is</span> <span class="string">"function"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>else trigger event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    status = <span class="string">"hidden"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"blur"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"idle"</span> <span class="comment"># When blurred page is idle too</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"statusChanged"</span>, { status: status }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>When page is focused but user is doing nothing on the page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  idle: (callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>if first argument is a callback then set an event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@on</span>(<span class="string">"idle"</span>, callback)  <span class="keyword">if</span> <span class="keyword">typeof</span> callback <span class="keyword">is</span> <span class="string">"function"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>else trigger event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    status = <span class="string">"idle"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"idle"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"statusChanged"</span>, { status: status }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>When user started to make interactions on the page such as:
+<code>mousemove</code>, <code>click</code>, <code>keypress</code>, <code>scroll</code>
+This will be called when page has focus too</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  wakeup: (callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>if first argument is a callback then set an event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@on</span>(<span class="string">"wakeup"</span>, callback)  <span class="keyword">if</span> <span class="keyword">typeof</span> callback <span class="keyword">is</span> <span class="string">"function"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>else trigger event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    status = <span class="string">"active"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"wakeup"</span>
+    customEvent.fire <span class="keyword">this</span>, <span class="string">"statusChanged"</span>, { status: status }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Set an event to ifvisible object</p>
+<pre><code>@param  {string}   name     Event name such as focus,
+                            idle, blur, wakeup
+@param  {Function} callback callback function to call
+                            when event is fired
+@return {object}            an object with a stop method
+                            to unbid this event</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="literal">on</span>: (name, callback) -&gt;
+    init() <span class="comment"># Auto init on first call</span>
+    customEvent.add <span class="keyword">this</span>, name, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>if page is visible then run given code in given seconds of intervals</p>
+<pre><code>@param  {float}   seconds  seconds to run interval
+@param  {Function} callback callback function to run</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  onEvery: (seconds, callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Auto init on first call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    init()
+    t = setInterval(-&gt;
+      callback()  <span class="keyword">if</span> status <span class="keyword">is</span> <span class="string">"active"</span>
+    , seconds * <span class="number">1000</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>return methods</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    stop: -&gt;
+      clearInterval t
+
+    code: t
+    callback: callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p><code>ifvisible.now()</code> return if the page is visible right now?</p>
+<pre><code>@return {boolean} true if page is visible</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  now: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Auto init on first call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    init()
+    status <span class="keyword">is</span> <span class="string">"active"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>If there is a <strong>Require JS</strong> kind of library use it othervise
+place it on the <code>window</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">if</span> <span class="keyword">typeof</span> define <span class="keyword">is</span> <span class="string">"function"</span> <span class="keyword">and</span> define.amd
+  define -&gt;
+    ifvisible
+
+<span class="keyword">else</span>
+  window.ifvisible = ifvisible</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>compile code: <code>coffee -wcm ifvisible.coffee</code></p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
