@@ -1,3 +1,5 @@
+###global define ###
+
 ###
 Copyright (c) 2013 Serkan Yersen
 
@@ -82,7 +84,7 @@ customEvent = (->
   Name of the custom GUID property
   @type {String}
   ###
-  customGUID = '__ceGUID'
+  cgid = '__ceGUID'
 
   ###
   Add a custom event to a given object
@@ -92,14 +94,15 @@ customEvent = (->
   ###
   addCustomEvent = (obj, event, callback)->
     # Extent Objects with custom event GUID so that it will be hidden
-    obj[customGUID] = `undefined` # it was using prototype before but diabled
+    obj[cgid] = `undefined` # it was using prototype before but diabled
     # We were using GUID here but it's disabled to keep events object in scope
-    obj[customGUID] = "ifvisible.object.event.identifier"  unless obj[customGUID]
+    obj[cgid] = "ifvisible.object.event.identifier" unless obj[cgid]
     # create a place for event
-    listeners[obj[customGUID]] = {}  unless listeners[obj[customGUID]]
-    listeners[obj[customGUID]][event] = []  unless listeners[obj[customGUID]][event]
+    listeners[obj[cgid]] = {}  unless listeners[obj[cgid]]
+    listeners[obj[cgid]][event] = []\
+      unless listeners[obj[cgid]][event]
     # add event
-    listeners[obj[customGUID]][event].push(callback)
+    listeners[obj[cgid]][event].push(callback)
 
   ###
   Trigger the custom event on given object
@@ -108,8 +111,8 @@ customEvent = (->
   @param  {object} memo  a custom argument to send triggered event
   ###
   fireCustomEvent = (obj, event, memo)->
-    if obj[customGUID] and listeners[obj[customGUID]] and listeners[obj[customGUID]][event]
-      ev memo or {} for ev in listeners[obj[customGUID]][event]
+    if obj[cgid] and listeners[obj[cgid]] and listeners[obj[cgid]][event]
+      ev memo or {} for ev in listeners[obj[cgid]][event]
 
   # export methods to use
   add: addCustomEvent
@@ -124,7 +127,7 @@ CrossBrowser event attachement
 ###
 addEvent = (->
   setListener = false
-
+  # return an anonmous function with the correct version of set listener
   (el, ev, fn)->
     if not setListener
       if el.addEventListener
@@ -164,7 +167,8 @@ ie = (->
   all = div.getElementsByTagName("i")
 
   check = ->
-    return ((div.innerHTML = "<!--[if gt IE " + (++v) + "]><i></i><![endif]-->"); all[0])
+    return ((div.innerHTML = "<!--[if gt IE " + (++v) +
+      "]><i></i><![endif]-->"); all[0])
 
   while check()
     continue
@@ -267,7 +271,8 @@ ifvisible =
 
   ###
   GEt information about user being idle.
-  @return {Object} An object contining information about idle status, informations is as following
+  @return {Object} An object contining information about idle status,
+  informations is as following
   <pre>
     isIdle = [current idle status true/false]
     idleFor = [how long the user was idle in milliseconds]
@@ -287,7 +292,8 @@ ifvisible =
       response.isIdle = false
       response.idleFor = now - idleStartedTime
       response.timeLeft = (idleStartedTime + idleTime) - now
-      response.timeLeftPer = (100 - (response.timeLeft * 100 / idleTime)).toFixed(2)
+      response.timeLeftPer = (100 - (response.timeLeft * 100 /
+        idleTime)).toFixed(2)
     response
 
 
