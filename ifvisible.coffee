@@ -100,8 +100,7 @@ customEvent = (->
     obj[cgid] = "ifvisible.object.event.identifier" unless obj[cgid]
     # create a place for event
     listeners[obj[cgid]] = {}  unless listeners[obj[cgid]]
-    listeners[obj[cgid]][event] = []\
-      unless listeners[obj[cgid]][event]
+    listeners[obj[cgid]][event] = [] unless listeners[obj[cgid]][event]
     # add event
     listeners[obj[cgid]][event].push(callback)
 
@@ -293,19 +292,18 @@ ifvisible =
   # ```
   getIdleInfo: ->
     now = +(new Date())
-    response = {}
+    res = {}
     if status is "idle"
-      response.isIdle = true
-      response.idleFor = now - idleStartedTime
-      response.timeLeft = 0
-      response.timeLeftPer = 100
+      res.isIdle = true
+      res.idleFor = now - idleStartedTime
+      res.timeLeft = 0
+      res.timeLeftPer = 100
     else
-      response.isIdle = false
-      response.idleFor = now - idleStartedTime
-      response.timeLeft = (idleStartedTime + idleTime) - now
-      response.timeLeftPer = (100 - (response.timeLeft * 100 /
-        idleTime)).toFixed(2)
-    response
+      res.isIdle = false
+      res.idleFor = now - idleStartedTime
+      res.timeLeft = (idleStartedTime + idleTime) - now
+      res.timeLeftPer = (100 - (res.timeLeft * 100 / idleTime)).toFixed(2)
+    res
 
 
   # When User Opens the page,
