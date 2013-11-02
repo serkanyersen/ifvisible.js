@@ -91,7 +91,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           };
         } else if (el.attachEvent) {
           setListener = function(el, ev, fn) {
-            return el.attachEvent(ev, fn, false);
+            return el.attachEvent('on' + ev, fn, false);
           };
         } else {
           setListener = function(el, ev, fn) {

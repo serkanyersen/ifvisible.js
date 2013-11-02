@@ -139,7 +139,7 @@ addEvent = (->
           el.addEventListener(ev, fn, false)
       else if el.attachEvent
         setListener = (el, ev, fn) ->
-          el.attachEvent(ev, fn, false)
+          el.attachEvent('on' + ev, fn, false)
       else
         setListener = (el, ev, fn) ->
           el['on' + ev] =  fn
