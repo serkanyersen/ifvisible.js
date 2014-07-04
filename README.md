@@ -9,7 +9,7 @@ Crossbrowser & lightweight way to check if user is looking at the page or intera
 ## Installation
 From Bower
 ```
-bower install ifvisible
+bower install ifvisible.js
 ```
 
 For Meteor
