@@ -170,7 +170,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }, idleTime);
     };
     wakeUp();
-    addEvent(doc, "mousemove", wakeUp);
+    addEvent(doc, "mousemove", (function()
+	{
+		var lastX =0;
+		var lastY = 0;
+		return function(evt){ 
+			if ((lastX != evt.clientX) || (lastY != evt.clientY))
+			{
+				wakeUp(evt);
+				lastX = evt.clientX;
+				lastY = evt.clientY;
+			}
+		};
+	}()));
     addEvent(doc, "keyup", wakeUp);
     addEvent(window, "scroll", wakeUp);
     return ifvisible.focus(wakeUp);
