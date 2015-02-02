@@ -278,17 +278,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       return customEvent.add(this, name, callback);
     },
     onEvery: function(seconds, callback) {
-      var t;
+      var paused, t;
 
       init();
-      t = setInterval(function() {
-        if (status === "active") {
-          return callback();
-        }
-      }, seconds * 1000);
+      paused = false;
+      if (callback) {
+        t = setInterval(function() {
+          if (status === "active" && paused === false) {
+            return callback();
+          }
+        }, seconds * 1000);
+      }
       return {
         stop: function() {
           return clearInterval(t);
+        },
+        pause: function() {
+          return paused = true;
+        },
+        unpause: function() {
+          return paused = false;
         },
         code: t,
         callback: callback
@@ -309,7 +318,3 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   }
 
 }).call(this);
-
-/*
-//@ sourceMappingURL=ifvisible.map
-*/

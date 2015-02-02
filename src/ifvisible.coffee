@@ -383,13 +383,22 @@ ifvisible =
   onEvery: (seconds, callback) ->
     # Auto init on first call
     init()
+
+    paused = false
+
     t = setInterval(->
-      callback()  if status is "active"
-    , seconds * 1000)
+      callback()  if status is "active" && paused is false
+    , seconds * 1000) if callback
 
     # return methods
     stop: ->
       clearInterval t
+
+    pause: ->
+      paused = true
+
+    unpause: ->
+      paused = false
 
     code: t
     callback: callback
