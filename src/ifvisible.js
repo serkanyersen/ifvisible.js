@@ -37,7 +37,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   idleStartedTime = false;
 
   customEvent = (function() {
-    var S4, addCustomEvent, cgid, fireCustomEvent, guid, listeners;
+    var S4, addCustomEvent, cgid, fireCustomEvent, guid, listeners, removeCustomEvent;
 
     S4 = function() {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -73,8 +73,29 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         return _results;
       }
     };
+    removeCustomEvent = function(obj, event, callback) {
+      var cl, i, _i, _len, _ref;
+
+      if (callback) {
+        if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
+          _ref = listeners[obj[cgid]][event];
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            cl = _ref[i];
+            if (cl === callback) {
+              listeners[obj[cgid]][event].splice(i, 1);
+              return cl;
+            }
+          }
+        }
+      } else {
+        if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
+          return delete listeners[obj[cgid]][event];
+        }
+      }
+    };
     return {
       add: addCustomEvent,
+      remove: removeCustomEvent,
       fire: fireCustomEvent
     };
   })();
@@ -276,6 +297,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     on: function(name, callback) {
       init();
       return customEvent.add(this, name, callback);
+    },
+    off: function(name, callback) {
+      init();
+      return customEvent.remove(this, name, callback);
     },
     onEvery: function(seconds, callback) {
       var paused, t;

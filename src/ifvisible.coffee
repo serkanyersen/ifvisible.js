@@ -113,10 +113,30 @@ customEvent = (->
   # ```
   fireCustomEvent = (obj, event, memo)->
     if obj[cgid] and listeners[obj[cgid]] and listeners[obj[cgid]][event]
-      ev memo or {} for ev in listeners[obj[cgid]][event]
+      ev(memo or {}) for ev in listeners[obj[cgid]][event]
+
+  # Remove a custom event from a given object
+  # ```
+  # @param {Object}   obj      Object to add custom events
+  # @param {string}   event    name of the custom event
+  # @param {Function} callback Optional! When passed, removes only that
+  #                            callback, otherwise removes all callbacks
+  # ```
+  removeCustomEvent = (obj, event, callback)->
+    # if callback was sent, find and remove only given callback
+    if callback
+      if obj[cgid] and listeners[obj[cgid]] and listeners[obj[cgid]][event]
+        for cl, i in listeners[obj[cgid]][event]
+          if cl is callback
+            listeners[obj[cgid]][event].splice(i, 1)
+            return cl
+    else # otherwise remove all callbacks for given event
+      if obj[cgid] and listeners[obj[cgid]] and listeners[obj[cgid]][event]
+        delete listeners[obj[cgid]][event]
 
   # export methods to use
   add: addCustomEvent
+  remove: removeCustomEvent
   fire: fireCustomEvent
 )()
 
@@ -359,8 +379,6 @@ ifvisible =
     customEvent.fire this, "wakeup"
     customEvent.fire this, "statusChanged", { status: status }
 
-
-
   # Set an event to ifvisible object
   # ```
   # @param  {string}   name     Event name such as focus,
@@ -374,6 +392,19 @@ ifvisible =
     init() # Auto init on first call
     customEvent.add this, name, callback
 
+  # Remove an event from ifvisible object
+  # ```
+  # @param  {string}   name     Event name such as focus,
+  #                             idle, blur, wakeup
+  # @param  {Function} callback Optional, if passed, it will remove
+  #                             only the given callback, if empty will
+  #                             remove all
+  # @return {object}            an object with a stop method
+  #                             to unbid this event
+  # ```
+  off: (name, callback) ->
+    init() # Auto init on first call
+    customEvent.remove this, name, callback
 
   # if page is visible then run given code in given seconds of intervals
   # ```
