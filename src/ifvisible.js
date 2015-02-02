@@ -296,7 +296,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         pause: function() {
           return paused = true;
         },
-        unpause: function() {
+        resume: function() {
           return paused = false;
         },
         code: t,

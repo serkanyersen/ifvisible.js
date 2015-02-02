@@ -397,7 +397,7 @@ ifvisible =
     pause: ->
       paused = true
 
-    unpause: ->
+    resume: ->
       paused = false
 
     code: t
