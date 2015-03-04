@@ -22,7 +22,7 @@ mrt add ifvisible
 
 ```javascript
 
-// If page is visible right now
+// If page is visible right now and the user is not idle
 if( ifvisible.now() ){
 	// Display pop-up
 	openPopUp();
