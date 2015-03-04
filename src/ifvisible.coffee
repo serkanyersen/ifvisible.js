@@ -336,6 +336,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
         res.timeLeftPer = (100 - (res.timeLeft * 100 / idleTime)).toFixed(2)
       res
 
+    # Get whether the page is visible, regardless of whether the user is active or not.
+    # ```
+    # @return {Boolean} Whether the page is visible
+    # ```
+    isVisible: ->
+      # Auto init on first call
+      init()
+      status != "hidden"
 
     # When User Opens the page,
     # ```
@@ -446,9 +454,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
       callback: callback
 
 
-    # `ifvisible.now()` return if the page is visible right now?
+    # `ifvisible.now()` return if the page is visible and the user is active right now?
     # ```
-    # @return {boolean} true if page is visible
+    # @return {boolean} true if page is visible and the user is active
     # ```
     now: ->
       # Auto init on first call
