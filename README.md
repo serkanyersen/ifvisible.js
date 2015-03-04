@@ -28,6 +28,12 @@ if( ifvisible.now() ){
 	openPopUp();
 }
 
+// If page is visible right now, regardless of whether the user is idle
+if( ifvisible.isVisible() ){
+	// Display pop-up
+	openPopUp();
+}
+
 ```
 
 Handle tab switch or browser minimize states
