@@ -454,5 +454,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
       # Auto init on first call
       init()
       status is "active"
+
+    # `ifvisible.isIdle()` return if the page is idle right now?
+    # ```
+    # @return {boolean} true if page is idle
+    # ```
+    isIdle: ->
+      # Auto init on first call
+      init()
+      status is "idle"
   return ifvisible
 )
