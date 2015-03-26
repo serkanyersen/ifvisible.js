@@ -387,6 +387,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
       return @on("wakeup", callback)  if typeof callback is "function"
       # else trigger event
       status = "active"
+      trackIdleStatus()
       customEvent.fire this, "wakeup"
       customEvent.fire this, "statusChanged", { status: status }
 
