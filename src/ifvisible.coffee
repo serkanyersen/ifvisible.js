@@ -61,7 +61,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
   _ref = undefined
   _results = undefined
 
-
+  # flag to prevent multiple listeners being attached
+  # ```
+  # @type {Boolean}
+  # ```
+  listenersAttached = false
 
   # Export Object
   # ```
@@ -278,9 +282,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
 
     # Call once so that it can set page to idle without doing anything
     wakeUp()
-    addEvent doc, "mousemove", wakeUp
-    addEvent doc, "keyup", wakeUp
-    addEvent window, "scroll", wakeUp
+    if listenersAttached is false
+      addEvent doc, "mousemove", wakeUp
+      addEvent doc, "keyup", wakeUp
+      addEvent window, "scroll", wakeUp
+      listenersAttached = true
     # If page got focus but noinput activity was recorded
     ifvisible.focus wakeUp
 

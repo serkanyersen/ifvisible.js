@@ -32,7 +32,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       return root.ifvisible = factory();
     }
   })(this, function() {
-    var S4, _i, _len, _ref, _results, addCustomEvent, addEvent, all, blur, cgid, check, customEvent, div, doc, ev, evt, fireCustomEvent, fireEvent, guid, hidden, idleStartedTime, idleTime, ie, ifvisible, init, initialized, listeners, now, paused, res, setListener, status, t, timer, trackIdleStatus, undef, v, visibilityChange, wakeUp;
+    var S4, _i, _len, _ref, _results, addCustomEvent, addEvent, all, blur, cgid, check, customEvent, div, doc, ev, evt, fireCustomEvent, fireEvent, guid, hidden, idleStartedTime, idleTime, ie, ifvisible, init, initialized, listeners, listenersAttached, now, paused, res, setListener, status, t, timer, trackIdleStatus, undef, v, visibilityChange, wakeUp;
     paused = void 0;
     timer = void 0;
     wakeUp = void 0;
@@ -58,6 +58,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     _len = void 0;
     _ref = void 0;
     _results = void 0;
+    listenersAttached = false;
     ifvisible = {};
     doc = document;
     initialized = false;
@@ -201,9 +202,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         }, idleTime);
       };
       wakeUp();
-      addEvent(doc, "mousemove", wakeUp);
-      addEvent(doc, "keyup", wakeUp);
-      addEvent(window, "scroll", wakeUp);
+      if (listenersAttached === false) {
+        addEvent(doc, "mousemove", wakeUp);
+        addEvent(doc, "keyup", wakeUp);
+        addEvent(window, "scroll", wakeUp);
+        listenersAttached = true;
+      }
       return ifvisible.focus(wakeUp);
     };
     init = function() {
