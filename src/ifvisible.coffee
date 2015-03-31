@@ -35,6 +35,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
     # Browser globals.
     root.ifvisible = factory()
 )(this, ->
+  paused = undefined
+  timer = undefined
+  wakeUp = undefined
+  evt = undefined
+  setListener = undefined
+  all = undefined
+  check = undefined
+  div = undefined
+  undef = undefined
+  v = undefined
+  S4 = undefined
+  addCustomEvent = undefined
+  cgid = undefined
+  fireCustomEvent = undefined
+  guid = undefined
+  listeners = undefined
+  blur = undefined
+  now = undefined
+  res  = undefined
+  t = undefined
+  ev = undefined
+  _i = undefined
+  _len = undefined
+  _ref = undefined
+  _results = undefined
+
+
+
   # Export Object
   # ```
   # @type {Object}

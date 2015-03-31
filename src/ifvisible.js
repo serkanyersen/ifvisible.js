@@ -32,7 +32,32 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       return root.ifvisible = factory();
     }
   })(this, function() {
-    var addEvent, customEvent, doc, fireEvent, hidden, idleStartedTime, idleTime, ie, ifvisible, init, initialized, status, trackIdleStatus, visibilityChange;
+    var S4, _i, _len, _ref, _results, addCustomEvent, addEvent, all, blur, cgid, check, customEvent, div, doc, ev, evt, fireCustomEvent, fireEvent, guid, hidden, idleStartedTime, idleTime, ie, ifvisible, init, initialized, listeners, now, paused, res, setListener, status, t, timer, trackIdleStatus, undef, v, visibilityChange, wakeUp;
+    paused = void 0;
+    timer = void 0;
+    wakeUp = void 0;
+    evt = void 0;
+    setListener = void 0;
+    all = void 0;
+    check = void 0;
+    div = void 0;
+    undef = void 0;
+    v = void 0;
+    S4 = void 0;
+    addCustomEvent = void 0;
+    cgid = void 0;
+    fireCustomEvent = void 0;
+    guid = void 0;
+    listeners = void 0;
+    blur = void 0;
+    now = void 0;
+    res = void 0;
+    t = void 0;
+    ev = void 0;
+    _i = void 0;
+    _len = void 0;
+    _ref = void 0;
+    _results = void 0;
     ifvisible = {};
     doc = document;
     initialized = false;
@@ -40,7 +65,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     idleTime = 60000;
     idleStartedTime = false;
     customEvent = (function() {
-      var S4, addCustomEvent, cgid, fireCustomEvent, guid, listeners, removeCustomEvent;
+      var removeCustomEvent;
       S4 = function() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
       };
@@ -63,7 +88,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         return listeners[obj[cgid]][event].push(callback);
       };
       fireCustomEvent = function(obj, event, memo) {
-        var ev, j, len, ref, results;
+        var j, len, ref, results;
         if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
           ref = listeners[obj[cgid]][event];
           results = [];
@@ -100,7 +125,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       };
     })();
     addEvent = (function() {
-      var setListener;
       setListener = false;
       return function(el, ev, fn) {
         if (!setListener) {
@@ -122,7 +146,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       };
     })();
     fireEvent = function(element, event) {
-      var evt;
       if (doc.createEventObject) {
         return element.fireEvent('on' + event, evt);
       } else {
@@ -132,7 +155,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }
     };
     ie = (function() {
-      var all, check, div, undef, v;
       undef = void 0;
       v = 3;
       div = doc.createElement("div");
@@ -165,7 +187,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       visibilityChange = "webkitvisibilitychange";
     }
     trackIdleStatus = function() {
-      var timer, wakeUp;
       timer = false;
       wakeUp = function() {
         clearTimeout(timer);
@@ -186,7 +207,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       return ifvisible.focus(wakeUp);
     };
     init = function() {
-      var blur;
       if (initialized) {
         return true;
       }
@@ -221,7 +241,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         return idleTime;
       },
       getIdleInfo: function() {
-        var now, res;
         now = +(new Date());
         res = {};
         if (status === "idle") {
@@ -289,7 +308,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         return customEvent.remove(this, name, callback);
       },
       onEvery: function(seconds, callback) {
-        var paused, t;
         init();
         paused = false;
         if (callback) {
