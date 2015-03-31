@@ -35,6 +35,38 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
     # Browser globals.
     root.ifvisible = factory()
 )(this, ->
+  paused = undefined
+  timer = undefined
+  wakeUp = undefined
+  evt = undefined
+  setListener = undefined
+  all = undefined
+  check = undefined
+  div = undefined
+  undef = undefined
+  v = undefined
+  S4 = undefined
+  addCustomEvent = undefined
+  cgid = undefined
+  fireCustomEvent = undefined
+  guid = undefined
+  listeners = undefined
+  blur = undefined
+  now = undefined
+  res  = undefined
+  t = undefined
+  ev = undefined
+  _i = undefined
+  _len = undefined
+  _ref = undefined
+  _results = undefined
+
+  # flag to prevent multiple listeners being attached
+  # ```
+  # @type {Boolean}
+  # ```
+  listenersAttached = false
+
   # Export Object
   # ```
   # @type {Object}
@@ -250,9 +282,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
 
     # Call once so that it can set page to idle without doing anything
     wakeUp()
-    addEvent doc, "mousemove", wakeUp
-    addEvent doc, "keyup", wakeUp
-    addEvent window, "scroll", wakeUp
+    if listenersAttached is false
+      addEvent doc, "mousemove", wakeUp
+      addEvent doc, "keyup", wakeUp
+      addEvent window, "scroll", wakeUp
+      listenersAttached = true
     # If page got focus but noinput activity was recorded
     ifvisible.focus wakeUp
 
@@ -387,6 +421,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
       return @on("wakeup", callback)  if typeof callback is "function"
       # else trigger event
       status = "active"
+      trackIdleStatus()
       customEvent.fire this, "wakeup"
       customEvent.fire this, "statusChanged", { status: status }
 
