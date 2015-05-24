@@ -3,6 +3,17 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        watch: {
+            coffee: {
+                files: ['src/*.coffee'],
+                tasks: ['coffee:compile'],
+                options: {
+                    spawn: false,
+                    interrupt: true
+                }
+            }
+        },
+
         coffee: {
             compile: {
                 options: {
@@ -34,12 +45,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-docco');
 
     grunt.registerTask('default', function (spec) {
-
         grunt.task.run(['coffee:compile', 'uglify:build', 'docco:build']);
-
     });
-
 };
