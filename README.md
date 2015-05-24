@@ -33,6 +33,18 @@ if( ifvisible.now() ){
 	openPopUp();
 }
 
+// You can also check the page status
+// using `now` method
+if( !ifvisible.now('hidden') ){
+  // Display pop-up if page is not hidden
+  openPopUp();
+}
+
+// Possible statuses are:
+// idle: when user has no interaction
+// hidden: page is not visible
+// active: page is visible and user is active
+
 ```
 
 Handle tab switch or browser minimize states

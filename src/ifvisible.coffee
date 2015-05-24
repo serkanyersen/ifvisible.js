@@ -428,9 +428,9 @@
     # ```
     # @return {boolean} true if page is visible
     # ```
-    now: ->
+    now: (check)->
       # Auto init on first call
       init()
-      status is "active"
+      status is (check or "active")
   return ifvisible
 )

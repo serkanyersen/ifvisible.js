@@ -292,9 +292,9 @@
           callback: callback
         };
       },
-      now: function() {
+      now: function(check) {
         init();
-        return status === "active";
+        return status === (check || "active");
       }
     };
     return ifvisible;
