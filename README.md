@@ -7,6 +7,11 @@ Crossbrowser & lightweight way to check if user is looking at the page or intera
 
 
 ## Installation
+From npm
+```
+npm install ifvisible.js --save
+```
+
 From Bower
 ```
 bower install ifvisible.js
@@ -100,3 +105,6 @@ ifvisible.onEvery(0.5, function(){
 });
 
 ```
+
+### License
+It's MIT, Go crazy.
