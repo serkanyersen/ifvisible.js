@@ -86,11 +86,11 @@ ifvisible.idle(function(){
 });
 
 // other methods are
-ifvisible.blur();
-ifvisible.focus();
+ifvisible.blur(); // will trigger idle event as well
 ifvisible.idle();
-ifvisible.wakeup();
 
+ifvisible.focus(); // Will trigger wakeup event as well
+ifvisible.wakeup();
 ```
 
 You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the page the interval will automatically stop itself
