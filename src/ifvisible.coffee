@@ -232,6 +232,7 @@
     addEvent window, "scroll", wakeUp
     # If page got focus but noinput activity was recorded
     ifvisible.focus wakeUp
+    ifvisible.wakeup wakeUp
 
   # ## Initialize the module
 
