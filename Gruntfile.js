@@ -20,15 +20,25 @@ module.exports = function(grunt) {
                     'src/ifvisible.min.js': ['src/ifvisible.js']
                 }
             }
+        },
+
+        docco: {
+          build: {
+            src: ['src/ifvisible.coffee'],
+            options: {
+              output: 'docs/'
+            }
+          }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-docco');
 
     grunt.registerTask('default', function (spec) {
 
-        grunt.task.run(['coffee:compile', 'uglify:build']);
+        grunt.task.run(['coffee:compile', 'uglify:build', 'docco:build']);
 
     });
 
