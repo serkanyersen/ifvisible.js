@@ -272,7 +272,7 @@ when we started keeping the time</p>
               <p>Add a custom event to a given object</p>
 <pre><code><span class="hljs-property">@param</span> {Object}   obj      Object to add custom events
 <span class="hljs-property">@param</span> {string}   event    name <span class="hljs-keyword">of</span> the custom event
-<span class="hljs-property">@param</span> {Function} callback callback <span class="hljs-reserved">function</span> to run <span class="hljs-keyword">when</span>
+<span class="hljs-property">@param</span> {Function} callback callback function to run <span class="hljs-keyword">when</span>
                            event <span class="hljs-keyword">is</span> fired
 </code></pre>
             </div>
@@ -445,8 +445,8 @@ when we started keeping the time</p>
               </div>
               <p>CrossBrowser event attachement</p>
 <pre><code><span class="hljs-property">@param</span>  {DomElement}   el Dom Element to attach the event
-<span class="hljs-property">@param</span>  {string}   ev name <span class="hljs-keyword">of</span> the event <span class="hljs-reserved">with</span> <span class="hljs-literal">on</span> prefix
-<span class="hljs-property">@param</span>  {Function} fn callback <span class="hljs-reserved">function</span> to run <span class="hljs-keyword">when</span> event
+<span class="hljs-property">@param</span>  {string}   ev name <span class="hljs-keyword">of</span> the event with <span class="hljs-literal">on</span> prefix
+<span class="hljs-property">@param</span>  {Function} fn callback function to run <span class="hljs-keyword">when</span> event
                       <span class="hljs-keyword">is</span> fired
 </code></pre>
             </div>
@@ -666,7 +666,7 @@ when we started keeping the time</p>
       ifvisible.wakeup()  <span class="hljs-keyword">if</span> status <span class="hljs-keyword">isnt</span> <span class="hljs-string">"active"</span>
       idleStartedTime = +(<span class="hljs-keyword">new</span> Date())
       timer = setTimeout(<span class="hljs-function">-&gt;</span>
-        ifvisible.idle()  <span class="hljs-keyword">if</span> status <span class="hljs-keyword">is</span> <span class="hljs-string">"active"</span>
+        ifvisible.idle()
       , idleTime)</pre></div></div>
             
         </li>
@@ -685,7 +685,7 @@ when we started keeping the time</p>
             <div class="content"><div class='highlight'><pre>    wakeUp()
     addEvent doc, <span class="hljs-string">"mousemove"</span>, wakeUp
     addEvent doc, <span class="hljs-string">"keyup"</span>, wakeUp
-    addEvent <span class="hljs-built_in">window</span>, <span class="hljs-string">"scroll"</span>, wakeUp</pre></div></div>
+    addEvent doc, <span class="hljs-string">"scroll"</span>, wakeUp</pre></div></div>
             
         </li>
         
@@ -1097,9 +1097,9 @@ This will be called when page has focus too</p>
               <p>Set an event to ifvisible object</p>
 <pre><code><span class="hljs-property">@param</span>  {string}   name     Event name such as focus,
                             idle, blur, wakeup
-<span class="hljs-property">@param</span>  {Function} callback callback <span class="hljs-reserved">function</span> to call
+<span class="hljs-property">@param</span>  {Function} callback callback function to call
                             <span class="hljs-keyword">when</span> event <span class="hljs-keyword">is</span> fired
-<span class="hljs-property">@return</span> {object}            an object <span class="hljs-reserved">with</span> a stop method
+<span class="hljs-property">@return</span> {object}            an object with a stop method
                             to unbid <span class="hljs-keyword">this</span> event
 </code></pre>
             </div>
@@ -1123,7 +1123,7 @@ This will be called when page has focus too</p>
 <span class="hljs-property">@param</span>  {Function} callback Optional, <span class="hljs-keyword">if</span> passed, it will remove
                             only the given callback, <span class="hljs-keyword">if</span> empty will
                             remove all
-<span class="hljs-property">@return</span> {object}            an object <span class="hljs-reserved">with</span> a stop method
+<span class="hljs-property">@return</span> {object}            an object with a stop method
                             to unbid <span class="hljs-keyword">this</span> event
 </code></pre>
             </div>
@@ -1143,7 +1143,7 @@ This will be called when page has focus too</p>
               </div>
               <p>if page is visible then run given code in given seconds of intervals</p>
 <pre><code><span class="hljs-property">@param</span>  {float}   seconds  seconds to run interval
-<span class="hljs-property">@param</span>  {Function} callback callback <span class="hljs-reserved">function</span> to run
+<span class="hljs-property">@param</span>  {Function} callback callback function to run
 </code></pre>
             </div>
             

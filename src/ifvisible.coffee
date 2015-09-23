@@ -222,14 +222,14 @@
       ifvisible.wakeup()  if status isnt "active"
       idleStartedTime = +(new Date())
       timer = setTimeout(->
-        ifvisible.idle()  if status is "active"
+        ifvisible.idle()
       , idleTime)
 
     # Call once so that it can set page to idle without doing anything
     wakeUp()
     addEvent doc, "mousemove", wakeUp
     addEvent doc, "keyup", wakeUp
-    addEvent window, "scroll", wakeUp
+    addEvent doc, "scroll", wakeUp
     # If page got focus but noinput activity was recorded
     ifvisible.focus wakeUp
     ifvisible.wakeup wakeUp
