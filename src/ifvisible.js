@@ -152,15 +152,13 @@
         }
         idleStartedTime = +(new Date());
         return timer = setTimeout(function() {
-          if (status === "active") {
-            return ifvisible.idle();
-          }
+          return ifvisible.idle();
         }, idleTime);
       };
       wakeUp();
       addEvent(doc, "mousemove", wakeUp);
       addEvent(doc, "keyup", wakeUp);
-      addEvent(window, "scroll", wakeUp);
+      addEvent(doc, "scroll", wakeUp);
       ifvisible.focus(wakeUp);
       return ifvisible.wakeup(wakeUp);
     };
