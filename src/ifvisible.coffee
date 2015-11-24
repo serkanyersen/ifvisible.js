@@ -322,12 +322,15 @@
     focus: (callback) ->
 
       # if first argument is a callback then set an event
-      return @on("focus", callback)  if typeof callback is "function"
-      # else trigger event
-      status = "active"
-      customEvent.fire this, "focus"
-      customEvent.fire this, "wakeup" # When focused page will woke up too.
-      customEvent.fire this, "statusChanged", { status: status }
+      if typeof callback is "function"
+        @on("focus", callback)
+      else
+        # else trigger event
+        status = "active"
+        customEvent.fire this, "focus"
+        customEvent.fire this, "wakeup" # When focused page will woke up too.
+        customEvent.fire this, "statusChanged", { status: status }
+      @
 
 
     # When User swicthes tabs or minimizes the window
@@ -337,23 +340,29 @@
     blur: (callback) ->
 
       # if first argument is a callback then set an event
-      return @on("blur", callback)  if typeof callback is "function"
-      # else trigger event
-      status = "hidden"
-      customEvent.fire this, "blur"
-      customEvent.fire this, "idle" # When blurred page is idle too
-      customEvent.fire this, "statusChanged", { status: status }
+      if typeof callback is "function"
+        @on("blur", callback)
+      else
+        # else trigger event
+        status = "hidden"
+        customEvent.fire this, "blur"
+        customEvent.fire this, "idle" # When blurred page is idle too
+        customEvent.fire this, "statusChanged", { status: status }
+      @
 
 
     # When page is focused but user is doing nothing on the page
     idle: (callback) ->
 
       # if first argument is a callback then set an event
-      return @on("idle", callback)  if typeof callback is "function"
-      # else trigger event
-      status = "idle"
-      customEvent.fire this, "idle"
-      customEvent.fire this, "statusChanged", { status: status }
+      if typeof callback is "function"
+        @on("idle", callback)
+      else
+        # else trigger event
+        status = "idle"
+        customEvent.fire this, "idle"
+        customEvent.fire this, "statusChanged", { status: status }
+      @
 
 
     # When user started to make interactions on the page such as:
@@ -362,11 +371,14 @@
     wakeup: (callback) ->
 
       # if first argument is a callback then set an event
-      return @on("wakeup", callback)  if typeof callback is "function"
-      # else trigger event
-      status = "active"
-      customEvent.fire this, "wakeup"
-      customEvent.fire this, "statusChanged", { status: status }
+      if typeof callback is "function"
+        @on("wakeup", callback)
+      else
+        # else trigger event
+        status = "active"
+        customEvent.fire this, "wakeup"
+        customEvent.fire this, "statusChanged", { status: status }
+      @
 
     # Set an event to ifvisible object
     # ```
@@ -380,6 +392,7 @@
     on: (name, callback) ->
       init() # Auto init on first call
       customEvent.add this, name, callback
+      @
 
     # Remove an event from ifvisible object
     # ```
@@ -394,6 +407,7 @@
     off: (name, callback) ->
       init() # Auto init on first call
       customEvent.remove this, name, callback
+      @
 
     # if page is visible then run given code in given seconds of intervals
     # ```
@@ -432,5 +446,6 @@
       # Auto init on first call
       init()
       status is (check or "active")
+
   return ifvisible
 )

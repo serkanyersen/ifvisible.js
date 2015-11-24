@@ -218,53 +218,63 @@
       },
       focus: function(callback) {
         if (typeof callback === "function") {
-          return this.on("focus", callback);
+          this.on("focus", callback);
+        } else {
+          status = "active";
+          customEvent.fire(this, "focus");
+          customEvent.fire(this, "wakeup");
+          customEvent.fire(this, "statusChanged", {
+            status: status
+          });
         }
-        status = "active";
-        customEvent.fire(this, "focus");
-        customEvent.fire(this, "wakeup");
-        return customEvent.fire(this, "statusChanged", {
-          status: status
-        });
+        return this;
       },
       blur: function(callback) {
         if (typeof callback === "function") {
-          return this.on("blur", callback);
+          this.on("blur", callback);
+        } else {
+          status = "hidden";
+          customEvent.fire(this, "blur");
+          customEvent.fire(this, "idle");
+          customEvent.fire(this, "statusChanged", {
+            status: status
+          });
         }
-        status = "hidden";
-        customEvent.fire(this, "blur");
-        customEvent.fire(this, "idle");
-        return customEvent.fire(this, "statusChanged", {
-          status: status
-        });
+        return this;
       },
       idle: function(callback) {
         if (typeof callback === "function") {
-          return this.on("idle", callback);
+          this.on("idle", callback);
+        } else {
+          status = "idle";
+          customEvent.fire(this, "idle");
+          customEvent.fire(this, "statusChanged", {
+            status: status
+          });
         }
-        status = "idle";
-        customEvent.fire(this, "idle");
-        return customEvent.fire(this, "statusChanged", {
-          status: status
-        });
+        return this;
       },
       wakeup: function(callback) {
         if (typeof callback === "function") {
-          return this.on("wakeup", callback);
+          this.on("wakeup", callback);
+        } else {
+          status = "active";
+          customEvent.fire(this, "wakeup");
+          customEvent.fire(this, "statusChanged", {
+            status: status
+          });
         }
-        status = "active";
-        customEvent.fire(this, "wakeup");
-        return customEvent.fire(this, "statusChanged", {
-          status: status
-        });
+        return this;
       },
       on: function(name, callback) {
         init();
-        return customEvent.add(this, name, callback);
+        customEvent.add(this, name, callback);
+        return this;
       },
       off: function(name, callback) {
         init();
-        return customEvent.remove(this, name, callback);
+        customEvent.remove(this, name, callback);
+        return this;
       },
       onEvery: function(seconds, callback) {
         var paused, t;

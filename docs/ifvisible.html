@@ -920,7 +920,9 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> <span class="hljs-property">@on</span>(<span class="hljs-string">"focus"</span>, callback)  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
+        <span class="hljs-property">@on</span>(<span class="hljs-string">"focus"</span>, callback)
+      <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
         
@@ -935,10 +937,11 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      status = <span class="hljs-string">"active"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"focus"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span> <span class="hljs-comment"># When focused page will woke up too.</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"active"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"focus"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span> <span class="hljs-comment"># When focused page will woke up too.</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+      @</pre></div></div>
             
         </li>
         
@@ -969,7 +972,9 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> <span class="hljs-property">@on</span>(<span class="hljs-string">"blur"</span>, callback)  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
+        <span class="hljs-property">@on</span>(<span class="hljs-string">"blur"</span>, callback)
+      <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
         
@@ -984,10 +989,11 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      status = <span class="hljs-string">"hidden"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"blur"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span> <span class="hljs-comment"># When blurred page is idle too</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"hidden"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"blur"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span> <span class="hljs-comment"># When blurred page is idle too</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+      @</pre></div></div>
             
         </li>
         
@@ -1017,7 +1023,9 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> <span class="hljs-property">@on</span>(<span class="hljs-string">"idle"</span>, callback)  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
+        <span class="hljs-property">@on</span>(<span class="hljs-string">"idle"</span>, callback)
+      <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
         
@@ -1032,9 +1040,10 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      status = <span class="hljs-string">"idle"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"idle"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+      @</pre></div></div>
             
         </li>
         
@@ -1066,7 +1075,9 @@ This will be called when page has focus too</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> <span class="hljs-property">@on</span>(<span class="hljs-string">"wakeup"</span>, callback)  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
+        <span class="hljs-property">@on</span>(<span class="hljs-string">"wakeup"</span>, callback)
+      <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
         
@@ -1081,9 +1092,10 @@ This will be called when page has focus too</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      status = <span class="hljs-string">"active"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span>
-      customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"active"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span>
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+      @</pre></div></div>
             
         </li>
         
@@ -1106,7 +1118,8 @@ This will be called when page has focus too</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">on</span>: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
       init() <span class="hljs-comment"># Auto init on first call</span>
-      customEvent.add <span class="hljs-keyword">this</span>, name, callback</pre></div></div>
+      customEvent.add <span class="hljs-keyword">this</span>, name, callback
+      @</pre></div></div>
             
         </li>
         
@@ -1130,7 +1143,8 @@ This will be called when page has focus too</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">off</span>: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
       init() <span class="hljs-comment"># Auto init on first call</span>
-      customEvent.remove <span class="hljs-keyword">this</span>, name, callback</pre></div></div>
+      customEvent.remove <span class="hljs-keyword">this</span>, name, callback
+      @</pre></div></div>
             
         </li>
         
@@ -1226,6 +1240,7 @@ This will be called when page has focus too</p>
             
             <div class="content"><div class='highlight'><pre>      init()
       status <span class="hljs-keyword">is</span> (check <span class="hljs-keyword">or</span> <span class="hljs-string">"active"</span>)
+
   <span class="hljs-keyword">return</span> ifvisible
 )</pre></div></div>
             
