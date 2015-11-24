@@ -1,28 +1,74 @@
-/*--------------------- Layout and Typography ----------------------------*/
+/*--------------------- Typography ----------------------------*/
+
+@font-face {
+    font-family: 'aller-light';
+    src: url('public/fonts/aller-light.eot');
+    src: url('public/fonts/aller-light.eot?#iefix') format('embedded-opentype'),
+         url('public/fonts/aller-light.woff') format('woff'),
+         url('public/fonts/aller-light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'aller-bold';
+    src: url('public/fonts/aller-bold.eot');
+    src: url('public/fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
+         url('public/fonts/aller-bold.woff') format('woff'),
+         url('public/fonts/aller-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'novecento-bold';
+    src: url('public/fonts/novecento-bold.eot');
+    src: url('public/fonts/novecento-bold.eot?#iefix') format('embedded-opentype'),
+         url('public/fonts/novecento-bold.woff') format('woff'),
+         url('public/fonts/novecento-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*--------------------- Layout ----------------------------*/
 html { height: 100%; }
 body {
-  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+  font-family: "aller-light";
   font-size: 14px;
-  line-height: 16px;
-  color: #252519;
+  line-height: 18px;
+  color: #30404f;
   margin: 0; padding: 0;
   height:100%;
 }
 #container { min-height: 100%; }
 
 a {
-  color: #261a3b;
+  color: #000;
 }
 
-a:visited {
-  color: #261a3b;
+b, strong {
+  font-weight: normal;
+  font-family: "aller-bold";
 }
 
-p, ul, ol {
-  margin: 0 0 15px;
+p {
+  margin: 15px 0 0px;
 }
+  .annotation ul, .annotation ol {
+    margin: 25px 0;
+  }
+    .annotation ul li, .annotation ol li {
+      font-size: 14px;
+      line-height: 18px;
+      margin: 10px 0;
+    }
 
 h1, h2, h3, h4, h5, h6 {
+  color: #112233;
+  line-height: 1em;
+  font-weight: normal;
+  font-family: "novecento-bold";
+  text-transform: uppercase;
   margin: 30px 0 15px 0;
 }
 
@@ -31,8 +77,8 @@ h1 {
 }
 
 hr {
-  border: 0 none;
-  border-top: 1px solid #e5e5ee;
+  border: 0;
+  background: 1px #ddd;
   height: 1px;
   margin: 20px 0;
 }
@@ -42,6 +88,35 @@ pre, tt, code {
   font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
   margin: 0; padding: 0;
 }
+  .annotation pre {
+    display: block;
+    margin: 0;
+    padding: 7px 10px;
+    background: #fcfcfc;
+    -moz-box-shadow:    inset 0 0 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    box-shadow:         inset 0 0 10px rgba(0,0,0,0.1);
+    overflow-x: auto;
+  }
+    .annotation pre code {
+      border: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+
+blockquote {
+  border-left: 5px solid #ccc;
+  margin: 0;
+  padding: 1px 0 1px 1em;
+}
+  .sections blockquote p {
+    font-family: Menlo, Consolas, Monaco, monospace;
+    font-size: 12px; line-height: 16px;
+    color: #999;
+    margin: 10px 0 0;
+    white-space: pre-wrap;
+  }
 
 ul.sections {
   list-style: none;
@@ -133,16 +208,11 @@ ul.sections > li > div {
     padding:5px 10px 0 10px;
   }
 
-  ul.sections > li > div.annotation {
-    background: #fff;
-  }
-
   ul.sections > li > div.annotation ul, ul.sections > li > div.annotation ol {
     padding-left: 30px;
   }
 
   ul.sections > li > div.content {
-    background: #f5f5ff;
     overflow-x:auto;
     -webkit-box-shadow: inset 0 0 5px #e5e5ee;
     box-shadow: inset 0 0 5px #e5e5ee;
@@ -172,11 +242,15 @@ ul.sections > li > div {
   body {
     background-color: #F5F5FF;
     font-size: 15px;
-    line-height: 22px;
+    line-height: 21px;
   }
   pre, tt, code {
     line-height: 18px;
   }
+  p, ul, ol {
+    margin: 0 0 15px;
+  }
+
 
   #jump_to {
     padding: 5px 10px;
@@ -204,7 +278,7 @@ ul.sections > li > div {
     position: absolute;
     top: 0; bottom: 0;
     width: 350px;
-    background: #ffffff;
+    background: #fff;
     border-right: 1px solid #e5e5ee;
     z-index: -1;
   }
@@ -239,7 +313,6 @@ ul.sections > li > div {
   ul.sections > li > div.content {
     padding: 13px;
     vertical-align: top;
-    background: #f5f5ff;
     border: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -275,6 +348,11 @@ ul.sections > li > div {
 /*---------------------- (> 1025px) ---------------------*/
 @media only screen and (min-width: 1025px) {
 
+  body {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
   #background {
     width: 525px;
   }
@@ -304,125 +382,125 @@ pre code {
   background: #f8f8ff
 }
 
-pre .comment,
-pre .template_comment,
-pre .diff .header,
-pre .javadoc {
+pre .hljs-comment,
+pre .hljs-template_comment,
+pre .hljs-diff .hljs-header,
+pre .hljs-javadoc {
   color: #408080;
   font-style: italic
 }
 
-pre .keyword,
-pre .assignment,
-pre .literal,
-pre .css .rule .keyword,
-pre .winutils,
-pre .javascript .title,
-pre .lisp .title,
-pre .subst {
+pre .hljs-keyword,
+pre .hljs-assignment,
+pre .hljs-literal,
+pre .hljs-css .hljs-rule .hljs-keyword,
+pre .hljs-winutils,
+pre .hljs-javascript .hljs-title,
+pre .hljs-lisp .hljs-title,
+pre .hljs-subst {
   color: #954121;
   /*font-weight: bold*/
 }
 
-pre .number,
-pre .hexcolor {
+pre .hljs-number,
+pre .hljs-hexcolor {
   color: #40a070
 }
 
-pre .string,
-pre .tag .value,
-pre .phpdoc,
-pre .tex .formula {
+pre .hljs-string,
+pre .hljs-tag .hljs-value,
+pre .hljs-phpdoc,
+pre .hljs-tex .hljs-formula {
   color: #219161;
 }
 
-pre .title,
-pre .id {
+pre .hljs-title,
+pre .hljs-id {
   color: #19469D;
 }
-pre .params {
+pre .hljs-params {
   color: #00F;
 }
 
-pre .javascript .title,
-pre .lisp .title,
-pre .subst {
+pre .hljs-javascript .hljs-title,
+pre .hljs-lisp .hljs-title,
+pre .hljs-subst {
   font-weight: normal
 }
 
-pre .class .title,
-pre .haskell .label,
-pre .tex .command {
+pre .hljs-class .hljs-title,
+pre .hljs-haskell .hljs-label,
+pre .hljs-tex .hljs-command {
   color: #458;
   font-weight: bold
 }
 
-pre .tag,
-pre .tag .title,
-pre .rules .property,
-pre .django .tag .keyword {
+pre .hljs-tag,
+pre .hljs-tag .hljs-title,
+pre .hljs-rules .hljs-property,
+pre .hljs-django .hljs-tag .hljs-keyword {
   color: #000080;
   font-weight: normal
 }
 
-pre .attribute,
-pre .variable,
-pre .instancevar,
-pre .lisp .body {
+pre .hljs-attribute,
+pre .hljs-variable,
+pre .hljs-instancevar,
+pre .hljs-lisp .hljs-body {
   color: #008080
 }
 
-pre .regexp {
+pre .hljs-regexp {
   color: #B68
 }
 
-pre .class {
+pre .hljs-class {
   color: #458;
   font-weight: bold
 }
 
-pre .symbol,
-pre .ruby .symbol .string,
-pre .ruby .symbol .keyword,
-pre .ruby .symbol .keymethods,
-pre .lisp .keyword,
-pre .tex .special,
-pre .input_number {
+pre .hljs-symbol,
+pre .hljs-ruby .hljs-symbol .hljs-string,
+pre .hljs-ruby .hljs-symbol .hljs-keyword,
+pre .hljs-ruby .hljs-symbol .hljs-keymethods,
+pre .hljs-lisp .hljs-keyword,
+pre .hljs-tex .hljs-special,
+pre .hljs-input_number {
   color: #990073
 }
 
-pre .builtin,
-pre .constructor,
-pre .built_in,
-pre .lisp .title {
+pre .hljs-builtin,
+pre .hljs-constructor,
+pre .hljs-built_in,
+pre .hljs-lisp .hljs-title {
   color: #0086b3
 }
 
-pre .preprocessor,
-pre .pi,
-pre .doctype,
-pre .shebang,
-pre .cdata {
+pre .hljs-preprocessor,
+pre .hljs-pi,
+pre .hljs-doctype,
+pre .hljs-shebang,
+pre .hljs-cdata {
   color: #999;
   font-weight: bold
 }
 
-pre .deletion {
+pre .hljs-deletion {
   background: #fdd
 }
 
-pre .addition {
+pre .hljs-addition {
   background: #dfd
 }
 
-pre .diff .change {
+pre .hljs-diff .hljs-change {
   background: #0086b3
 }
 
-pre .chunk {
+pre .hljs-chunk {
   color: #aaa
 }
 
-pre .tex .formula {
+pre .hljs-tex .hljs-formula {
   opacity: 0.5;
 }
