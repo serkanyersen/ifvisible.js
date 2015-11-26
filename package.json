@@ -1,6 +1,6 @@
 {
   "name": "ifvisible.js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "src/ifvisible.js",
   "directories": {
