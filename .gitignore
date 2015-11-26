@@ -11,3 +11,5 @@ Session.vim
 .netrwhist
 *~
 *.log
+
+.sublime-*

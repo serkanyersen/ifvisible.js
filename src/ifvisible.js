@@ -160,6 +160,7 @@
       wakeUp();
       addEvent(doc, "mousemove", wakeUp);
       addEvent(doc, "keyup", wakeUp);
+      addEvent(doc, "touchstart", wakeUp);
       addEvent(window, "scroll", wakeUp);
       ifvisible.focus(wakeUp);
       return ifvisible.wakeup(wakeUp);

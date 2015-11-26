@@ -229,6 +229,7 @@
     wakeUp()
     addEvent doc, "mousemove", wakeUp
     addEvent doc, "keyup", wakeUp
+    addEvent doc, "touchstart", wakeUp
     addEvent window, "scroll", wakeUp
     # If page got focus but noinput activity was recorded
     ifvisible.focus wakeUp
