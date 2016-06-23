@@ -1,26 +1,31 @@
-const path = require('path');
+const path = require("path");
+const fs = require("fs");
 const webpack = require("webpack");
+const version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
 
 let config = {
     entry: {
-        app: ['./src/main.ts']
+        app: ["./src/main.ts"]
     },
     watch: true,
-    devtool: 'inline-source-map',
+    devtool: "inline-source-map",
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'ifvisible.js'
+        path: path.resolve(__dirname, "dist"),
+        filename: "ifvisible.js"
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     module: {
         loaders: [{
-            test: /\.tsx?$/, loader: 'ts-loader'
+            test: /\.tsx?$/, loader: "ts-loader"
         }]
     },
     plugins: [
-        new webpack.optimize.DedupePlugin()
+        new webpack.optimize.DedupePlugin(),
+        new webpack.DefinePlugin({
+            __VERSION__: JSON.stringify(version)
+        })
     ]
 };
 

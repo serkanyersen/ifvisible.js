@@ -4,7 +4,7 @@ const STATUS_HIDDEN = "hidden";
 
 let DOC_HIDDEN: string;
 let VISIBILITY_CHANGE_EVENT: string = void 0;
-
+declare var __VERSION__: string;
 export namespace Events {
     const store = {};
     let setListener: Function;
@@ -133,7 +133,8 @@ export class IfVisible {
     public status: string;
     private idleTime: number;
     private idleStartedTime: number;
-    public VERSION = "2.0.0";
+    public VERSION = __VERSION__;
+
 
     constructor() {
         let BLUR_EVENT = "blur";

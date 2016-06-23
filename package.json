@@ -7,7 +7,7 @@
     "start": "webpack",
     "build": "PURPOSE=production webpack",
     "lint": "find src -type f -name '*.ts' | xargs tslint",
-    "docs": "docco src/ifvisible.ts --output docs",
+    "docs": "docco src/*.ts --output docs",
     "prepublish": "npm run build && npm run docs"
   },
   "repository": {
