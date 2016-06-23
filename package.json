@@ -4,8 +4,10 @@
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "src/ifvisible.ts",
   "scripts": {
-      "start": "tsc --watch",
-      "build": "tsc"
+    "start": "tsc --watch",
+    "build": "tsc",
+    "docs": "docco src/ifvisible.ts --output docs",
+    "prepublish": "npm run build && npm run docs"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {},
   "dependencies": {
+    "docco": "^0.7.0",
     "typescript": "^1.8.10"
   }
 }
