@@ -2,10 +2,11 @@
   "name": "ifvisible.js",
   "version": "2.0.0",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
-  "main": "src/ifvisible.ts",
+  "main": "dist/ifvisible.js",
   "scripts": {
-    "start": "tsc --watch",
-    "build": "tsc",
+    "start": "webpack",
+    "build": "PURPOSE=production webpack",
+    "lint": "find src -type f -name '*.ts' | xargs tslint",
     "docs": "docco src/ifvisible.ts --output docs",
     "prepublish": "npm run build && npm run docs"
   },
@@ -29,7 +30,8 @@
     "reading",
     "mode",
     "tab",
-    "change"
+    "change",
+    "typescript"
   ],
   "author": "Serkan Yersen <serkanyersen@gmail.com> (http://serkan.io/)",
   "license": "MIT",
@@ -40,6 +42,9 @@
   "devDependencies": {},
   "dependencies": {
     "docco": "^0.7.0",
-    "typescript": "^1.8.10"
+    "ts-loader": "^0.8.2",
+    "tslint": "^3.11.0",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.1"
   }
 }
