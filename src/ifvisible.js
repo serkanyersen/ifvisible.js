@@ -1,315 +1,284 @@
-(function() {
-  (function(root, factory) {
-    if (typeof define === 'function' && define.amd) {
-      return define(function() {
-        return factory();
-      });
-    } else if (typeof exports === 'object') {
-      return module.exports = factory();
-    } else {
-      return root.ifvisible = factory();
+var STATUS_ACTIVE = 'active';
+var STATUS_IDLE = 'idle';
+var STATUS_HIDDEN = 'hidden';
+var DOC_HIDDEN;
+var VISIBILITY_CHANGE_EVENT = void 0;
+var Events;
+(function (Events) {
+    var store = {};
+    var setListener;
+    function attach(event, callback) {
+        if (!store[event]) {
+            store[event] = [];
+        }
+        store[event].push(callback);
     }
-  })(this, function() {
-    var addEvent, customEvent, doc, fireEvent, hidden, idleStartedTime, idleTime, ie, ifvisible, init, initialized, status, trackIdleStatus, visibilityChange;
-    ifvisible = {};
-    doc = document;
-    initialized = false;
-    status = "active";
-    idleTime = 60000;
-    idleStartedTime = false;
-    customEvent = (function() {
-      var S4, addCustomEvent, cgid, fireCustomEvent, guid, listeners, removeCustomEvent;
-      S4 = function() {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-      };
-      guid = function() {
-        return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
-      };
-      listeners = {};
-      cgid = '__ceGUID';
-      addCustomEvent = function(obj, event, callback) {
-        obj[cgid] = undefined;
-        if (!obj[cgid]) {
-          obj[cgid] = "ifvisible.object.event.identifier";
+    Events.attach = attach;
+    function fire(event, args) {
+        if (store[event]) {
+            store[event].forEach(function (callback) {
+                callback.apply(void 0, args);
+            });
         }
-        if (!listeners[obj[cgid]]) {
-          listeners[obj[cgid]] = {};
+    }
+    Events.fire = fire;
+    function remove(event, callback) {
+        if (store[event]) {
+            store[event] = store[event].filter(function (savedCallback) {
+                return callback !== savedCallback;
+            });
         }
-        if (!listeners[obj[cgid]][event]) {
-          listeners[obj[cgid]][event] = [];
-        }
-        return listeners[obj[cgid]][event].push(callback);
-      };
-      fireCustomEvent = function(obj, event, memo) {
-        var ev, j, len, ref, results;
-        if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
-          ref = listeners[obj[cgid]][event];
-          results = [];
-          for (j = 0, len = ref.length; j < len; j++) {
-            ev = ref[j];
-            results.push(ev(memo || {}));
-          }
-          return results;
-        }
-      };
-      removeCustomEvent = function(obj, event, callback) {
-        var cl, i, j, len, ref;
-        if (callback) {
-          if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
-            ref = listeners[obj[cgid]][event];
-            for (i = j = 0, len = ref.length; j < len; i = ++j) {
-              cl = ref[i];
-              if (cl === callback) {
-                listeners[obj[cgid]][event].splice(i, 1);
-                return cl;
-              }
-            }
-          }
-        } else {
-          if (obj[cgid] && listeners[obj[cgid]] && listeners[obj[cgid]][event]) {
-            return delete listeners[obj[cgid]][event];
-          }
-        }
-      };
-      return {
-        add: addCustomEvent,
-        remove: removeCustomEvent,
-        fire: fireCustomEvent
-      };
-    })();
-    addEvent = (function() {
-      var setListener;
-      setListener = false;
-      return function(el, ev, fn) {
+    }
+    Events.remove = remove;
+    function dom(element, event, callback) {
         if (!setListener) {
-          if (el.addEventListener) {
-            setListener = function(el, ev, fn) {
-              return el.addEventListener(ev, fn, false);
-            };
-          } else if (el.attachEvent) {
-            setListener = function(el, ev, fn) {
-              return el.attachEvent('on' + ev, fn, false);
-            };
-          } else {
-            setListener = function(el, ev, fn) {
-              return el['on' + ev] = fn;
-            };
-          }
+            if (element.addEventListener) {
+                setListener = function (el, ev, fn) {
+                    return el.addEventListener(ev, fn, false);
+                };
+            }
+            else if (typeof element['attachEvent'] === 'function') {
+                setListener = function (el, ev, fn) {
+                    return el.attachEvent('on' + ev, fn, false);
+                };
+            }
+            else {
+                setListener = function (el, ev, fn) {
+                    return el['on' + ev] = fn;
+                };
+            }
         }
-        return setListener(el, ev, fn);
-      };
-    })();
-    fireEvent = function(element, event) {
-      var evt;
-      if (doc.createEventObject) {
-        return element.fireEvent('on' + event, evt);
-      } else {
-        evt = doc.createEvent('HTMLEvents');
-        evt.initEvent(event, true, true);
-        return !element.dispatchEvent(evt);
-      }
-    };
-    ie = (function() {
-      var all, check, div, undef, v;
-      undef = void 0;
-      v = 3;
-      div = doc.createElement("div");
-      all = div.getElementsByTagName("i");
-      check = function() {
-        return (div.innerHTML = "<!--[if gt IE " + (++v) + "]><i></i><![endif]-->", all[0]);
-      };
-      while (check()) {
-        continue;
-      }
-      if (v > 4) {
-        return v;
-      } else {
-        return undef;
-      }
-    })();
-    hidden = false;
-    visibilityChange = void 0;
-    if (typeof doc.hidden !== "undefined") {
-      hidden = "hidden";
-      visibilityChange = "visibilitychange";
-    } else if (typeof doc.mozHidden !== "undefined") {
-      hidden = "mozHidden";
-      visibilityChange = "mozvisibilitychange";
-    } else if (typeof doc.msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof doc.webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
+        return setListener(element, event, callback);
     }
-    trackIdleStatus = function() {
-      var timer, wakeUp;
-      timer = false;
-      wakeUp = function() {
-        clearTimeout(timer);
-        if (status !== "active") {
-          ifvisible.wakeup();
-        }
-        idleStartedTime = +(new Date());
-        return timer = setTimeout(function() {
-          if (status === "active") {
-            return ifvisible.idle();
-          }
-        }, idleTime);
-      };
-      wakeUp();
-      addEvent(doc, "mousemove", wakeUp);
-      addEvent(doc, "keyup", wakeUp);
-      addEvent(doc, "touchstart", wakeUp);
-      addEvent(window, "scroll", wakeUp);
-      ifvisible.focus(wakeUp);
-      return ifvisible.wakeup(wakeUp);
-    };
-    init = function() {
-      var blur;
-      if (initialized) {
-        return true;
-      }
-      if (hidden === false) {
-        blur = "blur";
-        if (ie < 9) {
-          blur = "focusout";
-        }
-        addEvent(window, blur, function() {
-          return ifvisible.blur();
+    Events.dom = dom;
+})(Events || (Events = {}));
+var Timer = (function () {
+    function Timer(ifvisible, seconds, callback) {
+        var _this = this;
+        this.ifvisible = ifvisible;
+        this.seconds = seconds;
+        this.callback = callback;
+        this.stopped = false;
+        this.start();
+        this.ifvisible.on('statusChanged', function (data) {
+            if (_this.stopped === false) {
+                if (data.status === STATUS_ACTIVE) {
+                    _this.start();
+                }
+                else {
+                    _this.pause();
+                }
+            }
         });
-        addEvent(window, "focus", function() {
-          return ifvisible.focus();
-        });
-      } else {
-        addEvent(doc, visibilityChange, function() {
-          if (doc[hidden]) {
-            return ifvisible.blur();
-          } else {
-            return ifvisible.focus();
-          }
-        }, false);
-      }
-      initialized = true;
-      return trackIdleStatus();
+    }
+    Timer.prototype.start = function () {
+        this.stopped = false;
+        clearInterval(this.token);
+        this.token = setInterval(this.callback, this.seconds * 1000);
     };
-    ifvisible = {
-      setIdleDuration: function(seconds) {
-        return idleTime = seconds * 1000;
-      },
-      getIdleDuration: function() {
-        return idleTime;
-      },
-      getIdleInfo: function() {
-        var now, res;
-        now = +(new Date());
-        res = {};
-        if (status === "idle") {
-          res.isIdle = true;
-          res.idleFor = now - idleStartedTime;
-          res.timeLeft = 0;
-          res.timeLeftPer = 100;
-        } else {
-          res.isIdle = false;
-          res.idleFor = now - idleStartedTime;
-          res.timeLeft = (idleStartedTime + idleTime) - now;
-          res.timeLeftPer = (100 - (res.timeLeft * 100 / idleTime)).toFixed(2);
+    Timer.prototype.stop = function () {
+        this.stopped = true;
+        clearInterval(this.token);
+    };
+    Timer.prototype.resume = function () {
+        this.start();
+    };
+    Timer.prototype.pause = function () {
+        this.stop();
+    };
+    return Timer;
+})();
+if (document.hidden !== void 0) {
+    DOC_HIDDEN = "hidden";
+    VISIBILITY_CHANGE_EVENT = "visibilitychange";
+}
+else if (document['mozHidden'] !== void 0) {
+    DOC_HIDDEN = "mozHidden";
+    VISIBILITY_CHANGE_EVENT = "mozvisibilitychange";
+}
+else if (document.msHidden !== void 0) {
+    DOC_HIDDEN = "msHidden";
+    VISIBILITY_CHANGE_EVENT = "msvisibilitychange";
+}
+else if (document['webkitHidden'] !== void 0) {
+    DOC_HIDDEN = "webkitHidden";
+    VISIBILITY_CHANGE_EVENT = "webkitvisibilitychange";
+}
+var IE = (function () {
+    var undef, v = 3, div = document.createElement('div'), all = div.getElementsByTagName('i');
+    while (div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+        all[0])
+        ;
+    return v > 4 ? v : undef;
+}());
+var IfVisible = (function () {
+    function IfVisible() {
+        var _this = this;
+        var BLUR_EVENT = 'blur';
+        var FOCUS_EVENT = 'focus';
+        if (DOC_HIDDEN === void 0) {
+            if (IE < 9) {
+                BLUR_EVENT = "focusout";
+            }
+            Events.dom(window, BLUR_EVENT, function () {
+                return _this.blur();
+            });
+            Events.dom(window, "focus", function () {
+                return _this.focus();
+            });
+        }
+        else {
+            Events.dom(document, VISIBILITY_CHANGE_EVENT, function () {
+                if (document[DOC_HIDDEN]) {
+                    return _this.blur();
+                }
+                else {
+                    return _this.focus();
+                }
+            });
+        }
+        this.trackIdleStatus();
+    }
+    IfVisible.prototype.trackIdleStatus = function () {
+        var _this = this;
+        var timer;
+        var wakeUp = function () {
+            clearTimeout(timer);
+            if (_this.status !== STATUS_ACTIVE) {
+                _this.wakeup();
+            }
+            _this.idleStartedTime = +(new Date());
+            timer = setTimeout(function () {
+                if (_this.status === STATUS_ACTIVE) {
+                    return _this.idle();
+                }
+            }, _this.idleTime);
+        };
+        wakeUp();
+        Events.dom(document, "mousemove", wakeUp);
+        Events.dom(document, "keyup", wakeUp);
+        Events.dom(document, "touchstart", wakeUp);
+        Events.dom(window, "scroll", wakeUp);
+        this.focus(wakeUp);
+        this.wakeup(wakeUp);
+    };
+    IfVisible.prototype.on = function (event, callback) {
+        Events.attach(event, callback);
+        return this;
+    };
+    IfVisible.prototype.off = function (event, callback) {
+        Events.remove(event, callback);
+        return this;
+    };
+    IfVisible.prototype.setIdleDuration = function (seconds) {
+        this.idleTime = seconds * 1000;
+        return this;
+    };
+    IfVisible.prototype.getIdleDuration = function () {
+        return this.idleTime;
+    };
+    IfVisible.prototype.getIdleInfo = function () {
+        var now = +(new Date());
+        var res;
+        if (this.status === STATUS_IDLE) {
+            res = {
+                isIdle: true,
+                idleFor: now - this.idleStartedTime,
+                timeLeft: 0,
+                timeLeftPer: 100
+            };
+        }
+        else {
+            var timeLeft = (this.idleStartedTime + this.idleTime) - now;
+            res = {
+                isIdle: false,
+                idleFor: now - this.idleStartedTime,
+                timeLeft: timeLeft,
+                timeLeftPer: parseFloat((100 - (timeLeft * 100 / this.idleTime)).toFixed(2))
+            };
         }
         return res;
-      },
-      focus: function(callback) {
-        if (typeof callback === "function") {
-          this.on("focus", callback);
-        } else {
-          status = "active";
-          customEvent.fire(this, "focus");
-          customEvent.fire(this, "wakeup");
-          customEvent.fire(this, "statusChanged", {
-            status: status
-          });
-        }
-        return this;
-      },
-      blur: function(callback) {
-        if (typeof callback === "function") {
-          this.on("blur", callback);
-        } else {
-          status = "hidden";
-          customEvent.fire(this, "blur");
-          customEvent.fire(this, "idle");
-          customEvent.fire(this, "statusChanged", {
-            status: status
-          });
-        }
-        return this;
-      },
-      idle: function(callback) {
-        if (typeof callback === "function") {
-          this.on("idle", callback);
-        } else {
-          status = "idle";
-          customEvent.fire(this, "idle");
-          customEvent.fire(this, "statusChanged", {
-            status: status
-          });
-        }
-        return this;
-      },
-      wakeup: function(callback) {
-        if (typeof callback === "function") {
-          this.on("wakeup", callback);
-        } else {
-          status = "active";
-          customEvent.fire(this, "wakeup");
-          customEvent.fire(this, "statusChanged", {
-            status: status
-          });
-        }
-        return this;
-      },
-      on: function(name, callback) {
-        init();
-        customEvent.add(this, name, callback);
-        return this;
-      },
-      off: function(name, callback) {
-        init();
-        customEvent.remove(this, name, callback);
-        return this;
-      },
-      onEvery: function(seconds, callback) {
-        var paused, t;
-        init();
-        paused = false;
-        if (callback) {
-          t = setInterval(function() {
-            if (status === "active" && paused === false) {
-              return callback();
-            }
-          }, seconds * 1000);
-        }
-        return {
-          stop: function() {
-            return clearInterval(t);
-          },
-          pause: function() {
-            return paused = true;
-          },
-          resume: function() {
-            return paused = false;
-          },
-          code: t,
-          callback: callback
-        };
-      },
-      now: function(check) {
-        init();
-        return status === (check || "active");
-      }
     };
-    return ifvisible;
-  });
-
-}).call(this);
-
-//# sourceMappingURL=ifvisible.js.map
+    IfVisible.prototype.idle = function (callback) {
+        if (callback) {
+            this.on('idle', callback);
+        }
+        else {
+            this.status = STATUS_IDLE;
+            Events.fire('idle');
+            Events.fire('statusChanged', [{ status: this.status }]);
+        }
+        return this;
+    };
+    IfVisible.prototype.blur = function (callback) {
+        if (callback) {
+            this.on('blur', callback);
+        }
+        else {
+            this.status = STATUS_HIDDEN;
+            Events.fire('blur');
+            Events.fire('idle');
+            Events.fire('statusChanged', [{ status: this.status }]);
+        }
+        return this;
+    };
+    IfVisible.prototype.focus = function (callback) {
+        if (callback) {
+            this.on('focus', callback);
+        }
+        else {
+            this.status = STATUS_ACTIVE;
+            Events.fire('focus');
+            Events.fire('wakeup');
+            Events.fire('statusChanged', [{ status: this.status }]);
+        }
+        return this;
+    };
+    IfVisible.prototype.wakeup = function (callback) {
+        if (callback) {
+            this.on('wakeup', callback);
+        }
+        else {
+            this.status = STATUS_ACTIVE;
+            Events.fire('wakeup');
+            Events.fire('statusChanged', [{ status: this.status }]);
+        }
+        return this;
+    };
+    IfVisible.prototype.onEvery = function (seconds, callback) {
+        return new Timer(this, seconds, callback);
+    };
+    IfVisible.prototype.now = function (check) {
+        if (check !== void 0) {
+            return this.status === check;
+        }
+        else {
+            return this.status === STATUS_ACTIVE;
+        }
+    };
+    return IfVisible;
+})();
+// What should have been ↴
+// export default new IfVisible();
+// What it is ↴
+function exports(root, factory) {
+    if (typeof root.define === 'function' && root.define.amd) {
+        return root.define(function () {
+            return factory();
+        });
+    }
+    else if (typeof root.module === 'object' && typeof root.module.exports === 'object') {
+        // return root.module.exports = factory();
+        var exp = factory();
+        root.exports.__esModule = true;
+        root.exports = exp;
+        root.exports["default"] = exp;
+    }
+    else {
+        // put it in the global
+        return root.ifvisible = factory();
+    }
+}
+exports(this, function () {
+    return new IfVisible();
+});

@@ -1,3 +1,10 @@
+const STATUS_ACTIVE = 'active';
+const STATUS_IDLE = 'idle';
+const STATUS_HIDDEN = 'hidden';
+
+let DOC_HIDDEN: string;
+let VISIBILITY_CHANGE_EVENT: string = void 0;
+
 namespace Events {
     const store = {};
     let setListener: Function;
@@ -87,13 +94,6 @@ class Timer {
     }
 }
 
-const STATUS_ACTIVE = 'active';
-const STATUS_IDLE = 'idle';
-const STATUS_HIDDEN = 'hidden';
-
-let DOC_HIDDEN: string;
-let VISIBILITY_CHANGE_EVENT: string = void 0;
-
 if (document.hidden !== void 0) {
     DOC_HIDDEN = "hidden";
     VISIBILITY_CHANGE_EVENT = "visibilitychange";
@@ -168,8 +168,8 @@ class IfVisible {
                 this.wakeup();
             }
 
-            timer = setTimeout(function () {
-                this.idleStartedTime = +(new Date());
+            this.idleStartedTime = +(new Date());
+            timer = setTimeout(() => {
                 if (this.status === STATUS_ACTIVE) {
                     return this.idle();
                 }
@@ -207,7 +207,7 @@ class IfVisible {
     getIdleInfo(): IdleInfo {
         let now = +(new Date());
         let res: IdleInfo;
-        if (status === STATUS_IDLE) {
+        if (this.status === STATUS_IDLE) {
             res = {
                 isIdle: true,
                 idleFor: now - this.idleStartedTime,
@@ -215,11 +215,12 @@ class IfVisible {
                 timeLeftPer: 100
             };
         } else {
+            let timeLeft = (this.idleStartedTime + this.idleTime) - now;
             res = {
                 isIdle: false,
                 idleFor: now - this.idleStartedTime,
-                timeLeft: (this.idleStartedTime + this.idleTime) - now,
-                timeLeftPer: parseFloat((100 - (res.timeLeft * 100 / this.idleTime)).toFixed(2))
+                timeLeft,
+                timeLeftPer: parseFloat((100 - (timeLeft * 100 / this.idleTime)).toFixed(2))
             };
         }
         return res;
@@ -284,4 +285,28 @@ class IfVisible {
     }
 }
 
-export default new IfVisible();
+
+// What should have been ↴
+// export default new IfVisible();
+
+// What it is ↴
+function exports(root, factory) {
+    if (typeof root.define === 'function' && root.define.amd) {
+        return root.define(function() {
+            return factory();
+        });
+    } else if (typeof root.module === 'object' && typeof root.module.exports === 'object') {
+        // return root.module.exports = factory();
+        let exp = factory();
+        root.exports.__esModule = true;
+        root.exports = exp
+        root.exports["default"] = exp;
+    } else {
+        // put it in the global
+        return root.ifvisible = factory();
+    }
+}
+
+exports(this, () => {
+    return new IfVisible();
+});
