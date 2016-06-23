@@ -3,6 +3,7 @@
 *.sublime-project
 
 node_modules
+dist
 
 # Vim
 .*.s[a-w][a-z]
