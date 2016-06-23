@@ -133,6 +133,7 @@ class IfVisible {
     public status: string;
     private idleTime: number;
     private idleStartedTime: number;
+    public VERSION = '2.0.0';
 
     constructor() {
         let BLUR_EVENT = 'blur';
