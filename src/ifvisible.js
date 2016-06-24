@@ -142,10 +142,13 @@
       hidden = "webkitHidden";
       visibilityChange = "webkitvisibilitychange";
     }
-    trackIdleStatus = function() {
+    trackIdleStatus = function(event) {
       var timer, wakeUp;
       timer = false;
       wakeUp = function() {
+        if (event instanceof MouseEvent && event.movementX === 0 && event.movementY === 0) {
+          return timer;
+        }
         clearTimeout(timer);
         if (status !== "active") {
           ifvisible.wakeup();
