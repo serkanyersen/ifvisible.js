@@ -215,9 +215,10 @@
 
 
   # Track if the page is idle or not
-  trackIdleStatus = ->
+   trackIdleStatus = (event) ->
     timer = false
     wakeUp = ->
+      return timer if event instanceof MouseEvent && event.movementX == 0 && event.movementY == 0  
       clearTimeout timer
       ifvisible.wakeup()  if status isnt "active"
       idleStartedTime = +(new Date())
