@@ -144,18 +144,18 @@
     }
     trackIdleStatus = function() {
       var timer, wakeUp;
-      timer = false;
+      timer = [];
       wakeUp = function() {
-        clearTimeout(timer);
+        timer.map(clearTimeout);
         if (status !== "active") {
           ifvisible.wakeup();
         }
         idleStartedTime = +(new Date());
-        return timer = setTimeout(function() {
+        return timer.push(setTimeout(function() {
           if (status === "active") {
             return ifvisible.idle();
           }
-        }, idleTime);
+        }, idleTime));
       };
       wakeUp();
       addEvent(doc, "mousemove", wakeUp);

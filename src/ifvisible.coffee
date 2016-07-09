@@ -216,12 +216,12 @@
 
   # Track if the page is idle or not
   trackIdleStatus = ->
-    timer = false
+    timer = []
     wakeUp = ->
-      clearTimeout timer
+      timer.map(clearTimeout);
       ifvisible.wakeup()  if status isnt "active"
       idleStartedTime = +(new Date())
-      timer = setTimeout(->
+      timer.push setTimeout(->
         ifvisible.idle()  if status is "active"
       , idleTime)
 

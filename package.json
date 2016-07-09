@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "node tests/tests.js"
+    "start": "grunt"
   },
   "repository": {
     "type": "git",

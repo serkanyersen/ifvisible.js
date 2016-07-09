@@ -94,7 +94,7 @@ like Node.</p>
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Export Object</p>
-<pre><code><span class="hljs-property">@type</span> {Object}
+<pre><code>@type {Object}
 </code></pre>
             </div>
             
@@ -110,7 +110,7 @@ like Node.</p>
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>document element</p>
-<pre><code><span class="hljs-property">@type</span> {Document Object}
+<pre><code>@type {Document Object}
 </code></pre>
             </div>
             
@@ -126,7 +126,7 @@ like Node.</p>
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>flag to prevent multiple initializations</p>
-<pre><code><span class="hljs-property">@type</span> {Boolean}`<span class="javascript"></span>
+<pre><code>@type {Boolean}`<span class="javascript"></span>
 </code></pre>
             </div>
             
@@ -142,7 +142,7 @@ like Node.</p>
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Current status, may contain <code>active</code>, <code>idle</code>, <code>hidden</code></p>
-<pre><code><span class="hljs-property">@type</span> {String}`<span class="javascript"></span>
+<pre><code>@type {String}`<span class="javascript"></span>
 </code></pre>
             </div>
             
@@ -158,7 +158,7 @@ like Node.</p>
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Time to wait when setting page to idle</p>
-<pre><code><span class="hljs-property">@type</span> {Number} <span class="hljs-keyword">in</span> miliseconds
+<pre><code>@type {Number} <span class="hljs-keyword">in</span> miliseconds
 </code></pre>
             </div>
             
@@ -175,7 +175,7 @@ like Node.</p>
               </div>
               <p>To track how many time left to become IDLE I need to know
 when we started keeping the time</p>
-<pre><code><span class="hljs-property">@type</span> {Number} <span class="hljs-keyword">in</span> miliseconds
+<pre><code>@type {Number} <span class="hljs-keyword">in</span> miliseconds
 </code></pre>
             </div>
             
@@ -204,7 +204,7 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Handle Custom Object events</p>
-<pre><code><span class="hljs-property">@return</span> {Object} add <span class="hljs-keyword">and</span> fire methods to handle custom events
+<pre><code>@return {Object} add <span class="hljs-keyword">and</span> fire methods to handle custom events
 </code></pre>
             </div>
             
@@ -224,8 +224,8 @@ when we started keeping the time</p>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function">    <span class="hljs-title">S4</span> = -&gt;</span>
-       (((<span class="hljs-number">1</span>+Math.random())*<span class="hljs-number">0x10000</span>)|<span class="hljs-number">0</span>).toString(<span class="hljs-number">16</span>).substring(<span class="hljs-number">1</span>)
-<span class="hljs-function">    <span class="hljs-title">guid</span> = -&gt;</span>
+       (((<span class="hljs-number">1</span>+Math.random())*<span class="hljs-number">0x10000</span>)|<span class="hljs-number">0</span>).toString(<span class="hljs-number">16</span>).substring(<span class="hljs-number">1</span>)<span class="hljs-function">
+    <span class="hljs-title">guid</span> = -&gt;</span>
        (S4()+S4()+<span class="hljs-string">"-"</span>+S4()+<span class="hljs-string">"-"</span>+S4()+<span class="hljs-string">"-"</span>+S4()+<span class="hljs-string">"-"</span>+S4()+S4()+S4())</pre></div></div>
             
         </li>
@@ -238,7 +238,7 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Event listeners</p>
-<pre><code><span class="hljs-property">@type</span> {Object}
+<pre><code>@type {Object}
 </code></pre>
             </div>
             
@@ -254,7 +254,7 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Name of the custom GUID property</p>
-<pre><code><span class="hljs-property">@type</span> {String}
+<pre><code>@type {String}
 </code></pre>
             </div>
             
@@ -270,9 +270,9 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Add a custom event to a given object</p>
-<pre><code><span class="hljs-property">@param</span> {Object}   obj      Object to add custom events
-<span class="hljs-property">@param</span> {string}   event    name <span class="hljs-keyword">of</span> the custom event
-<span class="hljs-property">@param</span> {Function} callback callback function to run <span class="hljs-keyword">when</span>
+<pre><code>@param {Object}   obj      Object to add custom events
+@param {string}   event    name <span class="hljs-keyword">of</span> the custom event
+@param {Function} callback callback function to run <span class="hljs-keyword">when</span>
                            event <span class="hljs-keyword">is</span> fired
 </code></pre>
             </div>
@@ -350,9 +350,9 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Trigger the custom event on given object</p>
-<pre><code><span class="hljs-property">@param</span>  {Object} obj   Object to trigger the event
-<span class="hljs-property">@param</span>  {string} event name <span class="hljs-keyword">of</span> the event to trigger
-<span class="hljs-property">@param</span>  {object} memo  a custom argument to send
+<pre><code>@param  {Object} obj   Object to trigger the event
+@param  {string} event name <span class="hljs-keyword">of</span> the event to trigger
+@param  {object} memo  a custom argument to send
                        triggered event
 </code></pre>
             </div>
@@ -371,9 +371,9 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Remove a custom event from a given object</p>
-<pre><code><span class="hljs-property">@param</span> {Object}   obj      Object to add custom events
-<span class="hljs-property">@param</span> {string}   event    name <span class="hljs-keyword">of</span> the custom event
-<span class="hljs-property">@param</span> {Function} callback Optional! When passed, removes only that
+<pre><code>@param {Object}   obj      Object to add custom events
+@param {string}   event    name <span class="hljs-keyword">of</span> the custom event
+@param {Function} callback Optional! When passed, removes only that
                            callback, otherwise removes all callbacks
 </code></pre>
             </div>
@@ -416,9 +416,9 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">add</span>: addCustomEvent
-    <span class="hljs-attribute">remove</span>: removeCustomEvent
-    <span class="hljs-attribute">fire</span>: fireCustomEvent
+            <div class="content"><div class='highlight'><pre>    add: addCustomEvent
+    remove: removeCustomEvent
+    fire: fireCustomEvent
   )()</pre></div></div>
             
         </li>
@@ -444,9 +444,9 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>CrossBrowser event attachement</p>
-<pre><code><span class="hljs-property">@param</span>  {DomElement}   el Dom Element to attach the event
-<span class="hljs-property">@param</span>  {string}   ev name <span class="hljs-keyword">of</span> the event with <span class="hljs-literal">on</span> prefix
-<span class="hljs-property">@param</span>  {Function} fn callback function to run <span class="hljs-keyword">when</span> event
+<pre><code>@param  {DomElement}   el Dom Element to attach the event
+@param  {string}   ev name <span class="hljs-keyword">of</span> the event with <span class="hljs-literal">on</span> prefix
+@param  {Function} fn callback function to run <span class="hljs-keyword">when</span> event
                       <span class="hljs-keyword">is</span> fired
 </code></pre>
             </div>
@@ -469,14 +469,14 @@ when we started keeping the time</p>
             
             <div class="content"><div class='highlight'><pre>    (el, ev, fn)-&gt;
       <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> setListener
-        <span class="hljs-keyword">if</span> el.addEventListener
-<span class="hljs-function">          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
+        <span class="hljs-keyword">if</span> el.addEventListener<span class="hljs-function">
+          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
             el.addEventListener(ev, fn, <span class="hljs-literal">false</span>)
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> el.attachEvent
-<span class="hljs-function">          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> el.attachEvent<span class="hljs-function">
+          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
             el.attachEvent(<span class="hljs-string">'on'</span> + ev, fn, <span class="hljs-literal">false</span>)
-        <span class="hljs-keyword">else</span>
-<span class="hljs-function">          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
+        <span class="hljs-keyword">else</span><span class="hljs-function">
+          <span class="hljs-title">setListener</span> = <span class="hljs-params">(el, ev, fn)</span> -&gt;</span>
             el[<span class="hljs-string">'on'</span> + ev] =  fn
       setListener(el, ev, fn)
   )()</pre></div></div>
@@ -491,10 +491,10 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Trigger any HTML events</p>
-<pre><code><span class="hljs-property">@param</span>  {DomElement} element Dom Element to trigger
+<pre><code>@param  {DomElement} element Dom Element to trigger
                              events <span class="hljs-literal">on</span>
-<span class="hljs-property">@param</span>  {string} event   event name to trigger
-<span class="hljs-property">@return</span> {boolean}   <span class="hljs-keyword">if</span> dispached <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>
+@param  {string} event   event name to trigger
+@return {boolean}   <span class="hljs-keyword">if</span> dispached <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>
 </code></pre>
             </div>
             
@@ -529,7 +529,7 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Get the IE version</p>
-<pre><code><span class="hljs-property">@return</span> {Number|Undefined} version number <span class="hljs-keyword">of</span> IE <span class="hljs-keyword">or</span> <span class="hljs-literal">undefined</span>
+<pre><code>@return {Number|Undefined} version number <span class="hljs-keyword">of</span> IE <span class="hljs-keyword">or</span> <span class="hljs-literal">undefined</span>
 </code></pre>
             </div>
             
@@ -537,8 +537,8 @@ when we started keeping the time</p>
     undef = <span class="hljs-literal">undefined</span>
     v = <span class="hljs-number">3</span>
     div = doc.createElement(<span class="hljs-string">"div"</span>)
-    all = div.getElementsByTagName(<span class="hljs-string">"i"</span>)
-<span class="hljs-function">
+    all = div.getElementsByTagName(<span class="hljs-string">"i"</span>)<span class="hljs-function">
+
     <span class="hljs-title">check</span> = -&gt;</span>
       <span class="hljs-keyword">return</span> ((div.innerHTML = <span class="hljs-string">"&lt;!--[if gt IE "</span> + (++v) +
         <span class="hljs-string">"]&gt;&lt;i&gt;&lt;/i&gt;&lt;![endif]--&gt;"</span>); all[<span class="hljs-number">0</span>])
@@ -660,12 +660,12 @@ when we started keeping the time</p>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">trackIdleStatus</span> = -&gt;</span>
-    timer = <span class="hljs-literal">false</span>
-<span class="hljs-function">    <span class="hljs-title">wakeUp</span> = -&gt;</span>
-      clearTimeout timer
+    timer = []<span class="hljs-function">
+    <span class="hljs-title">wakeUp</span> = -&gt;</span>
+      timer.map(clearTimeout);
       ifvisible.wakeup()  <span class="hljs-keyword">if</span> status <span class="hljs-keyword">isnt</span> <span class="hljs-string">"active"</span>
       idleStartedTime = +(<span class="hljs-keyword">new</span> Date())
-      timer = setTimeout(<span class="hljs-function">-&gt;</span>
+      timer.push setTimeout(<span class="hljs-function">-&gt;</span>
         ifvisible.idle()  <span class="hljs-keyword">if</span> status <span class="hljs-keyword">is</span> <span class="hljs-string">"active"</span>
       , idleTime)</pre></div></div>
             
@@ -816,7 +816,7 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>Methods to be exported</p>
-<pre><code><span class="hljs-property">@type</span> {Object}
+<pre><code>@type {Object}
 </code></pre>
             </div>
             
@@ -832,11 +832,11 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
               <p>Change idle timeout value.</p>
-<pre><code><span class="hljs-property">@param</span> {Number} seconds a number <span class="hljs-keyword">in</span> seconds such <span class="hljs-attribute">as</span>: <span class="hljs-number">10</span> <span class="hljs-keyword">or</span> <span class="hljs-number">0.5</span>
+<pre><code>@param {Number} seconds a number <span class="hljs-keyword">in</span> seconds such as: <span class="hljs-number">10</span> <span class="hljs-keyword">or</span> <span class="hljs-number">0.5</span>
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">setIdleDuration</span>: <span class="hljs-function"><span class="hljs-params">(seconds)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>    setIdleDuration: <span class="hljs-function"><span class="hljs-params">(seconds)</span> -&gt;</span>
       idleTime = seconds * <span class="hljs-number">1000</span></pre></div></div>
             
         </li>
@@ -852,7 +852,7 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">getIdleDuration</span>: <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>    getIdleDuration: <span class="hljs-function">-&gt;</span>
       idleTime</pre></div></div>
             
         </li>
@@ -865,19 +865,19 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
               <p>Get information about user being idle.</p>
-<pre><code><span class="hljs-property">@return</span> {Object} An object contining information about idle status
+<pre><code>@return {Object} An object contining information about idle status
 </code></pre><p>Informations is as following</p>
-<pre><code><span class="hljs-attribute">isIdle</span>: [current idle status <span class="hljs-literal">true</span>/<span class="hljs-literal">false</span>]
-<span class="hljs-attribute">idleFor</span>: [how long the user was idle
+<pre><code>isIdle: [current idle status <span class="hljs-literal">true</span>/<span class="hljs-literal">false</span>]
+idleFor: [how long the user was idle
           <span class="hljs-keyword">in</span> milliseconds]
-<span class="hljs-attribute">timeLeft</span>: [How long does it take to become
+timeLeft: [How long does it take to become
            idle <span class="hljs-keyword">in</span> milliseconds]
-<span class="hljs-attribute">timeLeftPer</span>: [How long does it take to become
+timeLeftPer: [How long does it take to become
               idle <span class="hljs-keyword">in</span> percentage]
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">getIdleInfo</span>: <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>    getIdleInfo: <span class="hljs-function">-&gt;</span>
       now = +(<span class="hljs-keyword">new</span> Date())
       res = {}
       <span class="hljs-keyword">if</span> status <span class="hljs-keyword">is</span> <span class="hljs-string">"idle"</span>
@@ -902,11 +902,11 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
               <p>When User Opens the page,</p>
-<pre><code><span class="hljs-property">@note</span>: User may <span class="hljs-keyword">not</span> be looking at it directly
+<pre><code>@note: User may <span class="hljs-keyword">not</span> be looking at it directly
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">focus</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    focus: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -922,7 +922,7 @@ when we started keeping the time</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
-        <span class="hljs-property">@on</span>(<span class="hljs-string">"focus"</span>, callback)
+        @on(<span class="hljs-string">"focus"</span>, callback)
       <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
@@ -941,7 +941,7 @@ when we started keeping the time</p>
             <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"active"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"focus"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span> <span class="hljs-comment"># When focused page will woke up too.</span>
-        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { status: status }
       @</pre></div></div>
             
         </li>
@@ -954,11 +954,11 @@ when we started keeping the time</p>
                 <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
               <p>When User swicthes tabs or minimizes the window</p>
-<pre><code><span class="hljs-property">@note</span>: <span class="hljs-keyword">this</span> may trigger <span class="hljs-keyword">when</span> iframes are selected
+<pre><code>@note: <span class="hljs-keyword">this</span> may trigger <span class="hljs-keyword">when</span> iframes are selected
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">blur</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    blur: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -974,7 +974,7 @@ when we started keeping the time</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
-        <span class="hljs-property">@on</span>(<span class="hljs-string">"blur"</span>, callback)
+        @on(<span class="hljs-string">"blur"</span>, callback)
       <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
@@ -993,7 +993,7 @@ when we started keeping the time</p>
             <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"hidden"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"blur"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span> <span class="hljs-comment"># When blurred page is idle too</span>
-        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { status: status }
       @</pre></div></div>
             
         </li>
@@ -1009,7 +1009,7 @@ when we started keeping the time</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">idle</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    idle: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -1025,7 +1025,7 @@ when we started keeping the time</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
-        <span class="hljs-property">@on</span>(<span class="hljs-string">"idle"</span>, callback)
+        @on(<span class="hljs-string">"idle"</span>, callback)
       <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
@@ -1043,7 +1043,7 @@ when we started keeping the time</p>
             
             <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"idle"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"idle"</span>
-        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { status: status }
       @</pre></div></div>
             
         </li>
@@ -1061,7 +1061,7 @@ This will be called when page has focus too</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">wakeup</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    wakeup: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -1077,7 +1077,7 @@ This will be called when page has focus too</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">"function"</span>
-        <span class="hljs-property">@on</span>(<span class="hljs-string">"wakeup"</span>, callback)
+        @on(<span class="hljs-string">"wakeup"</span>, callback)
       <span class="hljs-keyword">else</span></pre></div></div>
             
         </li>
@@ -1095,7 +1095,7 @@ This will be called when page has focus too</p>
             
             <div class="content"><div class='highlight'><pre>        status = <span class="hljs-string">"active"</span>
         customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"wakeup"</span>
-        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { <span class="hljs-attribute">status</span>: status }
+        customEvent.fire <span class="hljs-keyword">this</span>, <span class="hljs-string">"statusChanged"</span>, { status: status }
       @</pre></div></div>
             
         </li>
@@ -1108,16 +1108,16 @@ This will be called when page has focus too</p>
                 <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               <p>Set an event to ifvisible object</p>
-<pre><code><span class="hljs-property">@param</span>  {string}   name     Event name such as focus,
+<pre><code>@param  {string}   name     Event name such as focus,
                             idle, blur, wakeup
-<span class="hljs-property">@param</span>  {Function} callback callback function to call
+@param  {Function} callback callback function to call
                             <span class="hljs-keyword">when</span> event <span class="hljs-keyword">is</span> fired
-<span class="hljs-property">@return</span> {object}            an object with a stop method
+@return {object}            an object with a stop method
                             to unbid <span class="hljs-keyword">this</span> event
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">on</span>: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>    on: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
       init() <span class="hljs-comment"># Auto init on first call</span>
       customEvent.add <span class="hljs-keyword">this</span>, name, callback
       @</pre></div></div>
@@ -1132,17 +1132,17 @@ This will be called when page has focus too</p>
                 <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <p>Remove an event from ifvisible object</p>
-<pre><code><span class="hljs-property">@param</span>  {string}   name     Event name such as focus,
+<pre><code>@param  {string}   name     Event name such as focus,
                             idle, blur, wakeup
-<span class="hljs-property">@param</span>  {Function} callback Optional, <span class="hljs-keyword">if</span> passed, it will remove
+@param  {Function} callback Optional, <span class="hljs-keyword">if</span> passed, it will remove
                             only the given callback, <span class="hljs-keyword">if</span> empty will
                             remove all
-<span class="hljs-property">@return</span> {object}            an object with a stop method
+@return {object}            an object with a stop method
                             to unbid <span class="hljs-keyword">this</span> event
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">off</span>: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>    off: <span class="hljs-function"><span class="hljs-params">(name, callback)</span> -&gt;</span>
       init() <span class="hljs-comment"># Auto init on first call</span>
       customEvent.remove <span class="hljs-keyword">this</span>, name, callback
       @</pre></div></div>
@@ -1157,12 +1157,12 @@ This will be called when page has focus too</p>
                 <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
               <p>if page is visible then run given code in given seconds of intervals</p>
-<pre><code><span class="hljs-property">@param</span>  {float}   seconds  seconds to run interval
-<span class="hljs-property">@param</span>  {Function} callback callback function to run
+<pre><code>@param  {float}   seconds  seconds to run interval
+@param  {Function} callback callback function to run
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">onEvery</span>: <span class="hljs-function"><span class="hljs-params">(seconds, callback)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onEvery: <span class="hljs-function"><span class="hljs-params">(seconds, callback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -1198,17 +1198,17 @@ This will be called when page has focus too</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-attribute">stop</span>: <span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>      stop: <span class="hljs-function">-&gt;</span>
         clearInterval t
 
-      <span class="hljs-attribute">pause</span>: <span class="hljs-function">-&gt;</span>
+      pause: <span class="hljs-function">-&gt;</span>
         paused = <span class="hljs-literal">true</span>
 
-      <span class="hljs-attribute">resume</span>: <span class="hljs-function">-&gt;</span>
+      resume: <span class="hljs-function">-&gt;</span>
         paused = <span class="hljs-literal">false</span>
 
-      <span class="hljs-attribute">code</span>: t
-      <span class="hljs-attribute">callback</span>: callback</pre></div></div>
+      code: t
+      callback: callback</pre></div></div>
             
         </li>
         
@@ -1220,11 +1220,11 @@ This will be called when page has focus too</p>
                 <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p><code>ifvisible.now()</code> return if the page is visible right now?</p>
-<pre><code><span class="hljs-property">@return</span> {boolean} <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> page <span class="hljs-keyword">is</span> visible
+<pre><code>@return {boolean} <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> page <span class="hljs-keyword">is</span> visible
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">now</span>: <span class="hljs-function"><span class="hljs-params">(check)</span>-&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    now: <span class="hljs-function"><span class="hljs-params">(check)</span>-&gt;</span></pre></div></div>
             
         </li>
         
