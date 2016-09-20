@@ -1,5 +1,5 @@
 {
-  "name": "ifvisible.js",
+  "name": "ifvisible",
   "version": "1.0.6",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "src/ifvisible.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/serkanyersen/ifvisible.js.git"
+    "url": "git://github.com/muhammaddadu/ifvisible.git"
   },
   "typescript": {
     "definition": "ifvisible.d.ts"
@@ -35,9 +35,9 @@
   "author": "Serkan Yersen <serkanyersen@gmail.com> (http://serkan.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/serkanyersen/ifvisible.js/issues"
+    "url": "https://github.com/muhammaddadu/ifvisible/issues"
   },
-  "homepage": "https://github.com/serkanyersen/ifvisible.js",
+  "homepage": "https://github.com/muhammaddadu/ifvisible",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
