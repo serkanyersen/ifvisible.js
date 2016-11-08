@@ -59,6 +59,7 @@
 
 <span class="hljs-keyword">let</span> DOC_HIDDEN: <span class="hljs-built_in">string</span>;
 <span class="hljs-keyword">let</span> VISIBILITY_CHANGE_EVENT: <span class="hljs-built_in">string</span> = <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>;
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> __VERSION__: <span class="hljs-built_in">string</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">namespace</span> Events {
     <span class="hljs-keyword">const</span> store = {};
@@ -188,7 +189,8 @@
     <span class="hljs-keyword">public</span> status: <span class="hljs-built_in">string</span>;
     <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span>;
     <span class="hljs-keyword">private</span> idleStartedTime: <span class="hljs-built_in">number</span>;
-    <span class="hljs-keyword">public</span> VERSION = <span class="hljs-string">"2.0.0"</span>;
+    <span class="hljs-keyword">public</span> VERSION = __VERSION__;
+
 
     <span class="hljs-keyword">constructor</span>() {
         <span class="hljs-keyword">let</span> BLUR_EVENT = <span class="hljs-string">"blur"</span>;

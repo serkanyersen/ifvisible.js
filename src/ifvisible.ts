@@ -101,7 +101,7 @@ if (document.hidden !== void 0) {
 } else if (document["mozHidden"] !== void 0) {
     DOC_HIDDEN = "mozHidden";
     VISIBILITY_CHANGE_EVENT = "mozvisibilitychange";
-} else if (document.msHidden !== void 0) {
+} else if (document["msHidden"] !== void 0) {
     DOC_HIDDEN = "msHidden";
     VISIBILITY_CHANGE_EVENT = "msvisibilitychange";
 } else if (document["webkitHidden"] !== void 0) {

@@ -42,9 +42,9 @@
   "devDependencies": {},
   "dependencies": {
     "docco": "^0.7.0",
-    "ts-loader": "^0.8.2",
-    "tslint": "^3.11.0",
-    "typescript": "^1.8.10",
-    "webpack": "^1.13.1"
+    "ts-loader": "^1.0.0",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.7",
+    "webpack": "^1.13.3"
   }
 }
