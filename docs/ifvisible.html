@@ -156,7 +156,7 @@
 } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"mozHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
     DOC_HIDDEN = <span class="hljs-string">"mozHidden"</span>;
     VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"mozvisibilitychange"</span>;
-} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.msHidden !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"msHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
     DOC_HIDDEN = <span class="hljs-string">"msHidden"</span>;
     VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"msvisibilitychange"</span>;
 } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"webkitHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
