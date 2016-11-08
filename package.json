@@ -1,6 +1,6 @@
 {
   "name": "ifvisible.js",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "dist/ifvisible.js",
   "scripts": {
@@ -39,8 +39,7 @@
     "url": "https://github.com/serkanyersen/ifvisible.js/issues"
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "docco": "^0.7.0",
     "ts-loader": "^1.0.0",
     "tslint": "^3.15.1",
