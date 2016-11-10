@@ -119,9 +119,10 @@ export const IE = (function () {
 
 export class IfVisible {
     public status: string = STATUS_ACTIVE;
-    private idleTime: number = 5000;
-    private idleStartedTime: number;
     public VERSION = __VERSION__;
+    private timer: number;
+    private idleTime: number = 30000;
+    private idleStartedTime: number;
 
 
     constructor(private root, private doc) {
@@ -154,40 +155,42 @@ export class IfVisible {
                 return this.focus();
             });
         } else {
-            Events.dom(this.doc, VISIBILITY_CHANGE_EVENT, () => {
+            const trackChange = () => {
                 if (this.doc[DOC_HIDDEN]) {
-                    return this.blur();
+                    this.blur();
                 } else {
-                    return this.focus();
+                    this.focus();
                 }
-            });
+            };
+            trackChange(); // get initial status
+            Events.dom(this.doc, VISIBILITY_CHANGE_EVENT, trackChange);
         }
+        this.startIdleTimer();
         this.trackIdleStatus();
     }
 
-    trackIdleStatus() {
-        let timer: number;
-        let wakeUp = () => {
-            clearTimeout(timer);
-            if (this.status !== STATUS_ACTIVE) {
-                this.wakeup();
+    startIdleTimer() {
+        clearTimeout(this.timer);
+
+        if (this.status === STATUS_IDLE) {
+            this.wakeup();
+        }
+
+        this.idleStartedTime = +(new Date());
+        this.timer = setTimeout(() => {
+            if (this.status === STATUS_ACTIVE || this.status === STATUS_HIDDEN) {
+                return this.idle();
             }
+        }, this.idleTime);
+    }
 
-            this.idleStartedTime = +(new Date());
-            timer = setTimeout(() => {
-                if (this.status === STATUS_ACTIVE) {
-                    return this.idle();
-                }
-            }, this.idleTime);
-        };
-
-        wakeUp();
-        Events.dom(this.doc, "mousemove", wakeUp);
-        Events.dom(this.doc, "keyup", wakeUp);
-        Events.dom(this.doc, "touchstart", wakeUp);
-        Events.dom(this.root, "scroll", wakeUp);
-        this.focus(wakeUp);
-        this.wakeup(wakeUp);
+    trackIdleStatus() {
+        Events.dom(this.doc, "mousemove", this.startIdleTimer.bind(this));
+        Events.dom(this.doc, "keyup", this.startIdleTimer.bind(this));
+        Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
+        Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
+        // this.focus(wakeUp);
+        // this.wakeup(wakeUp);
     }
 
     on(event: string, callback: (data: any) => any): IfVisible {
@@ -202,6 +205,7 @@ export class IfVisible {
 
     setIdleDuration(seconds: number): IfVisible {
         this.idleTime = seconds * 1000;
+        this.startIdleTimer();
         return this;
     }
 
@@ -248,7 +252,6 @@ export class IfVisible {
         } else {
             this.status = STATUS_HIDDEN;
             Events.fire("blur");
-            Events.fire("idle");
             Events.fire("statusChanged", [{ status: this.status }]);
         }
         return this;
@@ -257,7 +260,7 @@ export class IfVisible {
     focus(callback?: (data: any) => any): IfVisible {
         if (callback) {
             this.on("focus", callback);
-        } else {
+        } else if (this.status !== STATUS_ACTIVE) {
             this.status = STATUS_ACTIVE;
             Events.fire("focus");
             Events.fire("wakeup");
@@ -269,7 +272,7 @@ export class IfVisible {
     wakeup(callback?: (data: any) => any): IfVisible {
         if (callback) {
             this.on("wakeup", callback);
-        } else {
+        } else if (this.status !== STATUS_ACTIVE) {
             this.status = STATUS_ACTIVE;
             Events.fire("wakeup");
             Events.fire("statusChanged", [{ status: this.status }]);

@@ -174,7 +174,7 @@
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> IfVisible {
     <span class="hljs-keyword">public</span> status: <span class="hljs-built_in">string</span> = STATUS_ACTIVE;
-    <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span> = <span class="hljs-number">5000</span>;
+    <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span> = <span class="hljs-number">30000</span>;
     <span class="hljs-keyword">private</span> idleStartedTime: <span class="hljs-built_in">number</span>;
     <span class="hljs-keyword">public</span> VERSION = __VERSION__;
 
@@ -242,7 +242,7 @@
 
             <span class="hljs-keyword">this</span>.idleStartedTime = +(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>());
             timer = setTimeout(() =&gt; {
-                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status === STATUS_ACTIVE) {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status === STATUS_ACTIVE || <span class="hljs-keyword">this</span>.status === STATUS_HIDDEN) {
                     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.idle();
                 }
             }, <span class="hljs-keyword">this</span>.idleTime);
