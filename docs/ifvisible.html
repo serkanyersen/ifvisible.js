@@ -56,10 +56,10 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> STATUS_ACTIVE = <span class="hljs-string">"active"</span>;
 <span class="hljs-keyword">const</span> STATUS_IDLE = <span class="hljs-string">"idle"</span>;
 <span class="hljs-keyword">const</span> STATUS_HIDDEN = <span class="hljs-string">"hidden"</span>;
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> __VERSION__: <span class="hljs-built_in">string</span>;
 
 <span class="hljs-keyword">let</span> DOC_HIDDEN: <span class="hljs-built_in">string</span>;
 <span class="hljs-keyword">let</span> VISIBILITY_CHANGE_EVENT: <span class="hljs-built_in">string</span> = <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>;
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> __VERSION__: <span class="hljs-built_in">string</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">namespace</span> Events {
     <span class="hljs-keyword">const</span> store = {};
@@ -110,6 +110,13 @@
 
 }
 
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IdleInfo {
+    isIdle: <span class="hljs-built_in">boolean</span>;
+    idleFor: <span class="hljs-built_in">number</span>;
+    timeLeft: <span class="hljs-built_in">number</span>;
+    timeLeftPer: <span class="hljs-built_in">number</span>;
+}
+
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Timer {
     <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
     stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
@@ -150,20 +157,6 @@
     }
 }
 
-<span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.hidden !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
-    DOC_HIDDEN = <span class="hljs-string">"hidden"</span>;
-    VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"visibilitychange"</span>;
-} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"mozHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
-    DOC_HIDDEN = <span class="hljs-string">"mozHidden"</span>;
-    VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"mozvisibilitychange"</span>;
-} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"msHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
-    DOC_HIDDEN = <span class="hljs-string">"msHidden"</span>;
-    VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"msvisibilitychange"</span>;
-} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[<span class="hljs-string">"webkitHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
-    DOC_HIDDEN = <span class="hljs-string">"webkitHidden"</span>;
-    VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"webkitvisibilitychange"</span>;
-}
-
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> IE = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">let</span> undef,
         v = <span class="hljs-number">3</span>,
@@ -178,37 +171,58 @@
     <span class="hljs-keyword">return</span> v &gt; <span class="hljs-number">4</span> ? v : undef;
 }());
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IdleInfo {
-    isIdle: <span class="hljs-built_in">boolean</span>;
-    idleFor: <span class="hljs-built_in">number</span>;
-    timeLeft: <span class="hljs-built_in">number</span>;
-    timeLeftPer: <span class="hljs-built_in">number</span>;
-}
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> IfVisible {
-    <span class="hljs-keyword">public</span> status: <span class="hljs-built_in">string</span>;
-    <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span>;
+    <span class="hljs-keyword">public</span> status: <span class="hljs-built_in">string</span> = STATUS_ACTIVE;
+    <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span> = <span class="hljs-number">5000</span>;
     <span class="hljs-keyword">private</span> idleStartedTime: <span class="hljs-built_in">number</span>;
     <span class="hljs-keyword">public</span> VERSION = __VERSION__;
 
 
-    <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">constructor</span>(private root, private doc) {
         <span class="hljs-keyword">let</span> BLUR_EVENT = <span class="hljs-string">"blur"</span>;
-        <span class="hljs-keyword">let</span> FOCUS_EVENT = <span class="hljs-string">"focus"</span>;
+        <span class="hljs-keyword">let</span> FOCUS_EVENT = <span class="hljs-string">"focus"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Find correct browser events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc.hidden !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
+            DOC_HIDDEN = <span class="hljs-string">"hidden"</span>;
+            VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"visibilitychange"</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc[<span class="hljs-string">"mozHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
+            DOC_HIDDEN = <span class="hljs-string">"mozHidden"</span>;
+            VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"mozvisibilitychange"</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc[<span class="hljs-string">"msHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
+            DOC_HIDDEN = <span class="hljs-string">"msHidden"</span>;
+            VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"msvisibilitychange"</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc[<span class="hljs-string">"webkitHidden"</span>] !== <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
+            DOC_HIDDEN = <span class="hljs-string">"webkitHidden"</span>;
+            VISIBILITY_CHANGE_EVENT = <span class="hljs-string">"webkitvisibilitychange"</span>;
+        }
 
         <span class="hljs-keyword">if</span> (DOC_HIDDEN === <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
             <span class="hljs-keyword">if</span> (IE &lt; <span class="hljs-number">9</span>) {
                 BLUR_EVENT = <span class="hljs-string">"focusout"</span>;
             }
-            Events.dom(<span class="hljs-built_in">window</span>, BLUR_EVENT, () =&gt; {
+            Events.dom(<span class="hljs-keyword">this</span>.root, BLUR_EVENT, () =&gt; {
                 <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.blur();
             });
-            Events.dom(<span class="hljs-built_in">window</span>, FOCUS_EVENT, () =&gt; {
+            Events.dom(<span class="hljs-keyword">this</span>.root, FOCUS_EVENT, () =&gt; {
                 <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.focus();
             });
         } <span class="hljs-keyword">else</span> {
-            Events.dom(<span class="hljs-built_in">document</span>, VISIBILITY_CHANGE_EVENT, () =&gt; {
-                <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>[DOC_HIDDEN]) {
+            Events.dom(<span class="hljs-keyword">this</span>.doc, VISIBILITY_CHANGE_EVENT, () =&gt; {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc[DOC_HIDDEN]) {
                     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.blur();
                 } <span class="hljs-keyword">else</span> {
                     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.focus();
@@ -235,10 +249,10 @@
         };
 
         wakeUp();
-        Events.dom(<span class="hljs-built_in">document</span>, <span class="hljs-string">"mousemove"</span>, wakeUp);
-        Events.dom(<span class="hljs-built_in">document</span>, <span class="hljs-string">"keyup"</span>, wakeUp);
-        Events.dom(<span class="hljs-built_in">document</span>, <span class="hljs-string">"touchstart"</span>, wakeUp);
-        Events.dom(<span class="hljs-built_in">window</span>, <span class="hljs-string">"scroll"</span>, wakeUp);
+        Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"mousemove"</span>, wakeUp);
+        Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"keyup"</span>, wakeUp);
+        Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"touchstart"</span>, wakeUp);
+        Events.dom(<span class="hljs-keyword">this</span>.root, <span class="hljs-string">"scroll"</span>, wakeUp);
         <span class="hljs-keyword">this</span>.focus(wakeUp);
         <span class="hljs-keyword">this</span>.wakeup(wakeUp);
     }
@@ -340,49 +354,6 @@
         } <span class="hljs-keyword">else</span> {
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.status === STATUS_ACTIVE;
         }
-    }
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">exporter</span>(<span class="hljs-params">root, factory</span>) </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> root.define === <span class="hljs-string">"function"</span> &amp;&amp; root.define.amd) {
-        <span class="hljs-keyword">return</span> root.define(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-            <span class="hljs-keyword">return</span> factory();
-        });
-    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> root.module === <span class="hljs-string">"object"</span> &amp;&amp; <span class="hljs-keyword">typeof</span> root.module.exports === <span class="hljs-string">"object"</span>) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>return root.module.exports = factory();</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> exp = factory();
-        root.exports.__esModule = <span class="hljs-literal">true</span>;
-        root.exports = exp;
-        root.exports[<span class="hljs-string">"default"</span>] = exp;
-    } <span class="hljs-keyword">else</span> {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>put it in the global</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> root.ifvisible = factory();
     }
 }</pre></div></div>
             
