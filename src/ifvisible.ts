@@ -1,10 +1,10 @@
 const STATUS_ACTIVE = "active";
 const STATUS_IDLE = "idle";
 const STATUS_HIDDEN = "hidden";
+declare var __VERSION__: string;
 
 let DOC_HIDDEN: string;
 let VISIBILITY_CHANGE_EVENT: string = void 0;
-declare var __VERSION__: string;
 
 export namespace Events {
     const store = {};
@@ -55,6 +55,13 @@ export namespace Events {
 
 }
 
+export interface IdleInfo {
+    isIdle: boolean;
+    idleFor: number;
+    timeLeft: number;
+    timeLeftPer: number;
+}
+
 export class Timer {
     private token: number;
     stopped: boolean = false;
@@ -95,20 +102,6 @@ export class Timer {
     }
 }
 
-if (document.hidden !== void 0) {
-    DOC_HIDDEN = "hidden";
-    VISIBILITY_CHANGE_EVENT = "visibilitychange";
-} else if (document["mozHidden"] !== void 0) {
-    DOC_HIDDEN = "mozHidden";
-    VISIBILITY_CHANGE_EVENT = "mozvisibilitychange";
-} else if (document["msHidden"] !== void 0) {
-    DOC_HIDDEN = "msHidden";
-    VISIBILITY_CHANGE_EVENT = "msvisibilitychange";
-} else if (document["webkitHidden"] !== void 0) {
-    DOC_HIDDEN = "webkitHidden";
-    VISIBILITY_CHANGE_EVENT = "webkitvisibilitychange";
-}
-
 export const IE = (function () {
     let undef,
         v = 3,
@@ -123,37 +116,46 @@ export const IE = (function () {
     return v > 4 ? v : undef;
 }());
 
-export interface IdleInfo {
-    isIdle: boolean;
-    idleFor: number;
-    timeLeft: number;
-    timeLeftPer: number;
-}
 
 export class IfVisible {
-    public status: string;
-    private idleTime: number;
+    public status: string = STATUS_ACTIVE;
+    private idleTime: number = 5000;
     private idleStartedTime: number;
     public VERSION = __VERSION__;
 
 
-    constructor() {
+    constructor(private root, private doc) {
         let BLUR_EVENT = "blur";
         let FOCUS_EVENT = "focus";
+
+        // Find correct browser events
+        if (this.doc.hidden !== void 0) {
+            DOC_HIDDEN = "hidden";
+            VISIBILITY_CHANGE_EVENT = "visibilitychange";
+        } else if (this.doc["mozHidden"] !== void 0) {
+            DOC_HIDDEN = "mozHidden";
+            VISIBILITY_CHANGE_EVENT = "mozvisibilitychange";
+        } else if (this.doc["msHidden"] !== void 0) {
+            DOC_HIDDEN = "msHidden";
+            VISIBILITY_CHANGE_EVENT = "msvisibilitychange";
+        } else if (this.doc["webkitHidden"] !== void 0) {
+            DOC_HIDDEN = "webkitHidden";
+            VISIBILITY_CHANGE_EVENT = "webkitvisibilitychange";
+        }
 
         if (DOC_HIDDEN === void 0) {
             if (IE < 9) {
                 BLUR_EVENT = "focusout";
             }
-            Events.dom(window, BLUR_EVENT, () => {
+            Events.dom(this.root, BLUR_EVENT, () => {
                 return this.blur();
             });
-            Events.dom(window, FOCUS_EVENT, () => {
+            Events.dom(this.root, FOCUS_EVENT, () => {
                 return this.focus();
             });
         } else {
-            Events.dom(document, VISIBILITY_CHANGE_EVENT, () => {
-                if (document[DOC_HIDDEN]) {
+            Events.dom(this.doc, VISIBILITY_CHANGE_EVENT, () => {
+                if (this.doc[DOC_HIDDEN]) {
                     return this.blur();
                 } else {
                     return this.focus();
@@ -180,10 +182,10 @@ export class IfVisible {
         };
 
         wakeUp();
-        Events.dom(document, "mousemove", wakeUp);
-        Events.dom(document, "keyup", wakeUp);
-        Events.dom(document, "touchstart", wakeUp);
-        Events.dom(window, "scroll", wakeUp);
+        Events.dom(this.doc, "mousemove", wakeUp);
+        Events.dom(this.doc, "keyup", wakeUp);
+        Events.dom(this.doc, "touchstart", wakeUp);
+        Events.dom(this.root, "scroll", wakeUp);
         this.focus(wakeUp);
         this.wakeup(wakeUp);
     }
@@ -285,22 +287,5 @@ export class IfVisible {
         } else {
             return this.status === STATUS_ACTIVE;
         }
-    }
-}
-
-export function exporter(root, factory) {
-    if (typeof root.define === "function" && root.define.amd) {
-        return root.define(function() {
-            return factory();
-        });
-    } else if (typeof root.module === "object" && typeof root.module.exports === "object") {
-        // return root.module.exports = factory();
-        let exp = factory();
-        root.exports.__esModule = true;
-        root.exports = exp;
-        root.exports["default"] = exp;
-    } else {
-        // put it in the global
-        return root.ifvisible = factory();
     }
 }

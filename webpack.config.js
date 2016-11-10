@@ -11,7 +11,8 @@ let config = {
     devtool: "inline-source-map",
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "ifvisible.js"
+        filename: "ifvisible.js",
+        libraryTarget: "umd"
     },
     resolve: {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
