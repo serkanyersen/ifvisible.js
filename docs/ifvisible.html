@@ -236,7 +236,26 @@
         <span class="hljs-keyword">this</span>.trackIdleStatus();
     }
 
-    startIdleTimer() {
+    startIdleTimer(event?: Event) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Prevents Phantom events.
+@see <a href="https://github.com/serkanyersen/ifvisible.js/pull/37">https://github.com/serkanyersen/ifvisible.js/pull/37</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (event <span class="hljs-keyword">instanceof</span> MouseEvent &amp;&amp; event.movementX === <span class="hljs-number">0</span> &amp;&amp; event.movementY === <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">return</span>;
+        }
+
         clearTimeout(<span class="hljs-keyword">this</span>.timer);
 
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status === STATUS_IDLE) {
@@ -260,11 +279,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>this.focus(wakeUp);
 this.wakeup(wakeUp);</p>
