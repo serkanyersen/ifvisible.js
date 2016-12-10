@@ -14,7 +14,7 @@ export namespace Events {
         if (!store[event]) {
             store[event] = [];
         }
-
+        console.log("seko");
         store[event].push(callback);
     }
 
@@ -192,9 +192,11 @@ export class IfVisible {
 
     trackIdleStatus() {
         Events.dom(this.doc, "mousemove", this.startIdleTimer.bind(this));
+        Events.dom(this.doc, "mousedown", this.startIdleTimer.bind(this));
         Events.dom(this.doc, "keyup", this.startIdleTimer.bind(this));
         Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
         Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
+
         // this.focus(wakeUp);
         // this.wakeup(wakeUp);
     }

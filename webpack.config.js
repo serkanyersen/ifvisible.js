@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
+const WebpackShellPlugin = require("webpack-shell-plugin");
 
 let config = {
     entry: {
@@ -32,7 +33,11 @@ let config = {
 
 if (process.env.PURPOSE === "production") {
     console.log("Production Mode");
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+        output: {
+            comments: false
+        }
+    }));
     config.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
     config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
 
@@ -40,5 +45,10 @@ if (process.env.PURPOSE === "production") {
     config.devServer = null;
     config.watch = false;
 }
+
+config.plugins.push(new WebpackShellPlugin({
+    dev: false,
+    onBuildEnd: ['cp ./dist/ifvisible.js ./docs/']
+}));
 
 module.exports = config;

@@ -69,7 +69,7 @@
         <span class="hljs-keyword">if</span> (!store[event]) {
             store[event] = [];
         }
-
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"seko"</span>);
         store[event].push(callback);
     }
 
@@ -272,6 +272,7 @@
 
     trackIdleStatus() {
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"mousemove"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
+        Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"mousedown"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"keyup"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"touchstart"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
         Events.dom(<span class="hljs-keyword">this</span>.root, <span class="hljs-string">"scroll"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));</pre></div></div>
