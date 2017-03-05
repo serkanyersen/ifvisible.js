@@ -69,7 +69,6 @@
         <span class="hljs-keyword">if</span> (!store[event]) {
             store[event] = [];
         }
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"seko"</span>);
         store[event].push(callback);
     }
 
@@ -121,9 +120,9 @@
     <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
     stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
 
-    <span class="hljs-keyword">constructor</span>(private ifvisible: IfVisible,
-        private seconds: number,
-        private callback: Function) {
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> ifvisible: IfVisible,
+        <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
+        <span class="hljs-keyword">private</span> callback: <span class="hljs-built_in">Function</span></span>) {
         <span class="hljs-keyword">this</span>.start();
 
         <span class="hljs-keyword">this</span>.ifvisible.on(<span class="hljs-string">"statusChanged"</span>, (data: <span class="hljs-built_in">any</span>) =&gt; {
@@ -180,7 +179,7 @@
     <span class="hljs-keyword">private</span> idleStartedTime: <span class="hljs-built_in">number</span>;
 
 
-    <span class="hljs-keyword">constructor</span>(private root, private doc) {
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> root, <span class="hljs-keyword">private</span> doc</span>) {
         <span class="hljs-keyword">let</span> BLUR_EVENT = <span class="hljs-string">"blur"</span>;
         <span class="hljs-keyword">let</span> FOCUS_EVENT = <span class="hljs-string">"focus"</span>;</pre></div></div>
             
@@ -275,23 +274,11 @@
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"mousedown"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"keyup"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
         Events.dom(<span class="hljs-keyword">this</span>.doc, <span class="hljs-string">"touchstart"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
-        Events.dom(<span class="hljs-keyword">this</span>.root, <span class="hljs-string">"scroll"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>this.focus(wakeUp);
-this.wakeup(wakeUp);</p>
+        Events.dom(<span class="hljs-keyword">this</span>.root, <span class="hljs-string">"scroll"</span>, <span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    }
+        <span class="hljs-keyword">this</span>.focus(<span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
+        <span class="hljs-keyword">this</span>.wakeup(<span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
+    }
 
     on(event: <span class="hljs-built_in">string</span>, callback: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
         Events.attach(event, callback);

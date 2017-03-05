@@ -14,7 +14,6 @@ export namespace Events {
         if (!store[event]) {
             store[event] = [];
         }
-        console.log("seko");
         store[event].push(callback);
     }
 
@@ -197,8 +196,8 @@ export class IfVisible {
         Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
         Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
 
-        // this.focus(wakeUp);
-        // this.wakeup(wakeUp);
+        this.focus(this.startIdleTimer.bind(this));
+        this.wakeup(this.startIdleTimer.bind(this));
     }
 
     on(event: string, callback: (data: any) => any): IfVisible {
