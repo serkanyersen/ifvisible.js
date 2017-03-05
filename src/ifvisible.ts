@@ -121,12 +121,10 @@ export class IfVisible {
     private timers: number[] = [];
     private idleTime: number = 30000;
     private idleStartedTime: number;
+    private isLegacyModeOn = false;
 
 
     constructor(private root, private doc) {
-        let BLUR_EVENT = "blur";
-        let FOCUS_EVENT = "focus";
-
         // Find correct browser events
         if (this.doc.hidden !== void 0) {
             DOC_HIDDEN = "hidden";
@@ -143,15 +141,7 @@ export class IfVisible {
         }
 
         if (DOC_HIDDEN === void 0) {
-            if (IE < 9) {
-                BLUR_EVENT = "focusout";
-            }
-            Events.dom(this.root, BLUR_EVENT, () => {
-                return this.blur();
-            });
-            Events.dom(this.root, FOCUS_EVENT, () => {
-                return this.focus();
-            });
+            this.legacyMode();
         } else {
             const trackChange = () => {
                 if (this.doc[DOC_HIDDEN]) {
@@ -165,6 +155,29 @@ export class IfVisible {
         }
         this.startIdleTimer();
         this.trackIdleStatus();
+    }
+
+    legacyMode() {
+        // it's already on
+        if (this.isLegacyModeOn) { return; }
+
+        let BLUR_EVENT = "blur";
+        let FOCUS_EVENT = "focus";
+
+        if (IE < 9) {
+            BLUR_EVENT = "focusout";
+        }
+
+        Events.dom(this.root, BLUR_EVENT, () => {
+            console.log("blurred");
+            return this.blur();
+        });
+
+        Events.dom(this.root, FOCUS_EVENT, () => {
+            return this.focus();
+        });
+
+        this.isLegacyModeOn = true;
     }
 
     startIdleTimer(event?: Event) {

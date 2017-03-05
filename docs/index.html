@@ -22,7 +22,10 @@
                 d("result2").innerHTML = "(-_-) Good bye. ZzzZZzz...";
                 document.body.style.opacity = 0.5;
             });
-
+            ifvisible.blur(function() {
+                d("result2").innerHTML = "(-_o) Where did you go?";
+                document.body.style.opacity = 0.5;
+            });
             ifvisible.wakeup(function(){
                 d("result2").innerHTML = "(O_o) Hey!, you woke me up.";
                 document.body.style.opacity = 1;
