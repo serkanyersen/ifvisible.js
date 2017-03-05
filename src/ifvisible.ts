@@ -115,11 +115,10 @@ export const IE = (function () {
     return v > 4 ? v : undef;
 }());
 
-
 export class IfVisible {
     public status: string = STATUS_ACTIVE;
     public VERSION = __VERSION__;
-    private timer: number;
+    private timers: number[] = [];
     private idleTime: number = 30000;
     private idleStartedTime: number;
 
@@ -175,18 +174,20 @@ export class IfVisible {
             return;
         }
 
-        clearTimeout(this.timer);
+        this.timers.map(clearTimeout);
+        this.timers.length = 0; // clear the array
 
         if (this.status === STATUS_IDLE) {
             this.wakeup();
         }
 
         this.idleStartedTime = +(new Date());
-        this.timer = setTimeout(() => {
+
+        this.timers.push(setTimeout(() => {
             if (this.status === STATUS_ACTIVE || this.status === STATUS_HIDDEN) {
                 return this.idle();
             }
-        }, this.idleTime);
+        }, this.idleTime));
     }
 
     trackIdleStatus() {
@@ -195,9 +196,8 @@ export class IfVisible {
         Events.dom(this.doc, "keyup", this.startIdleTimer.bind(this));
         Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
         Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
-
+        // When page is focues without any event, it should not be idle.
         this.focus(this.startIdleTimer.bind(this));
-        this.wakeup(this.startIdleTimer.bind(this));
     }
 
     on(event: string, callback: (data: any) => any): IfVisible {

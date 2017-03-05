@@ -12,7 +12,7 @@
             function d(el){
                 return document.getElementById(el);
             }
-            ifvisible.setIdleDuration(30);
+            ifvisible.setIdleDuration(6);
 
             ifvisible.on('statusChanged', function(e){
                 d("result").innerHTML += (e.status+"<br>");
