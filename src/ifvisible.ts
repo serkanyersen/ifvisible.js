@@ -1,7 +1,7 @@
 const STATUS_ACTIVE = "active";
 const STATUS_IDLE = "idle";
 const STATUS_HIDDEN = "hidden";
-declare var __VERSION__: string;
+// declare var __VERSION__: string;
 
 let DOC_HIDDEN: string;
 let VISIBILITY_CHANGE_EVENT: string = void 0;
@@ -66,8 +66,8 @@ export class Timer {
     stopped: boolean = false;
 
     constructor(private ifvisible: IfVisible,
-        private seconds: number,
-        private callback: Function) {
+                private seconds: number,
+                private callback: Function) {
         this.start();
 
         this.ifvisible.on("statusChanged", (data: any) => {
@@ -117,7 +117,7 @@ export const IE = (function () {
 
 export class IfVisible {
     public status: string = STATUS_ACTIVE;
-    public VERSION = __VERSION__;
+    public VERSION = "2.0.11";
     private timers: number[] = [];
     private idleTime: number = 30000;
     private idleStartedTime: number;
