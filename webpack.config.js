@@ -16,29 +16,31 @@ let config = {
         libraryTarget: "umd"
     },
     resolve: {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     module: {
-        loaders: [{
-            test: /\.tsx?$/, loader: "ts-loader"
+        rules: [{
+            test: /\.tsx?$/,
+            use: {
+                loader: "ts-loader"
+            }
         }]
     },
     plugins: [
-        new webpack.optimize.DedupePlugin(),
         new webpack.DefinePlugin({
             __VERSION__: JSON.stringify(version)
         })
     ]
 };
 
-if (process.env.PURPOSE === "production") {
+if (process.env.NODE_ENV === "production") {
     console.log("Production Mode");
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+        minimize: true,
         output: {
             comments: false
         }
     }));
-    config.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
     config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
 
     config.devtool = null;

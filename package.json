@@ -1,6 +1,6 @@
 {
   "name": "ifvisible.js",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "dist/ifvisible.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "PURPOSE=production webpack",
     "lint": "find src -type f -name '*.ts' | xargs tslint",
     "docs": "docco src/*.ts --output docs/docco",
-    "prepublish": "npm run build && npm run docs"
+    "release": "npm run build && npm run docs && npm run publish"
   },
   "repository": {
     "type": "git",
@@ -40,11 +40,27 @@
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {
+    "@types/jest": "^20.0.8",
     "docco": "^0.7.0",
-    "ts-loader": "^1.3.1",
+    "jest": "^20.0.4",
+    "ts-jest": "^20.0.14",
+    "ts-loader": "^2.3.4",
     "tslint": "4.0.2",
     "typescript": "^2.1.4",
-    "webpack": "^1.14.0",
-    "webpack-shell-plugin": "^0.4.9"
+    "webpack": "^3.5.5",
+    "webpack-shell-plugin": "^0.5.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

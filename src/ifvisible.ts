@@ -1,104 +1,18 @@
-const STATUS_ACTIVE = "active";
-const STATUS_IDLE = "idle";
-const STATUS_HIDDEN = "hidden";
-// declare var __VERSION__: string;
+import Events from "./Events";
+import Timer from "./Timer";
 
+export const STATUS_ACTIVE = "active";
+export const STATUS_IDLE = "idle";
+export const STATUS_HIDDEN = "hidden";
+// declare var __VERSION__: string;
 let DOC_HIDDEN: string;
 let VISIBILITY_CHANGE_EVENT: string = void 0;
-
-export namespace Events {
-    const store = {};
-    let setListener: Function;
-
-    export function attach(event: string, callback: Function) {
-        if (!store[event]) {
-            store[event] = [];
-        }
-        store[event].push(callback);
-    }
-
-    export function fire(event: string, args?: any[]) {
-        if (store[event]) {
-            store[event].forEach((callback) => {
-                callback(...args);
-            });
-        }
-    }
-
-    export function remove(event: string, callback: Function) {
-        if (store[event]) {
-            store[event] = store[event].filter((savedCallback) => {
-                return callback !== savedCallback;
-            });
-        }
-    }
-
-    export function dom(element: any, event: string, callback: Function) {
-        if (!setListener) {
-            if (element.addEventListener) {
-                setListener = function (el, ev, fn) {
-                    return el.addEventListener(ev, fn, false);
-                };
-            } else if (typeof element["attachEvent"] === "function") {
-                setListener = function (el, ev, fn) {
-                    return el.attachEvent("on" + ev, fn, false);
-                };
-            } else {
-                setListener = function (el, ev, fn) {
-                    return el["on" + ev] = fn;
-                };
-            }
-        }
-        return setListener(element, event, callback);
-    }
-
-}
 
 export interface IdleInfo {
     isIdle: boolean;
     idleFor: number;
     timeLeft: number;
     timeLeftPer: number;
-}
-
-export class Timer {
-    private token: number;
-    stopped: boolean = false;
-
-    constructor(private ifvisible: IfVisible,
-                private seconds: number,
-                private callback: Function) {
-        this.start();
-
-        this.ifvisible.on("statusChanged", (data: any) => {
-            if (this.stopped === false) {
-                if (data.status === STATUS_ACTIVE) {
-                    this.start();
-                } else {
-                    this.pause();
-                }
-            }
-        });
-    }
-
-    private start() {
-        this.stopped = false;
-        clearInterval(this.token);
-        this.token = setInterval(this.callback, this.seconds * 1000);
-    }
-
-    public stop() {
-        this.stopped = true;
-        clearInterval(this.token);
-    }
-
-    public resume() {
-        this.start();
-    }
-
-    public pause() {
-        this.stop();
-    }
 }
 
 export const IE = (function () {
@@ -209,7 +123,7 @@ export class IfVisible {
         Events.dom(this.doc, "keyup", this.startIdleTimer.bind(this));
         Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
         Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
-        // When page is focues without any event, it should not be idle.
+        // When page is focus without any event, it should not be idle.
         this.focus(this.startIdleTimer.bind(this));
     }
 
