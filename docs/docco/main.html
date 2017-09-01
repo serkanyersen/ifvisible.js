@@ -20,6 +20,16 @@
             <div id="jump_page">
               
                 
+                <a class="source" href="Events.html">
+                  Events.ts
+                </a>
+              
+                
+                <a class="source" href="Timer.html">
+                  Timer.ts
+                </a>
+              
+                
                 <a class="source" href="ifvisible.html">
                   ifvisible.ts
                 </a>
@@ -53,10 +63,24 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible } from <span class="hljs-string">"./ifvisible"</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible } <span class="hljs-keyword">from</span> <span class="hljs-string">"./ifvisible"</span>;
 
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> global: <span class="hljs-built_in">any</span>;
-<span class="hljs-keyword">const</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">"object"</span> &amp;&amp; self.self === self &amp;&amp; self ||
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> global: <span class="hljs-built_in">any</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>decide between self vs global depending on the environment</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">"object"</span> &amp;&amp; self.self === self &amp;&amp; self ||
              <span class="hljs-keyword">typeof</span> global === <span class="hljs-string">"object"</span> &amp;&amp; global.global === global &amp;&amp; global ||
              <span class="hljs-keyword">this</span>;
 

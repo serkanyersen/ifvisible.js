@@ -20,6 +20,16 @@
             <div id="jump_page">
               
                 
+                <a class="source" href="Events.html">
+                  Events.ts
+                </a>
+              
+                
+                <a class="source" href="Timer.html">
+                  Timer.ts
+                </a>
+              
+                
                 <a class="source" href="ifvisible.html">
                   ifvisible.ts
                 </a>
@@ -53,107 +63,34 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> STATUS_ACTIVE = <span class="hljs-string">"active"</span>;
-<span class="hljs-keyword">const</span> STATUS_IDLE = <span class="hljs-string">"idle"</span>;
-<span class="hljs-keyword">const</span> STATUS_HIDDEN = <span class="hljs-string">"hidden"</span>;
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> __VERSION__: <span class="hljs-built_in">string</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Events <span class="hljs-keyword">from</span> <span class="hljs-string">"./Events"</span>;
+<span class="hljs-keyword">import</span> Timer <span class="hljs-keyword">from</span> <span class="hljs-string">"./Timer"</span>;
 
-<span class="hljs-keyword">let</span> DOC_HIDDEN: <span class="hljs-built_in">string</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> STATUS_ACTIVE = <span class="hljs-string">"active"</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> STATUS_IDLE = <span class="hljs-string">"idle"</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> STATUS_HIDDEN = <span class="hljs-string">"hidden"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>declare var <strong>VERSION</strong>: string;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> DOC_HIDDEN: <span class="hljs-built_in">string</span>;
 <span class="hljs-keyword">let</span> VISIBILITY_CHANGE_EVENT: <span class="hljs-built_in">string</span> = <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>;
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">namespace</span> Events {
-    <span class="hljs-keyword">const</span> store = {};
-    <span class="hljs-keyword">let</span> setListener: <span class="hljs-built_in">Function</span>;
-
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attach</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (!store[event]) {
-            store[event] = [];
-        }
-        store[event].push(callback);
-    }
-
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fire</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, args?: <span class="hljs-built_in">any</span>[]</span>) </span>{
-        <span class="hljs-keyword">if</span> (store[event]) {
-            store[event].forEach((callback) =&gt; {
-                callback(...args);
-            });
-        }
-    }
-
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (store[event]) {
-            store[event] = store[event].filter((savedCallback) =&gt; {
-                <span class="hljs-keyword">return</span> callback !== savedCallback;
-            });
-        }
-    }
-
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dom</span>(<span class="hljs-params">element: <span class="hljs-built_in">any</span>, event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (!setListener) {
-            <span class="hljs-keyword">if</span> (element.addEventListener) {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el.addEventListener(ev, fn, <span class="hljs-literal">false</span>);
-                };
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> element[<span class="hljs-string">"attachEvent"</span>] === <span class="hljs-string">"function"</span>) {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el.attachEvent(<span class="hljs-string">"on"</span> + ev, fn, <span class="hljs-literal">false</span>);
-                };
-            } <span class="hljs-keyword">else</span> {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el[<span class="hljs-string">"on"</span> + ev] = fn;
-                };
-            }
-        }
-        <span class="hljs-keyword">return</span> setListener(element, event, callback);
-    }
-
-}
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IdleInfo {
     isIdle: <span class="hljs-built_in">boolean</span>;
     idleFor: <span class="hljs-built_in">number</span>;
     timeLeft: <span class="hljs-built_in">number</span>;
     timeLeftPer: <span class="hljs-built_in">number</span>;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Timer {
-    <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
-    stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
-
-    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> ifvisible: IfVisible,
-        <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
-        <span class="hljs-keyword">private</span> callback: <span class="hljs-built_in">Function</span></span>) {
-        <span class="hljs-keyword">this</span>.start();
-
-        <span class="hljs-keyword">this</span>.ifvisible.on(<span class="hljs-string">"statusChanged"</span>, (data: <span class="hljs-built_in">any</span>) =&gt; {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.stopped === <span class="hljs-literal">false</span>) {
-                <span class="hljs-keyword">if</span> (data.status === STATUS_ACTIVE) {
-                    <span class="hljs-keyword">this</span>.start();
-                } <span class="hljs-keyword">else</span> {
-                    <span class="hljs-keyword">this</span>.pause();
-                }
-            }
-        });
-    }
-
-    <span class="hljs-keyword">private</span> start() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">false</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-        <span class="hljs-keyword">this</span>.token = setInterval(<span class="hljs-keyword">this</span>.callback, <span class="hljs-keyword">this</span>.seconds * <span class="hljs-number">1000</span>);
-    }
-
-    <span class="hljs-keyword">public</span> stop() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">true</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-    }
-
-    <span class="hljs-keyword">public</span> resume() {
-        <span class="hljs-keyword">this</span>.start();
-    }
-
-    <span class="hljs-keyword">public</span> pause() {
-        <span class="hljs-keyword">this</span>.stop();
-    }
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> IE = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -172,7 +109,7 @@
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> IfVisible {
     <span class="hljs-keyword">public</span> status: <span class="hljs-built_in">string</span> = STATUS_ACTIVE;
-    <span class="hljs-keyword">public</span> VERSION = __VERSION__;
+    <span class="hljs-keyword">public</span> VERSION = <span class="hljs-string">"2.0.11"</span>;
     <span class="hljs-keyword">private</span> timers: <span class="hljs-built_in">number</span>[] = [];
     <span class="hljs-keyword">private</span> idleTime: <span class="hljs-built_in">number</span> = <span class="hljs-number">30000</span>;
     <span class="hljs-keyword">private</span> idleStartedTime: <span class="hljs-built_in">number</span>;
@@ -184,11 +121,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Find correct browser events</p>
 
@@ -211,7 +148,7 @@
         <span class="hljs-keyword">if</span> (DOC_HIDDEN === <span class="hljs-built_in">void</span> <span class="hljs-number">0</span>) {
             <span class="hljs-keyword">this</span>.legacyMode();
         } <span class="hljs-keyword">else</span> {
-            <span class="hljs-keyword">const</span> trackChange = () =&gt; {
+            <span class="hljs-keyword">const</span> trackChange = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
                 <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.doc[DOC_HIDDEN]) {
                     <span class="hljs-keyword">this</span>.blur();
                 } <span class="hljs-keyword">else</span> {
@@ -230,11 +167,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>it’s already on</p>
 
@@ -249,12 +186,12 @@
             BLUR_EVENT = <span class="hljs-string">"focusout"</span>;
         }
 
-        Events.dom(<span class="hljs-keyword">this</span>.root, BLUR_EVENT, () =&gt; {
+        Events.dom(<span class="hljs-keyword">this</span>.root, BLUR_EVENT, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
             <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"blurred"</span>);
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.blur();
         });
 
-        Events.dom(<span class="hljs-keyword">this</span>.root, FOCUS_EVENT, () =&gt; {
+        Events.dom(<span class="hljs-keyword">this</span>.root, FOCUS_EVENT, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.focus();
         });
 
@@ -266,11 +203,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Prevents Phantom events.
 @see <a href="https://github.com/serkanyersen/ifvisible.js/pull/37">https://github.com/serkanyersen/ifvisible.js/pull/37</a></p>
@@ -290,7 +227,7 @@
 
         <span class="hljs-keyword">this</span>.idleStartedTime = +(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>());
 
-        <span class="hljs-keyword">this</span>.timers.push(setTimeout(() =&gt; {
+        <span class="hljs-keyword">this</span>.timers.push(setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status === STATUS_ACTIVE || <span class="hljs-keyword">this</span>.status === STATUS_HIDDEN) {
                 <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.idle();
             }
@@ -307,20 +244,20 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>When page is focues without any event, it should not be idle.</p>
+              <p>When page is focus without any event, it should not be idle.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.focus(<span class="hljs-keyword">this</span>.startIdleTimer.bind(<span class="hljs-keyword">this</span>));
     }
 
-    on(event: <span class="hljs-built_in">string</span>, callback: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
+    on(event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>): IfVisible {
         Events.attach(event, callback);
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
@@ -362,7 +299,7 @@
         <span class="hljs-keyword">return</span> res;
     }
 
-    idle(callback?: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
+    idle(callback?: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>): IfVisible {
         <span class="hljs-keyword">if</span> (callback) {
             <span class="hljs-keyword">this</span>.on(<span class="hljs-string">"idle"</span>, callback);
         } <span class="hljs-keyword">else</span> {
@@ -373,7 +310,7 @@
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
 
-    blur(callback?: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
+    blur(callback?: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>): IfVisible {
         <span class="hljs-keyword">if</span> (callback) {
             <span class="hljs-keyword">this</span>.on(<span class="hljs-string">"blur"</span>, callback);
         } <span class="hljs-keyword">else</span> {
@@ -384,7 +321,7 @@
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
 
-    focus(callback?: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
+    focus(callback?: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>): IfVisible {
         <span class="hljs-keyword">if</span> (callback) {
             <span class="hljs-keyword">this</span>.on(<span class="hljs-string">"focus"</span>, callback);
         } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status !== STATUS_ACTIVE) {
@@ -396,7 +333,7 @@
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
 
-    wakeup(callback?: (data: <span class="hljs-built_in">any</span>) =&gt; <span class="hljs-built_in">any</span>): IfVisible {
+    wakeup(callback?: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>): IfVisible {
         <span class="hljs-keyword">if</span> (callback) {
             <span class="hljs-keyword">this</span>.on(<span class="hljs-string">"wakeup"</span>, callback);
         } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.status !== STATUS_ACTIVE) {
