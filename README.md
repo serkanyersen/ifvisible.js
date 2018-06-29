@@ -7,6 +7,8 @@ Crossbrowser & lightweight way to check if user is looking at the page or intera
 
 
 ## Installation
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js?ref=badge_shield)
+
 From npm
 ```
 npm install ifvisible.js --save
@@ -120,3 +122,6 @@ ifvisible.onEvery(0.5, function(){
 
 ### License
 It's MIT, Go crazy.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js?ref=badge_large)
