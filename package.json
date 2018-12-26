@@ -5,7 +5,7 @@
   "main": "dist/ifvisible.js",
   "scripts": {
     "start": "webpack",
-    "build": "PURPOSE=production webpack",
+    "build": "NODE_ENV=production webpack --production",
     "lint": "find src -type f -name '*.ts' | xargs tslint",
     "docs": "docco src/*.ts --output docs/docco",
     "release": "npm run build && npm run docs && npm run publish"
@@ -40,14 +40,14 @@
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {
-    "@types/jest": "^20.0.8",
-    "docco": "^0.7.0",
-    "jest": "^20.0.4",
-    "ts-jest": "^20.0.14",
-    "ts-loader": "^2.3.4",
-    "tslint": "4.0.2",
-    "typescript": "^2.1.4",
-    "webpack": "^3.5.5",
+    "@types/jest": "^23.3.10",
+    "docco": "^0.8.0",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^5.3.2",
+    "tslint": "5.12.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.2",
     "webpack-shell-plugin": "^0.5.0"
   },
   "jest": {
@@ -62,5 +62,8 @@
       "jsx",
       "json"
     ]
+  },
+  "dependencies": {
+    "webpack-cli": "^3.1.2"
   }
 }

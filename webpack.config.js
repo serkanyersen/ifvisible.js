@@ -3,12 +3,14 @@ const fs = require("fs");
 const webpack = require("webpack");
 const version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
 const WebpackShellPlugin = require("webpack-shell-plugin");
+const isProd = process.env.NODE_ENV === "production";
 
 let config = {
+    mode: 'development',
     entry: {
         app: ["./src/main.ts"]
     },
-    watch: true,
+    watch: !isProd,
     devtool: "inline-source-map",
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -26,6 +28,9 @@ let config = {
             }
         }]
     },
+    optimization: {
+        minimize: isProd
+    },
     plugins: [
         new webpack.DefinePlugin({
             __VERSION__: JSON.stringify(version)
@@ -33,19 +38,9 @@ let config = {
     ]
 };
 
-if (process.env.NODE_ENV === "production") {
+if (isProd) {
     console.log("Production Mode");
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-        minimize: true,
-        output: {
-            comments: false
-        }
-    }));
     config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
-
-    config.devtool = null;
-    config.devServer = null;
-    config.watch = false;
 }
 
 config.plugins.push(new WebpackShellPlugin({
