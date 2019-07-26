@@ -1,21 +1,21 @@
 {
   "name": "ifvisible.js",
-  "version": "1.0.6",
+  "version": "2.0.12",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
-  "main": "src/ifvisible.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
+  "main": "dist/ifvisible.js",
   "scripts": {
-    "start": "grunt"
+    "start": "webpack",
+    "build": "NODE_ENV=production webpack --production",
+    "lint": "find src -type f -name '*.ts' | xargs tslint",
+    "docs": "docco src/*.ts --output docs/docco",
+    "release": "npm run build && npm run docs && npm run publish"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/serkanyersen/ifvisible.js.git"
   },
   "typescript": {
-    "definition": "ifvisible.d.ts"
+    "definition": "src/ifvisible.ts"
   },
   "keywords": [
     "visibility",
@@ -30,7 +30,8 @@
     "reading",
     "mode",
     "tab",
-    "change"
+    "change",
+    "typescript"
   ],
   "author": "Serkan Yersen <serkanyersen@gmail.com> (http://serkan.io/)",
   "license": "MIT",
@@ -39,10 +40,30 @@
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-coffee": "^0.13.0",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-docco": "^0.3.3"
+    "@types/jest": "^23.3.10",
+    "docco": "^0.8.0",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^5.3.2",
+    "tslint": "5.12.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.2",
+    "webpack-shell-plugin": "^0.5.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
+  "dependencies": {
+    "webpack-cli": "^3.1.2"
   }
 }
