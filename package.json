@@ -40,18 +40,18 @@
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
+    "@types/jest": "^24.0.18",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
     "docco": "^0.8.0",
-    "eslint": "^6.1.0",
+    "eslint": "^6.2.2",
     "eslint-config-airbnb-typescript": "^4.0.1",
     "eslint-plugin-import": "^2.18.2",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    "ts-loader": "^5.3.2",
-    "typescript": "^3.2.2",
-    "webpack": "^4.28.2",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
     "webpack-shell-plugin": "^0.5.0"
   },
   "jest": {
@@ -68,6 +68,6 @@
     ]
   },
   "dependencies": {
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.3.7"
   }
 }
