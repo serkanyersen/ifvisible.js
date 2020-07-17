@@ -63,46 +63,47 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible, STATUS_ACTIVE } <span class="hljs-keyword">from</span> <span class="hljs-string">"./ifvisible"</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible, STATUS_ACTIVE } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./ifvisible&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> Timer {
-    <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
-    stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
 
-    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> ifvisible: IfVisible,
-                <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
-                <span class="hljs-keyword">private</span> callback: <span class="hljs-built_in">Function</span></span>) {
-        <span class="hljs-keyword">this</span>.start();
+  stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
 
-        <span class="hljs-keyword">this</span>.ifvisible.on(<span class="hljs-string">"statusChanged"</span>, <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.stopped === <span class="hljs-literal">false</span>) {
-                <span class="hljs-keyword">if</span> (data.status === STATUS_ACTIVE) {
-                    <span class="hljs-keyword">this</span>.start();
-                } <span class="hljs-keyword">else</span> {
-                    <span class="hljs-keyword">this</span>.pause();
-                }
-            }
-        });
-    }
+  <span class="hljs-keyword">constructor</span> (<span class="hljs-params"><span class="hljs-keyword">private</span> ifvisible: IfVisible,
+    <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
+    <span class="hljs-keyword">private</span> callback: <span class="hljs-built_in">Function</span></span>) {
+    <span class="hljs-built_in">this</span>.start();
 
-    <span class="hljs-keyword">private</span> start() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">false</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-        <span class="hljs-keyword">this</span>.token = setInterval(<span class="hljs-keyword">this</span>.callback, <span class="hljs-keyword">this</span>.seconds * <span class="hljs-number">1000</span>);
-    }
+    <span class="hljs-built_in">this</span>.ifvisible.on(<span class="hljs-string">&#x27;statusChanged&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.stopped === <span class="hljs-literal">false</span>) {
+        <span class="hljs-keyword">if</span> (data.status === STATUS_ACTIVE) {
+          <span class="hljs-built_in">this</span>.start();
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-built_in">this</span>.pause();
+        }
+      }
+    });
+  }
 
-    <span class="hljs-keyword">public</span> stop() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">true</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-    }
+  <span class="hljs-keyword">private</span> start () {
+    <span class="hljs-built_in">this</span>.stopped = <span class="hljs-literal">false</span>;
+    <span class="hljs-built_in">clearInterval</span>(<span class="hljs-built_in">this</span>.token);
+    <span class="hljs-built_in">this</span>.token = <span class="hljs-built_in">setInterval</span>(<span class="hljs-built_in">this</span>.callback, <span class="hljs-built_in">this</span>.seconds * <span class="hljs-number">1000</span>);
+  }
 
-    <span class="hljs-keyword">public</span> resume() {
-        <span class="hljs-keyword">this</span>.start();
-    }
+  stop () {
+    <span class="hljs-built_in">this</span>.stopped = <span class="hljs-literal">true</span>;
+    <span class="hljs-built_in">clearInterval</span>(<span class="hljs-built_in">this</span>.token);
+  }
 
-    <span class="hljs-keyword">public</span> pause() {
-        <span class="hljs-keyword">this</span>.stop();
-    }
+  resume () {
+    <span class="hljs-built_in">this</span>.start();
+  }
+
+  pause () {
+    <span class="hljs-built_in">this</span>.stop();
+  }
 }</pre></div></div>
             
         </li>

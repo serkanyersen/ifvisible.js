@@ -1,6 +1,6 @@
 {
-  "name": "ifvisible.js",
-  "version": "2.0.12",
+  "name": "@promaton/ifvisible.js",
+  "version": "3.0.1",
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "dist/ifvisible.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "NODE_ENV=production webpack --production",
     "lint": "eslint --ext .js,.ts ./src",
     "docs": "docco src/*.ts --output docs/docco",
-    "release": "npm run build && npm run docs && npm run publish"
+    "release": "npm run build && npm run docs && npm publish"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,10 @@
   },
   "typescript": {
     "definition": "src/ifvisible.ts"
+  },
+  "types": "dist/main.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.tools.promaton.com/"
   },
   "keywords": [
     "visibility",

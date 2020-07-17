@@ -63,9 +63,9 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible } <span class="hljs-keyword">from</span> <span class="hljs-string">"./ifvisible"</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./ifvisible&#x27;</span>;
 
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> global: <span class="hljs-built_in">any</span>;</pre></div></div>
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">let</span> <span class="hljs-built_in">global</span>: <span class="hljs-built_in">any</span>;</pre></div></div>
             
         </li>
         
@@ -80,9 +80,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">"object"</span> &amp;&amp; self.self === self &amp;&amp; self ||
-             <span class="hljs-keyword">typeof</span> global === <span class="hljs-string">"object"</span> &amp;&amp; global.global === global &amp;&amp; global ||
-             <span class="hljs-keyword">this</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> root = (<span class="hljs-keyword">typeof</span> self === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; self.self === self &amp;&amp; self)
+             || (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">global</span> === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; <span class="hljs-built_in">global</span>.global === <span class="hljs-built_in">global</span> &amp;&amp; <span class="hljs-built_in">global</span>)
+             || <span class="hljs-built_in">this</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ifvisible = <span class="hljs-keyword">new</span> IfVisible(root, <span class="hljs-built_in">document</span>);</pre></div></div>
             

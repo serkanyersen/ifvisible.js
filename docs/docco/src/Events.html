@@ -64,56 +64,81 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">namespace</span> Events {
-    <span class="hljs-keyword">const</span> store = {};
-    <span class="hljs-keyword">let</span> setListener: <span class="hljs-built_in">Function</span>;
+  <span class="hljs-keyword">const</span> store = {};
+  <span class="hljs-keyword">let</span> setListener: <span class="hljs-built_in">Function</span>;
 
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attach</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (!store[event]) {
-            store[event] = [];
-        }
-        store[event].push(callback);
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attach</span> (<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
+    <span class="hljs-keyword">if</span> (!store[event]) {
+      store[event] = [];
     }
+    store[event].push(callback);
+  }
 
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fire</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, args = []</span>) </span>{
-        <span class="hljs-keyword">if</span> (store[event]) {
-            store[event].forEach(<span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> {
-                callback(...args);
-            });
-        }
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fire</span> (<span class="hljs-params">event: <span class="hljs-built_in">string</span>, args = []</span>) </span>{
+    <span class="hljs-keyword">if</span> (store[event]) {
+      store[event].forEach(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> {
+        callback(...args);
+      });
     }
+  }
 
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback?: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (!callback) {
-            <span class="hljs-keyword">delete</span> store[event];
-        }
-        <span class="hljs-keyword">if</span> (store[event]) {
-            store[event] = store[event].filter(<span class="hljs-function">(<span class="hljs-params">savedCallback</span>) =&gt;</span> {
-                <span class="hljs-keyword">return</span> callback !== savedCallback;
-            });
-        }
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span> (<span class="hljs-params">event: <span class="hljs-built_in">string</span>, callback?: <span class="hljs-built_in">Function</span></span>) </span>{
+    <span class="hljs-keyword">if</span> (!callback) {
+      <span class="hljs-keyword">delete</span> store[event];
     }
-
-    <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dom</span>(<span class="hljs-params">element: <span class="hljs-built_in">any</span>, event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
-        <span class="hljs-keyword">if</span> (!setListener) {
-            <span class="hljs-keyword">if</span> (element.addEventListener) {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el.addEventListener(ev, fn, <span class="hljs-literal">false</span>);
-                };
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> element[<span class="hljs-string">"attachEvent"</span>] === <span class="hljs-string">"function"</span>) {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el.attachEvent(<span class="hljs-string">"on"</span> + ev, fn, <span class="hljs-literal">false</span>);
-                };
-            } <span class="hljs-keyword">else</span> {
-                setListener = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el, ev, fn</span>) </span>{
-                    <span class="hljs-keyword">return</span> el[<span class="hljs-string">"on"</span> + ev] = fn;
-                };
-            }
-        }
-        <span class="hljs-keyword">return</span> setListener(element, event, callback);
+    <span class="hljs-keyword">if</span> (store[event]) {
+      store[event] = store[event].filter(<span class="hljs-function"><span class="hljs-params">savedCallback</span> =&gt;</span> {
+        <span class="hljs-keyword">return</span> callback !== savedCallback;
+      });
     }
-}
+  }
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Events;</pre></div></div>
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dom</span> (<span class="hljs-params">element: <span class="hljs-built_in">any</span>, event: <span class="hljs-built_in">string</span>, callback: <span class="hljs-built_in">Function</span></span>) </span>{
+    <span class="hljs-keyword">if</span> (!setListener) {
+      <span class="hljs-keyword">if</span> (element.addEventListener) {
+        setListener = <span class="hljs-function">(<span class="hljs-params">el, ev, fn</span>) =&gt;</span> {
+          <span class="hljs-keyword">return</span> el.addEventListener(ev, fn, <span class="hljs-literal">false</span>);
+        };
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> element.attachEvent === <span class="hljs-string">&#x27;function&#x27;</span>) {
+        setListener = <span class="hljs-function">(<span class="hljs-params">el, ev, fn</span>) =&gt;</span> {
+          <span class="hljs-keyword">return</span> el.attachEvent(<span class="hljs-string">`on<span class="hljs-subst">${ev}</span>`</span>, fn, <span class="hljs-literal">false</span>);
+        };
+      } <span class="hljs-keyword">else</span> {
+        setListener = <span class="hljs-function">(<span class="hljs-params">el, ev, fn</span>) =&gt;</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>eslint-disable-next-line no-return-assign, no-param-reassign</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> el[<span class="hljs-string">`on<span class="hljs-subst">${ev}</span>`</span>] = fn;
+        };
+      }
+    }
+    <span class="hljs-keyword">return</span> setListener(element, event, callback);
+  }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>export default Events;</p>
+
+            </div>
             
         </li>
         
