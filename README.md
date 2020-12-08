@@ -107,6 +107,20 @@ ifvisible.focus(); // Will trigger wakeup event as well
 ifvisible.wakeup();
 ```
 
+You can use ifvisible.off() to remove event triggers:
+
+```javascript
+
+ifvisible.off('idle', triggeredFunction); // will remove only triggeredFunction from being tiggered on idle
+ifvisible.off('idle'); // will remove all events triggered on idle
+
+// works with other events:
+ifvisible.off('blur');
+ifvisible.off('wakeup');
+ifvisible.off('focus');
+
+```
+
 You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the page the interval will automatically stop itself
 
 ```javascript
