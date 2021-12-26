@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta name="HandheldFriendly" content="true" />
+    <link
+      href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css"
+      rel="stylesheet"
+    />
+    <title>ifvisible.js test page</title>
+  </head>
+  <body>
+    <script type="text/javascript"></script>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <h1>ifvisible.js test page</h1>
+      </div>
+      <div class="row-fluid">
+        <div class="span6">
+          <p class="lead">
+            Idle duration is set to
+            <span id="idleTime" class="label label-warning">00 seconds</span>,
+            so that you can see the effect easily.
+          </p>
+          <ul>
+            <li>
+              Try switching between tabs or minimizing the window. and look for
+              the event log
+            </li>
+            <li>
+              Do nothing and wait for idle time to fill. Counter should stop.
+            </li>
+            <li>
+              While Idle, try moving the mouse or pressing any key. Page should
+              wake up
+            </li>
+          </ul>
+
+          <div class="well">
+            If you wait
+            <span class="label label-warning" id="seconds">00</span> seconds
+            I'll sleep.
+            <div class="progress">
+              <div class="bar" id="idlebar" style="width: 0%"></div>
+            </div>
+            <div id="result2">(^_^) Hey, there.</div>
+          </div>
+          <div class="well">
+            This simple clock
+            <span id="result3" class="badge badge-info">0</span> is updated via
+            <code>onEvery</code> method. It should stop when page is not active
+            (idle,hidden) and should continue with current time when page is
+            active.
+          </div>
+        </div>
+        <div class="span6">
+          <div id="result">
+            <p>Event log.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

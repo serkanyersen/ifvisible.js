@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["es5", "es2015.promise", "dom", "es2015"],
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -10,13 +11,5 @@
     "noImplicitAny": false,
     "outDir": "dist"
   },
-  "files": [
-      "src/ifvisible.ts",
-      "src/main.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "bower_components",
-    "jspm_packages"
-  ]
+  "exclude": ["node_modules", "bower_components", "jspm_packages"]
 }

@@ -7,7 +7,7 @@
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
         <title>ifvisible.js test page</title>
-        <script src="/ifvisible.js"></script>
+        <script src="./ifvisible.js"></script>
         <script type="text/javascript">
             function d(el){
                 return document.getElementById(el);
@@ -45,7 +45,7 @@
 
             setInterval(function(){
                 var info = ifvisible.getIdleInfo();
-                // Give 3% margin to stabilaze user output
+                // Give 3% margin to stabilize user output
                 if(info.timeLeftPer < 3){
                     info.timeLeftPer = 0;
                     info.timeLeft = ifvisible.getIdleDuration();

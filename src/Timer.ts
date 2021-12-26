@@ -1,16 +1,19 @@
-import { IfVisible, STATUS_ACTIVE } from './ifvisible';
+import { STATUS_ACTIVE, EventData } from "./consts";
+import type { IfVisible } from "./ifvisible";
 
 export default class Timer {
   private token: number;
 
-  stopped: boolean = false;
+  stopped = false;
 
-  constructor (private ifvisible: IfVisible,
+  constructor(
+    private ifvisible: IfVisible,
     private seconds: number,
-    private callback: Function) {
+    private callback: (data: EventData) => void
+  ) {
     this.start();
 
-    this.ifvisible.on('statusChanged', (data: any) => {
+    this.ifvisible.on("statusChanged", (data: { status: string }) => {
       if (this.stopped === false) {
         if (data.status === STATUS_ACTIVE) {
           this.start();
@@ -21,22 +24,22 @@ export default class Timer {
     });
   }
 
-  private start () {
+  private start() {
     this.stopped = false;
     clearInterval(this.token);
     this.token = setInterval(this.callback, this.seconds * 1000);
   }
 
-  stop () {
+  stop() {
     this.stopped = true;
     clearInterval(this.token);
   }
 
-  resume () {
+  resume() {
     this.start();
   }
 
-  pause () {
+  pause() {
     this.stop();
   }
 }
