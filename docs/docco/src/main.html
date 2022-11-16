@@ -30,6 +30,11 @@
                 </a>
               
                 
+                <a class="source" href="consts.html">
+                  src/consts.ts
+                </a>
+              
+                
                 <a class="source" href="ifvisible.html">
                   src/ifvisible.ts
                 </a>
@@ -57,15 +62,13 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
+              <div class="sswrap ">
+                <a class="ss" href="#section-1">&#x00a7;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible } <span class="hljs-keyword">from</span> <span class="hljs-string">"./ifvisible"</span>;
-
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> global: <span class="hljs-built_in">any</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { <span class="hljs-title class_">IfVisible</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./ifvisible&quot;</span>;</pre></div></div>
             
         </li>
         
@@ -73,18 +76,34 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+              <div class="sswrap ">
+                <a class="ss" href="#section-2">&#x00a7;</a>
+              </div>
+              <p>eslint-disable-next-line @typescript-eslint/no-explicit-any</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">declare</span> <span class="hljs-keyword">let</span> <span class="hljs-attr">global</span>: <span class="hljs-built_in">any</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-3">&#x00a7;</a>
               </div>
               <p>decide between self vs global depending on the environment</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">"object"</span> &amp;&amp; self.self === self &amp;&amp; self ||
-             <span class="hljs-keyword">typeof</span> global === <span class="hljs-string">"object"</span> &amp;&amp; global.global === global &amp;&amp; global ||
-             <span class="hljs-keyword">this</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> root =
+  (<span class="hljs-keyword">typeof</span> self === <span class="hljs-string">&quot;object&quot;</span> &amp;&amp; self.<span class="hljs-property">self</span> === self &amp;&amp; self) ||
+  (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">global</span> === <span class="hljs-string">&quot;object&quot;</span> &amp;&amp; <span class="hljs-variable language_">global</span>.<span class="hljs-property">global</span> === <span class="hljs-variable language_">global</span> &amp;&amp; <span class="hljs-variable language_">global</span>) ||
+  <span class="hljs-variable language_">this</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ifvisible = <span class="hljs-keyword">new</span> IfVisible(root, <span class="hljs-built_in">document</span>);</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ifvisible = <span class="hljs-keyword">new</span> <span class="hljs-title class_">IfVisible</span>(root, <span class="hljs-variable language_">document</span>);</pre></div></div>
             
         </li>
         

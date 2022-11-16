@@ -4,7 +4,7 @@
   "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
   "main": "dist/ifvisible.js",
   "scripts": {
-    "start": "webpack",
+    "serve": "webpack serve",
     "build": "NODE_ENV=production webpack build --mode production && cp ./dist/ifvisible.js ./docs",
     "lint": "eslint --ext .js,.ts ./src",
     "docs": "docco src/*.ts --output docs/docco",
@@ -71,6 +71,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.5.1",
+    "simple-progress-webpack-plugin": "^2.0.0",
+    "ts-node": "^10.4.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.1"
   }

@@ -30,6 +30,11 @@
                 </a>
               
                 
+                <a class="source" href="consts.html">
+                  src/consts.ts
+                </a>
+              
+                
                 <a class="source" href="ifvisible.html">
                   src/ifvisible.ts
                 </a>
@@ -57,52 +62,56 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
+              <div class="sswrap ">
+                <a class="ss" href="#section-1">&#x00a7;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { IfVisible, STATUS_ACTIVE } <span class="hljs-keyword">from</span> <span class="hljs-string">"./ifvisible"</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">STATUS_ACTIVE</span>, <span class="hljs-title class_">EventData</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./consts&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">IfVisible</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./ifvisible&quot;</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> Timer {
-    <span class="hljs-keyword">private</span> token: <span class="hljs-built_in">number</span>;
-    stopped: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Timer</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">token</span>: <span class="hljs-built_in">number</span>;
 
-    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> ifvisible: IfVisible,
-                <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
-                <span class="hljs-keyword">private</span> callback: <span class="hljs-built_in">Function</span></span>) {
-        <span class="hljs-keyword">this</span>.start();
+  stopped = <span class="hljs-literal">false</span>;
 
-        <span class="hljs-keyword">this</span>.ifvisible.on(<span class="hljs-string">"statusChanged"</span>, <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.stopped === <span class="hljs-literal">false</span>) {
-                <span class="hljs-keyword">if</span> (data.status === STATUS_ACTIVE) {
-                    <span class="hljs-keyword">this</span>.start();
-                } <span class="hljs-keyword">else</span> {
-                    <span class="hljs-keyword">this</span>.pause();
-                }
-            }
-        });
-    }
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">
+    <span class="hljs-keyword">private</span> ifvisible: IfVisible,
+    <span class="hljs-keyword">private</span> seconds: <span class="hljs-built_in">number</span>,
+    <span class="hljs-keyword">private</span> callback: (data: EventData) =&gt; <span class="hljs-built_in">void</span>
+  </span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">start</span>();
 
-    <span class="hljs-keyword">private</span> start() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">false</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-        <span class="hljs-keyword">this</span>.token = setInterval(<span class="hljs-keyword">this</span>.callback, <span class="hljs-keyword">this</span>.seconds * <span class="hljs-number">1000</span>);
-    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">ifvisible</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;statusChanged&quot;</span>, <span class="hljs-function">(<span class="hljs-params">data: { status: <span class="hljs-built_in">string</span> }</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">stopped</span> === <span class="hljs-literal">false</span>) {
+        <span class="hljs-keyword">if</span> (data.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">STATUS_ACTIVE</span>) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">start</span>();
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">pause</span>();
+        }
+      }
+    });
+  }
 
-    <span class="hljs-keyword">public</span> stop() {
-        <span class="hljs-keyword">this</span>.stopped = <span class="hljs-literal">true</span>;
-        clearInterval(<span class="hljs-keyword">this</span>.token);
-    }
+  <span class="hljs-keyword">private</span> <span class="hljs-title function_">start</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">stopped</span> = <span class="hljs-literal">false</span>;
+    <span class="hljs-built_in">clearInterval</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">token</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">token</span> = <span class="hljs-built_in">setInterval</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">callback</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">seconds</span> * <span class="hljs-number">1000</span>);
+  }
 
-    <span class="hljs-keyword">public</span> resume() {
-        <span class="hljs-keyword">this</span>.start();
-    }
+  <span class="hljs-title function_">stop</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">stopped</span> = <span class="hljs-literal">true</span>;
+    <span class="hljs-built_in">clearInterval</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">token</span>);
+  }
 
-    <span class="hljs-keyword">public</span> pause() {
-        <span class="hljs-keyword">this</span>.stop();
-    }
+  <span class="hljs-title function_">resume</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">start</span>();
+  }
+
+  <span class="hljs-title function_">pause</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">stop</span>();
+  }
 }</pre></div></div>
             
         </li>
