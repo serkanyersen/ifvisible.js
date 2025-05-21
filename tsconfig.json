@@ -8,11 +8,12 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "files": [
-      "src/ifvisible.ts",
-      "src/main.ts"
+  "include": [
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

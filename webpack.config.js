@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
-const WebpackShellPlugin = require("webpack-shell-plugin");
+const WebpackShellPluginNext = require("webpack-shell-plugin-next");
 const isProd = process.env.NODE_ENV === "production";
 
 let config = {
@@ -38,12 +38,7 @@ let config = {
     ]
 };
 
-if (isProd) {
-    console.log("Production Mode");
-    config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
-}
-
-config.plugins.push(new WebpackShellPlugin({
+config.plugins.push(new WebpackShellPluginNext({
     dev: false,
     onBuildEnd: ['cp ./dist/ifvisible.js ./docs/']
 }));

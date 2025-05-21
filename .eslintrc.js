@@ -1,7 +1,7 @@
 module.exports = {
   // extends: 'airbnb-base',
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
   extends: ['airbnb-typescript/base'],
   rules: {
     'import/no-cycle': 0,
@@ -33,8 +33,6 @@ module.exports = {
     'global-require': 0,
     // allow dangling underscore
     'no-underscore-dangle': 0,
-    // force space before function parentheses everywhere
-    'space-before-function-paren': ['error', 'always'],
     // allow modules to use a single named export
     'import/prefer-default-export': 0,
     // disallow parameter object manipulation except for specific exclusions
@@ -49,9 +47,9 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/space-before-function-paren": ["error", "always"],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/interface-name-prefix": ["error", "always"],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-member-accessibility": ["error", { accessibility: 'no-public' } ]
   },

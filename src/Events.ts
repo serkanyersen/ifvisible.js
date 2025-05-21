@@ -1,6 +1,6 @@
 export namespace Events {
-  const store = {};
-  let setListener: Function;
+  const store: { [key: string]: Function[] } = {};
+  let setListener: (el: any, ev: string, fn: Function) => void;
 
   export function attach (event: string, callback: Function) {
     if (!store[event]) {
@@ -9,7 +9,7 @@ export namespace Events {
     store[event].push(callback);
   }
 
-  export function fire (event: string, args = []) {
+  export function fire (event: string, args: any[] = []) {
     if (store[event]) {
       store[event].forEach(callback => {
         callback(...args);

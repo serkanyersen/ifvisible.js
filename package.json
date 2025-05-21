@@ -5,8 +5,9 @@
   "main": "dist/ifvisible.js",
   "scripts": {
     "start": "webpack",
-    "build": "NODE_ENV=production webpack --production",
+    "build": "NODE_ENV=production webpack",
     "lint": "eslint --ext .js,.ts ./src",
+    "test": "jest",
     "docs": "docco src/*.ts --output docs/docco",
     "release": "npm run build && npm run docs && npm run publish"
   },
@@ -40,23 +41,24 @@
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
   "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
+    "@types/jest": "^29.5.14",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "docco": "^0.8.0",
-    "eslint": "^6.2.2",
-    "eslint-config-airbnb-typescript": "^4.0.1",
-    "eslint-plugin-import": "^2.18.2",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.6.2",
-    "webpack": "^4.39.3",
-    "webpack-shell-plugin": "^0.5.0"
+    "eslint": "8.57.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-shell-plugin-next": "^2.3.2"
   },
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
@@ -67,7 +69,8 @@
       "json"
     ]
   },
-  "dependencies": {
-    "webpack-cli": "^3.3.7"
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

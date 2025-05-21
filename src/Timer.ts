@@ -7,10 +7,10 @@ export default class Timer {
 
   constructor (private ifvisible: IfVisible,
     private seconds: number,
-    private callback: Function) {
+    private callback: () => void) {
     this.start();
 
-    this.ifvisible.on('statusChanged', (data: any) => {
+    this.ifvisible.on('statusChanged', (data: { status: string }) => {
       if (this.stopped === false) {
         if (data.status === STATUS_ACTIVE) {
           this.start();
@@ -23,13 +23,13 @@ export default class Timer {
 
   private start () {
     this.stopped = false;
-    clearInterval(this.token);
-    this.token = setInterval(this.callback, this.seconds * 1000);
+    window.clearInterval(this.token);
+    this.token = window.setInterval(this.callback, this.seconds * 1000);
   }
 
   stop () {
     this.stopped = true;
-    clearInterval(this.token);
+    window.clearInterval(this.token);
   }
 
   resume () {

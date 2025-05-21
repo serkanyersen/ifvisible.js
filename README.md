@@ -134,6 +134,46 @@ ifvisible.onEvery(0.5, function(){
 
 ```
 
+## Development
+
+This project uses [Yarn](https://yarnpkg.com/) as the primary package manager for development, but `npm` commands are also available.
+
+**Prerequisites:**
+* Node.js >= 18.0.0 (as specified in `package.json`)
+* Yarn (Classic - v1.x.x) or npm
+
+**Setup:**
+```bash
+git clone https://github.com/serkanyersen/ifvisible.js.git
+cd ifvisible.js
+yarn install # or npm install
+```
+
+**Available Scripts:**
+
+The following scripts can be run using `yarn <script-name>` or `npm run <script-name>`:
+
+*   **`lint`**: Lints the TypeScript code using ESLint.
+*   **`test`**: Runs the test suite using Jest.
+*   **`build`**: Builds the library for production using Webpack. The output is in the `dist/` directory.
+*   **`docs`**: Generates source code documentation using Docco into the `docs/docco` directory.
+*   **`start`**: Starts Webpack in watch mode for development (useful for seeing changes live, though this project doesn't have a dedicated dev server in its Webpack config).
+
+**Example Commands:**
+```bash
+yarn lint
+yarn test
+yarn build
+npm run docs
+npm start
+```
+
+**Tech Stack (Modernized):**
+*   TypeScript 5.x
+*   Webpack 5.x
+*   Jest 29.x
+*   ESLint 8.x (with Airbnb style guide)
+
 ### License
 It's MIT, Go crazy.
 

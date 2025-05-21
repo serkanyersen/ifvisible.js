@@ -46,18 +46,18 @@ export class IfVisible {
   private isLegacyModeOn = false;
 
 
-  constructor (private root, private doc) {
+  constructor (private root: Window, private doc: Document) {
     // Find correct browser events
     if (this.doc.hidden !== undefined) {
       DOC_HIDDEN = 'hidden';
       VISIBILITY_CHANGE_EVENT = 'visibilitychange';
-    } else if (this.doc.mozHidden !== undefined) {
+    } else if ((this.doc as any).mozHidden !== undefined) {
       DOC_HIDDEN = 'mozHidden';
       VISIBILITY_CHANGE_EVENT = 'mozvisibilitychange';
-    } else if (this.doc.msHidden !== undefined) {
+    } else if ((this.doc as any).msHidden !== undefined) {
       DOC_HIDDEN = 'msHidden';
       VISIBILITY_CHANGE_EVENT = 'msvisibilitychange';
-    } else if (this.doc.webkitHidden !== undefined) {
+    } else if ((this.doc as any).webkitHidden !== undefined) {
       DOC_HIDDEN = 'webkitHidden';
       VISIBILITY_CHANGE_EVENT = 'webkitvisibilitychange';
     }
@@ -108,7 +108,7 @@ export class IfVisible {
       return;
     }
 
-    this.timers.map(clearTimeout);
+    this.timers.map(window.clearTimeout);
     this.timers.length = 0; // clear the array
 
     if (this.status === STATUS_IDLE) {
@@ -117,7 +117,7 @@ export class IfVisible {
 
     this.idleStartedTime = +(new Date());
 
-    this.timers.push(setTimeout(() => {
+    this.timers.push(window.setTimeout(() => {
       if (this.status === STATUS_ACTIVE || this.status === STATUS_HIDDEN) {
         return this.idle();
       }
@@ -221,7 +221,7 @@ export class IfVisible {
     return this;
   }
 
-  onEvery (seconds: number, callback: Function): Timer {
+  onEvery (seconds: number, callback: () => void): Timer {
     return new Timer(this, seconds, callback);
   }
 
