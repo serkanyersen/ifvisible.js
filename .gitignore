@@ -134,3 +134,9 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 .DS_Store
+
+# Stele local project binding
+.stele/
+
+# Playwright MCP scratch output
+.playwright-mcp/

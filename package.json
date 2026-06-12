@@ -1,21 +1,40 @@
 {
   "name": "ifvisible.js",
-  "version": "2.0.12",
-  "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around HTML5 visibility api)",
-  "main": "dist/ifvisible.js",
+  "version": "3.0.0",
+  "description": "Crossbrowser & lightweight way to check if user is looking at the page or interacting with it. (wrapper around the HTML5 Page Visibility API)",
+  "type": "module",
+  "main": "./dist/ifvisible.cjs",
+  "module": "./dist/ifvisible.js",
+  "types": "./dist/ifvisible.d.ts",
+  "unpkg": "./dist/ifvisible.global.js",
+  "jsdelivr": "./dist/ifvisible.global.js",
+  "exports": {
+    ".": {
+      "types": "./dist/ifvisible.d.ts",
+      "import": "./dist/ifvisible.js",
+      "require": "./dist/ifvisible.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "serve": "webpack serve",
-    "build": "NODE_ENV=production webpack build --mode production && cp ./dist/ifvisible.js ./docs",
-    "lint": "eslint --ext .js,.ts ./src",
-    "docs": "docco src/*.ts --output docs/docco",
-    "release": "npm run build && npm run docs && npm run publish"
+    "build": "tsup",
+    "build:demo": "tsup && cp dist/ifvisible.js docs/ifvisible.js && cp dist/ifvisible.js.map docs/ifvisible.js.map",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build",
+    "release": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/serkanyersen/ifvisible.js.git"
-  },
-  "typescript": {
-    "definition": "src/ifvisible.ts"
   },
   "keywords": [
     "visibility",
@@ -31,7 +50,9 @@
     "mode",
     "tab",
     "change",
-    "typescript"
+    "typescript",
+    "page-visibility",
+    "page-lifecycle"
   ],
   "author": "Serkan Yersen <serkanyersen@gmail.com> (http://serkan.io/)",
   "license": "MIT",
@@ -39,41 +60,22 @@
     "url": "https://github.com/serkanyersen/ifvisible.js/issues"
   },
   "homepage": "https://github.com/serkanyersen/ifvisible.js",
-  "devDependencies": {
-    "@types/jest": "^27.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.8.0",
-    "@typescript-eslint/parser": "^5.8.0",
-    "docco": "^0.9.1",
-    "eslint": "^8.5.0",
-    "eslint-config-airbnb-typescript": "^16.1.0",
-    "eslint-plugin-import": "^2.25.3",
-    "jest": "^27.4.5",
-    "ts-jest": "^27.1.2",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.5.4",
-    "webpack": "^5.65.0"
+  "engines": {
+    "node": ">=18"
   },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
+  "packageManager": "pnpm@10.33.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
     ]
   },
-  "dependencies": {
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "html-webpack-plugin": "^5.5.0",
-    "prettier": "^2.5.1",
-    "simple-progress-webpack-plugin": "^2.0.0",
-    "ts-node": "^10.4.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.1"
+  "devDependencies": {
+    "@vitest/coverage-v8": "latest",
+    "eslint": "latest",
+    "jsdom": "latest",
+    "tsup": "latest",
+    "typescript": "latest",
+    "typescript-eslint": "latest",
+    "vitest": "latest"
   }
 }

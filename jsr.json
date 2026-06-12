@@ -1,0 +1,10 @@
+{
+  "name": "@serkan/ifvisible",
+  "version": "3.0.0",
+  "license": "MIT",
+  "exports": "./src/main.ts",
+  "publish": {
+    "include": ["src", "README.md", "LICENSE", "jsr.json"],
+    "exclude": ["src/__tests__", "src/**/*.test.ts"]
+  }
+}

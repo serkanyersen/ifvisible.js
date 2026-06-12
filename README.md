@@ -8,25 +8,50 @@ Crossbrowser & lightweight way to check if user is looking at the page or intera
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js?ref=badge_shield)
 
-From npm
-
 ```
-npm install ifvisible.js --save
+npm install ifvisible.js
 ```
 
-From Bower
+## Usage
 
-```
-bower install ifvisible.js
+ifvisible.js ships as ESM, CommonJS, and a browser global, with bundled
+TypeScript types.
+
+```javascript
+// ES modules (recommended)
+import ifvisible from "ifvisible.js";
+
+// Named exports are also available:
+import { ifvisible, IfVisible, type IfVisibleEvent } from "ifvisible.js";
 ```
 
-For Meteor
-
+```javascript
+// CommonJS
+const { ifvisible } = require("ifvisible.js");
 ```
-mrt add ifvisible
+
+```html
+<!-- Browser global -->
+<script src="https://unpkg.com/ifvisible.js"></script>
+<script>
+  ifvisible.now(); // global `ifvisible` singleton
+</script>
 ```
 
-> meteor package is provided by [@frozeman](https://github.com/frozeman/meteor-ifvisible.js) via [Atmosphere](https://atmosphere.meteor.com/package/ifvisible)
+> **SSR-safe:** importing `ifvisible.js` in Node / during server-side rendering
+> never throws. In a non-DOM environment `ifvisible.isSupported` is `false` and
+> every method is a safe no-op (`now()` returns `true`).
+
+## v3 highlights
+
+ifvisible.js 3 is a clean-break rewrite. It is a major version bump.
+
+- Modern ESM + CJS + IIFE builds with bundled `.d.ts` types.
+- All legacy IE / vendor-prefix code removed; uses the standard Page Visibility API.
+- SSR-safe singleton — no DOM access at import time.
+- Per-instance event isolation (multiple `new IfVisible()` instances no longer share one global event store).
+- New `freeze` / `resume` events from the [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api) (bfcache).
+- New `ifvisible.destroy()` to detach all listeners and timers on teardown (SPA/route unmount).
 
 ## Examples
 
@@ -78,7 +103,7 @@ ifvisible.on("wakeup", function () {
 });
 ```
 
-Default idle duration is 60 seconds but you can change it with `setIdleDuration` method
+Default idle duration is 30 seconds but you can change it with `setIdleDuration` method
 
 ```javascript
 ifvisible.setIdleDuration(120); // Page will become idle after 120 seconds
@@ -121,6 +146,32 @@ ifvisible.onEvery(0.5, function () {
   // Do an animation on the logo only when page is visible
   animateLogo();
 });
+```
+
+### Page Lifecycle (freeze / resume)
+
+The browser may freeze a backgrounded page (bfcache) and later resume it.
+ifvisible.js surfaces these as events:
+
+```javascript
+ifvisible.on("freeze", function () {
+  // Page is about to be frozen — flush state, close connections.
+});
+
+ifvisible.on("resume", function () {
+  // Page was resumed from the back/forward cache.
+});
+```
+
+### Cleanup
+
+Call `destroy()` to remove every DOM listener, handler, and timer — useful when
+unmounting in a single-page app:
+
+```javascript
+const instance = new IfVisible();
+// ...later
+instance.destroy();
 ```
 
 ### License

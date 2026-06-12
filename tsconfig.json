@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es2015.promise", "dom", "es2015"],
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "declaration": true,
     "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
     "outDir": "dist"
   },
-  "exclude": ["node_modules", "bower_components", "jspm_packages"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "src/demo"]
 }

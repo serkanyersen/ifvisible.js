@@ -1,10 +1,14 @@
-import * as Events from "./Events";
-import { EventData, STATUS_ACTIVE, STATUS_HIDDEN, STATUS_IDLE } from "./consts";
+import { addDomListener, EventEmitter } from "./EventEmitter";
+import {
+  EventCallback,
+  IfVisibleEvent,
+  STATUS_ACTIVE,
+  STATUS_HIDDEN,
+  STATUS_IDLE,
+  Status,
+} from "./consts";
 import Timer from "./Timer";
-
-// declare var __VERSION__: string;
-let DOC_HIDDEN: string;
-let VISIBILITY_CHANGE_EVENT: string;
+import { VERSION } from "./version";
 
 export interface IIdleInfo {
   isIdle: boolean;
@@ -13,90 +17,62 @@ export interface IIdleInfo {
   timeLeftPer: number;
 }
 
-// eslint-disable-next-line func-names
-export const IE = (function () {
-  let undef: undefined;
-  let v = 3;
-  const div = document.createElement("div");
-  const all = div.getElementsByTagName("i");
-
-  // eslint-disable-next-line no-cond-assign
-  while (
-    // eslint-disable-next-line no-plusplus, no-sequences, no-cond-assign
-    ((div.innerHTML = `<!--[if gt IE ${++v}]><i></i><![endif]-->`), all[0])
-  );
-
-  return v > 4 ? v : undef;
-})();
+const hasDOM = typeof document !== "undefined";
 
 export class IfVisible {
-  status: string = STATUS_ACTIVE;
+  status: Status = STATUS_ACTIVE;
 
-  VERSION = "2.0.11";
+  readonly VERSION = VERSION;
 
-  private timers: NodeJS.Timeout[] = [];
+  /** False in non-DOM environments (SSR / Node). All methods stay safe no-ops. */
+  readonly isSupported: boolean;
+
+  private emitter = new EventEmitter();
+
+  private disposers: Array<() => void> = [];
+
+  private timer: ReturnType<typeof setTimeout> | undefined;
 
   private idleTime = 30000;
 
-  private idleStartedTime: number;
+  private idleStartedTime = Date.now();
 
-  private isLegacyModeOn = false;
+  constructor(
+    private root: (Window & typeof globalThis) | undefined = hasDOM
+      ? window
+      : undefined,
+    private doc: Document | undefined = hasDOM ? document : undefined
+  ) {
+    this.isSupported = !!(this.doc && this.root);
 
-  constructor(private root, private doc) {
-    // Find correct browser events
-    if (this.doc.hidden !== undefined) {
-      DOC_HIDDEN = "hidden";
-      VISIBILITY_CHANGE_EVENT = "visibilitychange";
-    } else if (this.doc.mozHidden !== undefined) {
-      DOC_HIDDEN = "mozHidden";
-      VISIBILITY_CHANGE_EVENT = "mozvisibilitychange";
-    } else if (this.doc.msHidden !== undefined) {
-      DOC_HIDDEN = "msHidden";
-      VISIBILITY_CHANGE_EVENT = "msvisibilitychange";
-    } else if (this.doc.webkitHidden !== undefined) {
-      DOC_HIDDEN = "webkitHidden";
-      VISIBILITY_CHANGE_EVENT = "webkitvisibilitychange";
+    if (!this.doc || !this.root) {
+      // SSR / non-DOM: nothing to wire up; methods remain safe no-ops.
+      return;
     }
 
-    if (DOC_HIDDEN === undefined) {
-      this.legacyMode();
-    } else {
-      const trackChange = () => {
-        if (this.doc[DOC_HIDDEN]) {
-          this.blur();
-        } else {
-          this.focus();
-        }
-      };
-      trackChange(); // get initial status
-      Events.dom(this.doc, VISIBILITY_CHANGE_EVENT, trackChange);
-    }
+    const trackChange = () => (this.doc!.hidden ? this.blur() : this.focus());
+    trackChange(); // get initial status
+    this.disposers.push(
+      addDomListener(this.doc, "visibilitychange", trackChange)
+    );
+
+    // Page Lifecycle API: surface freeze/resume (bfcache) as first-class events.
+    this.disposers.push(
+      addDomListener(this.doc, "freeze", () => this.emitter.fire("freeze"))
+    );
+    this.disposers.push(
+      addDomListener(this.doc, "resume", () => this.emitter.fire("resume"))
+    );
+
     this.startIdleTimer();
     this.trackIdleStatus();
   }
 
-  legacyMode() {
-    // it's already on
-    if (this.isLegacyModeOn) {
-      return;
-    }
+  private startIdleTimer = (event?: Event): void => {
+    // No idle tracking without a DOM (SSR / Node).
+    if (!this.isSupported) return;
 
-    let BLUR_EVENT = "blur";
-    const FOCUS_EVENT = "focus";
-
-    if (IE < 9) {
-      BLUR_EVENT = "focusout";
-    }
-
-    Events.dom(this.root, BLUR_EVENT, () => this.blur());
-
-    Events.dom(this.root, FOCUS_EVENT, () => this.focus());
-
-    this.isLegacyModeOn = true;
-  }
-
-  startIdleTimer(event?: Event) {
-    // Prevents Phantom events.
+    // Prevents phantom mousemove events that report no movement.
     // @see https://github.com/serkanyersen/ifvisible.js/pull/37
     if (
       event instanceof MouseEvent &&
@@ -107,45 +83,48 @@ export class IfVisible {
       return;
     }
 
-    this.timers.map(clearTimeout);
-    this.timers.length = 0; // clear the array
+    if (this.timer !== undefined) {
+      clearTimeout(this.timer);
+      this.timer = undefined;
+    }
 
     if (this.status === STATUS_IDLE) {
       this.wakeup();
     }
 
-    this.idleStartedTime = +new Date();
+    this.idleStartedTime = Date.now();
 
-    this.timers.push(
-      setTimeout(() => {
-        if (this.status === STATUS_ACTIVE || this.status === STATUS_HIDDEN) {
-          this.idle();
-        }
-      }, this.idleTime)
+    this.timer = setTimeout(() => {
+      if (this.status === STATUS_ACTIVE || this.status === STATUS_HIDDEN) {
+        this.idle();
+      }
+    }, this.idleTime);
+  };
+
+  private trackIdleStatus(): void {
+    if (!this.doc || !this.root) return;
+    this.disposers.push(
+      addDomListener(this.doc, "mousemove", this.startIdleTimer),
+      addDomListener(this.doc, "mousedown", this.startIdleTimer),
+      addDomListener(this.doc, "keyup", this.startIdleTimer),
+      addDomListener(this.doc, "touchstart", this.startIdleTimer),
+      addDomListener(this.root, "scroll", this.startIdleTimer)
     );
+    // When the page is focused without any other event, it should not be idle.
+    this.focus(() => this.startIdleTimer());
   }
 
-  trackIdleStatus() {
-    Events.dom(this.doc, "mousemove", this.startIdleTimer.bind(this));
-    Events.dom(this.doc, "mousedown", this.startIdleTimer.bind(this));
-    Events.dom(this.doc, "keyup", this.startIdleTimer.bind(this));
-    Events.dom(this.doc, "touchstart", this.startIdleTimer.bind(this));
-    Events.dom(this.root, "scroll", this.startIdleTimer.bind(this));
-    // When page is focus without any event, it should not be idle.
-    this.focus(this.startIdleTimer.bind(this));
-  }
-
-  on(event: string, callback: (data: EventData) => void): IfVisible {
-    Events.attach(event, callback);
+  on(event: IfVisibleEvent, callback: EventCallback): this {
+    this.emitter.on(event, callback);
     return this;
   }
 
-  off(event: string, callback?: (data: EventData) => void): IfVisible {
-    Events.remove(event, callback);
+  off(event: IfVisibleEvent, callback?: EventCallback): this {
+    this.emitter.off(event, callback);
     return this;
   }
 
-  setIdleDuration(seconds: number): IfVisible {
+  setIdleDuration(seconds: number): this {
     this.idleTime = seconds * 1000;
     this.startIdleTimer();
     return this;
@@ -156,82 +135,93 @@ export class IfVisible {
   }
 
   getIdleInfo(): IIdleInfo {
-    const now = +new Date();
-    let res: IIdleInfo;
+    const now = Date.now();
     if (this.status === STATUS_IDLE) {
-      res = {
+      return {
         isIdle: true,
         idleFor: now - this.idleStartedTime,
         timeLeft: 0,
         timeLeftPer: 100,
       };
-    } else {
-      const timeLeft = this.idleStartedTime + this.idleTime - now;
-      res = {
-        isIdle: false,
-        idleFor: now - this.idleStartedTime,
-        timeLeft,
-        timeLeftPer: parseFloat(
-          (100 - (timeLeft * 100) / this.idleTime).toFixed(2)
-        ),
-      };
     }
-    return res;
+    const timeLeft = this.idleStartedTime + this.idleTime - now;
+    return {
+      isIdle: false,
+      idleFor: now - this.idleStartedTime,
+      timeLeft,
+      timeLeftPer: parseFloat(
+        (100 - (timeLeft * 100) / this.idleTime).toFixed(2)
+      ),
+    };
   }
 
-  idle(callback?: (data: EventData) => void): IfVisible {
+  idle(callback?: EventCallback): this {
     if (callback) {
       this.on("idle", callback);
     } else {
       this.status = STATUS_IDLE;
-      Events.fire("idle");
-      Events.fire("statusChanged", { status: this.status });
+      this.emitter.fire("idle");
+      this.emitter.fire("statusChanged", { status: this.status });
     }
     return this;
   }
 
-  blur(callback?: (data: EventData) => void): IfVisible {
+  blur(callback?: EventCallback): this {
     if (callback) {
       this.on("blur", callback);
     } else {
       this.status = STATUS_HIDDEN;
-      Events.fire("blur");
-      Events.fire("statusChanged", { status: this.status });
+      this.emitter.fire("blur");
+      this.emitter.fire("statusChanged", { status: this.status });
     }
     return this;
   }
 
-  focus(callback?: (data: EventData) => void): IfVisible {
+  focus(callback?: EventCallback): this {
     if (callback) {
       this.on("focus", callback);
     } else if (this.status !== STATUS_ACTIVE) {
       this.status = STATUS_ACTIVE;
-      Events.fire("focus");
-      Events.fire("wakeup");
-      Events.fire("statusChanged", { status: this.status });
+      this.emitter.fire("focus");
+      this.emitter.fire("wakeup");
+      this.emitter.fire("statusChanged", { status: this.status });
     }
     return this;
   }
 
-  wakeup(callback?: (data: EventData) => void): IfVisible {
+  wakeup(callback?: EventCallback): this {
     if (callback) {
       this.on("wakeup", callback);
     } else if (this.status !== STATUS_ACTIVE) {
       this.status = STATUS_ACTIVE;
-      Events.fire("wakeup");
-      Events.fire("statusChanged", { status: this.status });
+      this.emitter.fire("wakeup");
+      this.emitter.fire("statusChanged", { status: this.status });
     }
     return this;
   }
 
-  onEvery(seconds: number, callback: (data: EventData) => void): Timer {
+  onEvery(seconds: number, callback: EventCallback): Timer {
     return new Timer(this, seconds, callback);
   }
 
-  now(check?: string): boolean {
+  now(check?: Status): boolean {
     if (check !== undefined) {
       return this.status === check;
     }
     return this.status === STATUS_ACTIVE;
+  }
+
+  /**
+   * Detach every DOM listener and clear all registered handlers and timers.
+   * Call this when tearing down (e.g. SPA route unmount) to avoid leaks.
+   */
+  destroy(): void {
+    this.disposers.forEach((dispose) => dispose());
+    this.disposers = [];
+    if (this.timer !== undefined) {
+      clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+    this.emitter.clear();
   }
 }

@@ -1,96 +1,398 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-        <meta name="HandheldFriendly" content="true" />
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
-        <title>ifvisible.js test page</title>
-        <script src="./ifvisible.js"></script>
-        <script type="text/javascript">
-            function d(el){
-                return document.getElementById(el);
-            }
-            ifvisible.setIdleDuration(6);
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ifvisible.js — know when your user is there</title>
+    <meta
+      name="description"
+      content="ifvisible.js — a tiny, modern, dependency-free way to know whether the user is looking at your page or interacting with it."
+    />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👁️</text></svg>" />
+    <style>
+      :root {
+        --bg: #0a0b10;
+        --panel: #14161f;
+        --panel-2: #1b1e2b;
+        --line: #262a3a;
+        --text: #e7e9f0;
+        --muted: #8b90a6;
+        --accent: #6ea8fe;
+        --active: #34d399;
+        --idle: #fbbf24;
+        --hidden: #f87171;
+        --freeze: #c084fc;
+        --radius: 16px;
+        --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+        --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f5f6fa;
+          --panel: #ffffff;
+          --panel-2: #eef1f7;
+          --line: #e2e5ee;
+          --text: #1a1c25;
+          --muted: #5b6072;
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        background: radial-gradient(1200px 600px at 50% -10%, #1a2138 0%, var(--bg) 55%);
+        color: var(--text);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      @media (prefers-color-scheme: light) {
+        body { background: radial-gradient(1200px 600px at 50% -10%, #e8eeff 0%, var(--bg) 55%); }
+      }
+      a { color: var(--accent); }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
 
-            ifvisible.on('statusChanged', function(e){
-                d("result").innerHTML += (e.status+"<br>");
-            });
+      header.hero { text-align: center; padding: 24px 0 12px; }
+      .hero h1 {
+        font-size: clamp(2.2rem, 6vw, 3.4rem);
+        margin: 0 0 8px;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+      }
+      .hero .eye { filter: drop-shadow(0 0 18px rgba(110,168,254,.5)); }
+      .hero p { color: var(--muted); font-size: 1.1rem; margin: 0 auto; max-width: 560px; }
+      .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 18px 0 8px; }
+      .badge {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        padding: 5px 11px;
+        border-radius: 999px;
+        color: var(--muted);
+      }
+      .badge b { color: var(--text); }
 
-            ifvisible.idle(function(){
-                d("result2").innerHTML = "(-_-) Good bye. ZzzZZzz...";
-                document.body.style.opacity = 0.5;
-            });
-            ifvisible.blur(function() {
-                d("result2").innerHTML = "(-_o) Where did you go?";
-                document.body.style.opacity = 0.5;
-            });
-            ifvisible.wakeup(function(){
-                d("result2").innerHTML = "(O_o) Hey!, you woke me up.";
-                document.body.style.opacity = 1;
-            });
+      .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; margin-top: 28px; }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+      .card h2 {
+        margin: 0 0 14px;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .span-2 { grid-column: 1 / -1; }
 
-            ifvisible.onEvery(0.5, function(){
-                // Clock, as simple as it gets
-                var h = (new Date()).getHours();
-                var m = (new Date()).getMinutes();
-                var s = (new Date()).getSeconds();
-                h = h < 10? "0"+h : h;
-                m = m < 10? "0"+m : m;
-                s = s < 10? "0"+s : s;
-                // Update clock
-                d("result3").innerHTML = (h+':'+m+':'+s);
-            });
+      /* Status card */
+      .status-card { text-align: center; transition: border-color .4s; }
+      .status-orb {
+        width: 132px; height: 132px; margin: 4px auto 18px;
+        border-radius: 50%;
+        display: grid; place-items: center;
+        font-size: 3.2rem;
+        position: relative;
+        transition: background .5s, box-shadow .5s;
+      }
+      .status-orb::after {
+        content: ""; position: absolute; inset: -6px; border-radius: 50%;
+        border: 2px solid currentColor; opacity: .25;
+        animation: pulse 2.6s ease-out infinite;
+      }
+      @keyframes pulse { 0% { transform: scale(.95); opacity:.35 } 100% { transform: scale(1.25); opacity: 0 } }
+      .status-label { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; }
+      .status-sub { color: var(--muted); font-family: var(--mono); font-size: 0.85rem; margin-top: 4px; }
 
-            setInterval(function(){
-                var info = ifvisible.getIdleInfo();
-                // Give 3% margin to stabilize user output
-                if(info.timeLeftPer < 3){
-                    info.timeLeftPer = 0;
-                    info.timeLeft = ifvisible.getIdleDuration();
-                }
-                d("seconds").innerHTML = parseInt(info.timeLeft / 1000), 10;
-                d("idlebar").style.width = info.timeLeftPer+'%';
-            }, 100);
-        </script>
-    </head>
-    <body>
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <h1>ifvisible.js test page</h1>
-            </div>
-            <div class="row-fluid">
-                <div class="span6">
-                    <p class="lead">Idle duration is set to <span id="idleTime" class="label label-warning">00 seconds</span>, so that you can see the effect easily.
-                    <ul>
-                        <li>Try switching between tabs or minimizing the window. and look for the event log</li>
-                        <li>Do nothing and wait for idle time to fill. Counter should stop.</li>
-                        <li>While Idle, try moving the mouse or pressing any key. Page should wake up</li>
-                    </ul>
+      /* Idle ring */
+      .ring-wrap { display: flex; align-items: center; gap: 20px; }
+      .ring { --p: 0; width: 120px; height: 120px; flex: 0 0 auto; }
+      .ring circle { fill: none; stroke-width: 11; }
+      .ring .track { stroke: var(--line); }
+      .ring .bar { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset .25s linear, stroke .4s; transform: rotate(-90deg); transform-origin: 50% 50%; }
+      .ring-num { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; }
+      .ring-info { color: var(--muted); font-size: .9rem; }
+      .ring-info b { color: var(--text); }
 
-                    <div class="well">
-                        If you wait <span class="label label-warning" id="seconds">00</span> seconds I'll sleep.
-                        <div class="progress">
-                          <div class="bar" id="idlebar" style="width: 0%;"></div>
-                        </div>
-                        <div id="result2">(^_^) Hey, there.</div>
-                    </div>
-                    <div class="well">
-                        This simple clock <span id="result3" class="badge badge-info">0</span> is updated via <code>onEvery</code> method. It should stop when page is not active (idle,hidden) and should continue with current time when page is active.
-                    </div>
-                </div>
-                <div class="span6">
-                    <div id="result">
-                        <p>Event log.</p>
-                    </div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                var dur = (ifvisible.getIdleDuration() / 1000);
-                d('seconds').innerHTML =  dur;
-                d('idleTime').innerHTML = dur + " seconds";
-            </script>
+      /* Controls */
+      .controls { display: flex; flex-direction: column; gap: 16px; }
+      .slider-row label { display: flex; justify-content: space-between; font-size: .9rem; color: var(--muted); margin-bottom: 8px; }
+      .slider-row label b { color: var(--text); font-family: var(--mono); }
+      input[type="range"] { width: 100%; accent-color: var(--accent); }
+      .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+      button {
+        font-family: var(--sans); font-size: .88rem; font-weight: 600;
+        background: var(--panel-2); color: var(--text);
+        border: 1px solid var(--line); border-radius: 10px;
+        padding: 9px 14px; cursor: pointer; transition: transform .08s, border-color .2s, background .2s;
+      }
+      button:hover { border-color: var(--accent); }
+      button:active { transform: translateY(1px) scale(.98); }
+
+      /* Heartbeat / onEvery */
+      .beat-wrap { display: flex; align-items: center; gap: 18px; }
+      .beat {
+        width: 64px; height: 64px; border-radius: 50%; flex: 0 0 auto;
+        background: var(--panel-2); border: 1px solid var(--line);
+        display: grid; place-items: center; font-size: 1.6rem;
+        transition: transform .15s, background .2s, box-shadow .2s;
+      }
+      .beat.tick { transform: scale(1.18); background: rgba(110,168,254,.18); box-shadow: 0 0 24px rgba(110,168,254,.4); }
+      .beat-stat { font-family: var(--mono); font-size: .9rem; color: var(--muted); }
+      .beat-stat b { color: var(--text); font-size: 1.5rem; }
+
+      /* Event log */
+      .log {
+        font-family: var(--mono); font-size: .82rem;
+        background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px;
+        height: 230px; overflow-y: auto; padding: 10px 12px; margin: 0;
+        display: flex; flex-direction: column-reverse; gap: 4px;
+      }
+      .log li { list-style: none; display: flex; gap: 10px; align-items: baseline; opacity: 0; animation: fadein .3s forwards; }
+      @keyframes fadein { to { opacity: 1; } }
+      .log .t { color: var(--muted); flex: 0 0 auto; }
+      .log .ev { font-weight: 700; flex: 0 0 96px; }
+      .log .d { color: var(--muted); }
+      .ev-focus, .ev-wakeup { color: var(--active); }
+      .ev-blur, .ev-hidden { color: var(--hidden); }
+      .ev-idle { color: var(--idle); }
+      .ev-statusChanged { color: var(--accent); }
+      .ev-freeze, .ev-resume { color: var(--freeze); }
+
+      .hint { color: var(--muted); font-size: .9rem; margin-top: 10px; }
+      .hint kbd { font-family: var(--mono); background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: .8em; }
+
+      pre.code {
+        background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px;
+        padding: 16px; overflow-x: auto; font-family: var(--mono); font-size: .85rem; margin: 0;
+      }
+      .code .k { color: var(--freeze); }
+      .code .s { color: var(--active); }
+      .code .c { color: var(--muted); }
+
+      footer { text-align: center; color: var(--muted); margin-top: 48px; font-size: .9rem; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1><span class="eye">👁️</span> ifvisible.js</h1>
+        <p>
+          A tiny, dependency-free way to know whether your user is
+          <em>looking</em> at the page — and whether they're still
+          <em>there</em>.
+        </p>
+        <div class="badges">
+          <span class="badge">v<b id="version">3.x</b></span>
+          <span class="badge"><b>0</b> dependencies</span>
+          <span class="badge"><b>ESM</b> · CJS · IIFE</span>
+          <span class="badge">supported: <b id="supported">…</b></span>
         </div>
-    </body>
+      </header>
+
+      <p class="hint" style="text-align:center">
+        This whole page is wired to one <code>ifvisible</code> instance. Try it:
+        <kbd>switch tabs</kbd>, <kbd>minimize</kbd>, or just
+        <kbd>stop touching your mouse/keyboard</kbd> and watch.
+      </p>
+
+      <div class="grid">
+        <!-- Live status -->
+        <section class="card status-card" id="statusCard">
+          <h2>Live status</h2>
+          <div class="status-orb" id="orb">😀</div>
+          <div class="status-label" id="statusLabel">ACTIVE</div>
+          <div class="status-sub" id="statusSub">ifvisible.now() === true</div>
+        </section>
+
+        <!-- Idle countdown -->
+        <section class="card">
+          <h2>Idle countdown · getIdleInfo()</h2>
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="track" cx="60" cy="60" r="52"></circle>
+              <circle class="bar" id="ringBar" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div>
+              <div class="ring-num" id="ringNum">30.0s</div>
+              <div class="ring-info" id="ringInfo">until you're marked <b>idle</b></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Controls -->
+        <section class="card">
+          <h2>Controls</h2>
+          <div class="controls">
+            <div class="slider-row">
+              <label>Idle duration <b><span id="durVal">30</span>s</b></label>
+              <input type="range" id="dur" min="3" max="60" step="1" value="30" />
+            </div>
+            <div class="btns">
+              <button data-act="idle">Force idle()</button>
+              <button data-act="wakeup">wakeup()</button>
+              <button data-act="blur">blur()</button>
+              <button data-act="focus">focus()</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- onEvery heartbeat -->
+        <section class="card">
+          <h2>Smart interval · onEvery(1, …)</h2>
+          <div class="beat-wrap">
+            <div class="beat" id="beat">💓</div>
+            <div class="beat-stat">
+              <b id="beatCount">0</b><br />ticks while visible
+            </div>
+          </div>
+          <p class="hint">
+            This 1s interval <b>auto-pauses</b> when you go idle or hide the tab,
+            and resumes when you're back — no ticks are wasted.
+          </p>
+        </section>
+
+        <!-- Event log -->
+        <section class="card span-2">
+          <h2>Event stream</h2>
+          <ul class="log" id="log"></ul>
+          <p class="hint">
+            Listening to <code>focus</code>, <code>blur</code>,
+            <code>idle</code>, <code>wakeup</code>,
+            <code>statusChanged</code>, and the Page Lifecycle
+            <code>freeze</code> / <code>resume</code> events.
+          </p>
+        </section>
+
+        <!-- Code -->
+        <section class="card span-2">
+          <h2>That was all of this</h2>
+<pre class="code"><span class="k">import</span> ifvisible <span class="k">from</span> <span class="s">"ifvisible.js"</span>;
+
+<span class="c">// React to attention</span>
+ifvisible.on(<span class="s">"blur"</span>,  () => video.pause());
+ifvisible.on(<span class="s">"focus"</span>, () => video.play());
+
+<span class="c">// React to inactivity (default 30s)</span>
+ifvisible.setIdleDuration(<span class="s">30</span>);
+ifvisible.on(<span class="s">"idle"</span>,   () => stream.pause());
+ifvisible.on(<span class="s">"wakeup"</span>, () => stream.resume());
+
+<span class="c">// Intervals that pause themselves when nobody's watching</span>
+ifvisible.onEvery(<span class="s">1</span>, () => poll());</pre>
+        </section>
+      </div>
+
+      <footer>
+        <p>
+          <a href="https://github.com/serkanyersen/ifvisible.js">GitHub</a> ·
+          <a href="https://www.npmjs.com/package/ifvisible.js">npm</a> ·
+          <a href="https://jsr.io/@serkan/ifvisible">JSR</a> · MIT
+        </p>
+      </footer>
+    </div>
+
+    <script type="module">
+      import ifvisible from "./ifvisible.js";
+
+      const $ = (id) => document.getElementById(id);
+      const STATE = {
+        active: { emoji: "😀", color: "var(--active)", label: "ACTIVE", sub: "the user is here and watching" },
+        idle:   { emoji: "😴", color: "var(--idle)",   label: "IDLE",   sub: "no interaction for a while" },
+        hidden: { emoji: "🙈", color: "var(--hidden)", label: "HIDDEN", sub: "tab is in the background" },
+      };
+
+      // Header badges
+      $("version").textContent = ifvisible.VERSION;
+      $("supported").textContent = ifvisible.isSupported ? "yes" : "no";
+
+      // ---- Status card ----
+      function paintStatus() {
+        const s = STATE[ifvisible.status] || STATE.active;
+        $("orb").textContent = s.emoji;
+        $("orb").style.background = `color-mix(in srgb, ${s.color} 22%, transparent)`;
+        $("orb").style.color = s.color;
+        $("orb").style.boxShadow = `0 0 50px color-mix(in srgb, ${s.color} 35%, transparent)`;
+        $("statusLabel").textContent = s.label;
+        $("statusLabel").style.color = s.color;
+        $("statusSub").textContent = s.sub;
+        $("statusCard").style.borderColor = `color-mix(in srgb, ${s.color} 45%, var(--line))`;
+      }
+
+      // ---- Idle ring ----
+      const RING_LEN = 2 * Math.PI * 52;
+      $("ringBar").style.strokeDasharray = RING_LEN;
+      function paintRing() {
+        const info = ifvisible.getIdleInfo();
+        const pct = Math.max(0, Math.min(100, info.timeLeftPer));
+        $("ringBar").style.strokeDashoffset = RING_LEN * (pct / 100);
+        if (info.isIdle) {
+          $("ringBar").style.stroke = "var(--idle)";
+          $("ringNum").textContent = (info.idleFor / 1000).toFixed(0) + "s";
+          $("ringInfo").innerHTML = "you've been <b>idle</b>";
+        } else {
+          $("ringBar").style.stroke = "var(--accent)";
+          $("ringNum").textContent = (info.timeLeft / 1000).toFixed(1) + "s";
+          $("ringInfo").innerHTML = "until you're marked <b>idle</b>";
+        }
+        requestAnimationFrame(paintRing);
+      }
+      requestAnimationFrame(paintRing);
+
+      // ---- Event log ----
+      const log = $("log");
+      function pad(n) { return String(n).padStart(2, "0"); }
+      function logEvent(name, detail = "") {
+        const d = new Date();
+        const li = document.createElement("li");
+        li.innerHTML =
+          `<span class="t">${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}</span>` +
+          `<span class="ev ev-${name}">${name}</span>` +
+          `<span class="d">${detail}</span>`;
+        log.prepend(li);
+        while (log.children.length > 60) log.lastChild.remove();
+      }
+
+      ["focus", "blur", "idle", "wakeup", "freeze", "resume"].forEach((ev) =>
+        ifvisible.on(ev, () => logEvent(ev))
+      );
+      ifvisible.on("statusChanged", (e) => {
+        logEvent("statusChanged", "→ " + e.status);
+        paintStatus();
+      });
+
+      // ---- Controls ----
+      $("dur").addEventListener("input", (e) => {
+        const v = Number(e.target.value);
+        $("durVal").textContent = v;
+        ifvisible.setIdleDuration(v);
+      });
+      document.querySelectorAll("[data-act]").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          ifvisible[btn.dataset.act]();
+          paintStatus();
+        })
+      );
+
+      // ---- onEvery heartbeat ----
+      let beats = 0;
+      ifvisible.onEvery(1, () => {
+        beats++;
+        $("beatCount").textContent = beats;
+        const b = $("beat");
+        b.classList.add("tick");
+        setTimeout(() => b.classList.remove("tick"), 160);
+      });
+
+      // Initial paint + greeting
+      paintStatus();
+      logEvent("statusChanged", "→ " + ifvisible.status + " (ready)");
+    </script>
+  </body>
 </html>
