@@ -1,8 +1,8 @@
 ## ifvisible.js
 
-Crossbrowser & lightweight way to check if user is looking at the page or interacting with it.
+A lightweight, cross-browser way to check whether the user is looking at the page or interacting with it.
 
-#### Check out the [Demo](http://serkanyersen.github.com/ifvisible.js/demo.html) or read below for code example or Check [Annotated Source](http://serkanyersen.github.com/ifvisible.js/docs/ifvisible.html)
+#### Try the interactive [demo](https://ifvisible.serkan.dev/), or read on for code examples.
 
 ## Installation
 
@@ -44,7 +44,7 @@ const { ifvisible } = require("ifvisible.js");
 
 ## v3 highlights
 
-ifvisible.js 3 is a clean-break rewrite. It is a major version bump.
+ifvisible.js 3 is a clean-break rewrite and a major version bump.
 
 - Modern ESM + CJS + IIFE builds with bundled `.d.ts` types.
 - All legacy IE / vendor-prefix code removed; uses the standard Page Visibility API.
@@ -70,9 +70,9 @@ if (!ifvisible.now("hidden")) {
 }
 
 // Possible statuses are:
-// idle: when user has no interaction
-// hidden: page is not visible
-// active: page is visible and user is active
+// idle: when the user has no interaction
+// hidden: the page is not visible
+// active: the page is visible and the user is active
 ```
 
 Handle tab switch or browser minimize states
@@ -89,7 +89,7 @@ ifvisible.on("focus", function () {
 });
 ```
 
-ifvisible.js can handle activity states too, such as being IDLE or ACTIVE on the page
+ifvisible.js can track activity states too, such as the user being IDLE or ACTIVE on the page
 
 ```javascript
 ifvisible.on("idle", function () {
@@ -109,28 +109,26 @@ Default idle duration is 30 seconds but you can change it with `setIdleDuration`
 ifvisible.setIdleDuration(120); // Page will become idle after 120 seconds
 ```
 
-You can manually trigger status events by calling them directly or you can set events with their names by giving first argument as a callback
+You can manually trigger status events by calling them directly, or register a handler for an event by passing a callback as the first argument:
 
 ```javascript
-ifvisible.idle(); // will put page in a idle status
+ifvisible.idle(); // will put the page in an idle status
 
 ifvisible.idle(function () {
-  // This code will work when page goes into idle status
+  // This code will run when the page goes into idle status
 });
 
-// other methods are
-ifvisible.blur(); // will trigger idle event as well
-ifvisible.idle();
-
-ifvisible.focus(); // Will trigger wakeup event as well
-ifvisible.wakeup();
+// The other status methods work the same way:
+ifvisible.blur(); // mark the page as hidden (fires "blur")
+ifvisible.focus(); // mark the page as active (also fires "wakeup")
+ifvisible.wakeup(); // wake from idle (fires "wakeup")
 ```
 
 You can use ifvisible.off() to remove event triggers:
 
 ```javascript
-ifvisible.off("idle", triggeredFunction); // will remove only triggeredFunction from being tiggered on idle
-ifvisible.off("idle"); // will remove all events triggered on idle
+ifvisible.off("idle", triggeredFunction); // removes only triggeredFunction from the idle event
+ifvisible.off("idle"); // removes all handlers for the idle event
 
 // works with other events:
 ifvisible.off("blur");
@@ -138,12 +136,12 @@ ifvisible.off("wakeup");
 ifvisible.off("focus");
 ```
 
-You can set your smart intervals with ifvisible.js, if user is IDLE or not seeing the page the interval will automatically stop itself
+You can set smart intervals with ifvisible.js. If the user is IDLE or not looking at the page, the interval pauses itself automatically and resumes when they return:
 
 ```javascript
-// If page is visible run this function on every half seconds
+// While the page is visible, run this function every half second
 ifvisible.onEvery(0.5, function () {
-  // Do an animation on the logo only when page is visible
+  // Animate the logo only when the page is visible
   animateLogo();
 });
 ```
@@ -176,6 +174,6 @@ instance.destroy();
 
 ### License
 
-It's MIT, Go crazy.
+It's MIT — go crazy.
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fserkanyersen%2Fifvisible.js?ref=badge_large)
